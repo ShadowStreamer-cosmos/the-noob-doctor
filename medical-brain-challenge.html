@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noob Doctor — Quiz for MBBS & NEET PG</title>
+    <meta name="description"
+        content="Test your medical knowledge with The Noob Doctor. 80+ MCQs across 8 specialties for MBBS students and NEET PG aspirants.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #0a0e1a;
+            --card: #131832;
+            --card2: #1a2040;
+            --accent: #6c5ce7;
+            --accent2: #a29bfe;
+            --green: #00b894;
+            --red: #e17055;
+            --orange: #fdcb6e;
+            --text: #e8e8f0;
+            --text2: #8b8db0;
+            --radius: 16px;
+            --glow: 0 0 30px rgba(108, 92, 231, 0.3)
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1.05)
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            20%,
+            60% {
+                transform: translateX(-8px)
+            }
+
+            40%,
+            80% {
+                transform: translateX(8px)
+            }
+        }
+
+        @keyframes progressFill {
+            from {
+                width: 0
+            }
+
+            to {
+                width: var(--fill)
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(108, 92, 231, 0.4)
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(108, 92, 231, 0.8)
+            }
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(600px) rotate(720deg);
+                opacity: 0
+            }
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.5)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        @keyframes barGrow {
+            from {
+                width: 0%
+            }
+
+            to {
+                width: var(--target-width)
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0);
+                opacity: 0
+            }
+
+            50% {
+                transform: scale(1.15)
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.5s ease
+        }
+
+        .screen.active {
+            display: flex
+        }
+
+        /* Home Screen */
+        .hero {
+            text-align: center;
+            padding: 40px 0 30px
+        }
+
+        .hero-icon {
+            font-size: 72px;
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 16px
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px
+        }
+
+        .hero p {
+            color: var(--text2);
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            justify-content: center
+        }
+
+        .stat {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 12px 18px;
+            text-align: center;
+            flex: 1
+        }
+
+        .stat .val {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent2)
+        }
+
+        .stat .lbl {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 2px
+        }
+
+        /* Category Grid */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0
+        }
+
+        .cat-card {
+            background: var(--card);
+            border: 1px solid rgba(108, 92, 231, 0.15);
+            border-radius: var(--radius);
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden
+        }
+
+        .cat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            opacity: 0;
+            transition: opacity 0.3s
+        }
+
+        .cat-card:hover,
+        .cat-card:active {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--glow)
+        }
+
+        .cat-card:hover::before,
+        .cat-card:active::before {
+            opacity: 1
+        }
+
+        .cat-card .emoji {
+            font-size: 36px;
+            margin-bottom: 8px;
+            display: block
+        }
+
+        .cat-card .name {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px
+        }
+
+        .cat-card .count {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 4px
+        }
+
+        /* Quiz Screen */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 16px
+        }
+
+        .quiz-cat {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent2)
+        }
+
+        .quiz-progress {
+            font-size: 13px;
+            color: var(--text2)
+        }
+
+        .timer-bar {
+            height: 6px;
+            background: var(--card2);
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden
+        }
+
+        .timer-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s linear, background 0.5s;
+            background: var(--green)
+        }
+
+        .timer-fill.warning {
+            background: var(--orange)
+        }
+
+        .timer-fill.danger {
+            background: var(--red)
+        }
+
+        .timer-text {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 16px
+        }
+
+        .timer-text.warning {
+            color: var(--orange)
+        }
+
+        .timer-text.danger {
+            color: var(--red);
+            animation: pulse 0.5s infinite
+        }
+
+        .question-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 16px;
+            animation: slideUp 0.4s ease
+        }
+
+        .q-number {
+            font-size: 11px;
+            color: var(--accent2);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px
+        }
+
+        .q-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.6
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px
+        }
+
+        .option {
+            background: var(--card);
+            border: 2px solid rgba(108, 92, 231, 0.15);
+            border-radius: 14px;
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            animation: slideUp 0.4s ease;
+            animation-fill-mode: both
+        }
+
+        .option:nth-child(1) {
+            animation-delay: 0.05s
+        }
+
+        .option:nth-child(2) {
+            animation-delay: 0.1s
+        }
+
+        .option:nth-child(3) {
+            animation-delay: 0.15s
+        }
+
+        .option:nth-child(4) {
+            animation-delay: 0.2s
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            background: var(--card2)
+        }
+
+        .option.selected {
+            border-color: var(--accent);
+            background: rgba(108, 92, 231, 0.15)
+        }
+
+        .option.correct {
+            border-color: var(--green);
+            background: rgba(0, 184, 148, 0.15);
+            animation: pulse 0.4s
+        }
+
+        .option.wrong {
+            border-color: var(--red);
+            background: rgba(225, 112, 85, 0.15);
+            animation: shake 0.4s
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.6
+        }
+
+        .option.correct.disabled,
+        .option.wrong.disabled {
+            opacity: 1
+        }
+
+        .opt-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--card2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0
+        }
+
+        .option.correct .opt-letter {
+            background: var(--green);
+            color: #fff
+        }
+
+        .option.wrong .opt-letter {
+            background: var(--red);
+            color: #fff
+        }
+
+        .opt-text {
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        .explanation-card {
+            background: linear-gradient(135deg, #1a2040, #1e2550);
+            border: 1px solid rgba(108,92,231,0.25);
+            border-left: 4px solid var(--green);
+            border-radius: 14px;
+            padding: 18px 16px;
+            margin: 12px 0;
+            animation: slideUp 0.4s ease;
+            display: none;
+        }
+        .explanation-card.visible { display: block }
+        .explanation-card .exp-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--green);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .explanation-card .exp-text {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text);
+        }
+        .explanation-card .exp-revise {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: rgba(108,92,231,0.12);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--accent2);
+            font-weight: 600;
+        }
+
+        /* Inline Quiz Nav Arrows */
+        .quiz-nav-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .quiz-nav-row .timer-bar-wrap { flex: 1 }
+        .q-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--card2);
+            color: var(--accent2);
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            padding: 0;
+            line-height: 1;
+        }
+        .q-arrow:hover { background: var(--accent); color: #fff }
+        .q-arrow:disabled { opacity: 0.2; cursor: default; background: var(--card2); color: var(--accent2) }
+        .q-arrow.visible { display: flex }
+
+        .next-btn,
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Inter';
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            color: #fff;
+            margin-top: 8px
+        }
+
+        .next-btn:hover,
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow)
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent2)
+        }
+
+        .btn-outline:hover {
+            background: rgba(108, 92, 231, 0.1)
+        }
+
+        .btn-share {
+            background: linear-gradient(135deg, #00b894, #00cec9)
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e17055, #d63031)
+        }
+
+        /* Result Screen */
+        .result-container {
+            text-align: center;
+            padding: 20px 0
+        }
+
+        .result-emoji {
+            font-size: 80px;
+            animation: bounceIn 0.6s ease;
+            margin-bottom: 16px
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 6px
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .result-subtitle {
+            color: var(--text2);
+            font-size: 14px;
+            margin: 8px 0 24px
+        }
+
+        .progress-container {
+            margin: 24px 0;
+            padding: 0 8px
+        }
+
+        .progress-label {
+            text-align: left;
+            font-size: 12px;
+            color: var(--text2);
+            margin-bottom: 8px;
+            font-weight: 600
+        }
+
+        .progress-bar-outer {
+            height: 28px;
+            background: var(--card2);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            transition: width 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 0
+        }
+
+        .progress-bar-inner.animate {
+            width: var(--target-width)
+        }
+
+        .personality-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 20px 0;
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            animation: slideUp 0.6s ease 0.5s both
+        }
+
+        .personality-emoji {
+            font-size: 52px;
+            margin-bottom: 12px
+        }
+
+        .personality-level {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent2);
+            margin-bottom: 8px
+        }
+
+        .personality-roast {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.6;
+            font-style: italic
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0
+        }
+
+        .score-item {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center
+        }
+
+        .score-item .val {
+            font-size: 22px;
+            font-weight: 800
+        }
+
+        .score-item .lbl {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 4px
+        }
+
+        .score-item.green .val {
+            color: var(--green)
+        }
+
+        .score-item.red .val {
+            color: var(--red)
+        }
+
+        .score-item.orange .val {
+            color: var(--orange)
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px
+        }
+
+        /* Leaderboard */
+        .lb-list {
+            margin: 16px 0
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            animation: slideUp 0.3s ease;
+            animation-fill-mode: both
+        }
+
+        .lb-rank {
+            font-size: 20px;
+            font-weight: 900;
+            width: 36px;
+            text-align: center
+        }
+
+        .lb-rank.gold {
+            color: #fdcb6e
+        }
+
+        .lb-rank.silver {
+            color: #b2bec3
+        }
+
+        .lb-rank.bronze {
+            color: #e17055
+        }
+
+        .lb-info {
+            flex: 1
+        }
+
+        .lb-name {
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .lb-detail {
+            font-size: 12px;
+            color: var(--text2);
+            margin-top: 2px
+        }
+
+        .lb-score {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent2)
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--accent2);
+            font-family: 'Inter';
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 16px 0 8px
+        }
+
+        /* Confetti */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti 3s ease-in forwards;
+            z-index: 1000;
+            border-radius: 2px
+        }
+
+        /* Responsive */
+        @media(max-width:380px) {
+            .hero h1 {
+                font-size: 24px
+            }
+
+            .cat-grid {
+                gap: 8px
+            }
+
+            .cat-card {
+                padding: 16px 10px
+            }
+        }
+
+        /* Profile Screen */
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent2);
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .form-group label span { color: var(--red); }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--card);
+            border: 2px solid rgba(108,92,231,0.2);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Inter';
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus { border-color: var(--accent) }
+        .form-group input::placeholder { color: var(--text2) }
+        .form-error { color: var(--red); font-size: 12px; margin-top: 4px; display: none }
+        .greeting {
+            font-size: 13px;
+            color: var(--text2);
+            text-align: center;
+            margin-top: -8px;
+            margin-bottom: 4px;
+        }
+        .greeting strong { color: var(--accent2) }
+        .edit-profile-btn {
+            background: none; border: none; color: var(--accent2); font-size: 12px;
+            font-family: 'Inter'; cursor: pointer; text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="app">
+
+        <!-- PROFILE SCREEN -->
+        <div class="screen" id="profileScreen">
+            <div class="hero">
+                <div class="hero-icon">👨‍⚕️</div>
+                <h1>Welcome, Doctor!</h1>
+                <p>Tell us a bit about yourself</p>
+            </div>
+            <div class="profile-form">
+                <div class="form-group">
+                    <label>YOUR NAME <span>*</span></label>
+                    <input type="text" id="profileName" placeholder="e.g. Dr. Shadow" maxlength="30">
+                    <div class="form-error" id="nameError">Please enter your name</div>
+                </div>
+                <div class="form-group">
+                    <label>EMAIL ADDRESS <span style="color:var(--text2)">(optional)</span></label>
+                    <input type="email" id="profileEmail" placeholder="shadow@hospital.com">
+                </div>
+                <button class="btn" onclick="saveProfile()" style="margin-top:8px">🚀 Let's Go!</button>
+            </div>
+        </div>
+
+        <!-- HOME SCREEN -->
+        <div class="screen" id="homeScreen">
+            <div class="hero">
+                <div class="hero-icon">🧠</div>
+                <h1>The Noob Doctor</h1>
+                <p>Test your clinical knowledge. Compete. Conquer.</p>
+            </div>
+            <div class="greeting" id="greetingBar"></div>
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="val" id="totalPlayed">0</div>
+                    <div class="lbl">Played</div>
+                </div>
+                <div class="stat">
+                    <div class="val" id="bestScore">-</div>
+                    <div class="lbl">Best</div>
+                </div>
+                <div class="stat">
+                    <div class="val" id="avgScore">-</div>
+                    <div class="lbl">Avg %</div>
+                </div>
+            </div>
+            <div class="section-title">Choose Specialty</div>
+            <div class="cat-grid" id="catGrid"></div>
+            <button class="btn btn-outline" style="margin-top:12px"
+                onclick="showScreen('lbScreen');renderLeaderboard()">🏆 Leaderboard</button>
+        </div>
+
+        <!-- SUBCATEGORY SCREEN (generic) -->
+        <div class="screen" id="subCatScreen">
+            <button class="back-btn" onclick="showScreen('homeScreen');updateHomeStats()">← Back to Specialties</button>
+            <div class="hero" style="padding:24px 0 16px">
+                <div class="hero-icon" style="font-size:52px" id="subCatEmoji"></div>
+                <h1 style="font-size:22px" id="subCatTitle"></h1>
+                <p>Choose a subspecialty</p>
+            </div>
+            <div class="cat-grid" id="subCatGrid"></div>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div class="screen" id="quizScreen">
+            <div class="quiz-header">
+                <button class="back-btn" onclick="confirmQuit()">← Quit</button>
+                <div class="quiz-cat" id="quizCat"></div>
+                <div class="quiz-progress" id="quizProg"></div>
+            </div>
+            <div class="quiz-nav-row">
+                <button class="q-arrow" id="prevBtn" onclick="prevQuestion()">←</button>
+                <div class="timer-bar-wrap">
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="timerFill"></div>
+                    </div>
+                </div>
+                <button class="q-arrow" id="nextBtn" onclick="nextQuestion()">→</button>
+            </div>
+            <div class="timer-text" id="timerText">45</div>
+            <div class="question-card">
+                <div class="q-number" id="qNum"></div>
+                <div class="q-text" id="qText"></div>
+            </div>
+            <div class="options" id="optionsDiv"></div>
+            <div class="explanation-card" id="expCard">
+                <div class="exp-title">💡 EXPLANATION</div>
+                <div class="exp-text" id="expText"></div>
+                <div class="exp-revise" id="expRevise"></div>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div class="screen" id="resultScreen">
+            <div class="result-container" id="resultContainer"></div>
+        </div>
+
+        <!-- LEADERBOARD SCREEN -->
+        <div class="screen" id="lbScreen">
+            <button class="back-btn" onclick="showScreen('homeScreen');updateHomeStats()">← Back</button>
+            <div class="section-title">🏆 Leaderboard</div>
+            <div class="lb-list" id="lbList"></div>
+            <button class="btn btn-danger"
+                onclick="if(confirm('Clear all scores?')){localStorage.removeItem('mbc_leaderboard');renderLeaderboard()}">Clear
+                All</button>
+        </div>
+    </div>
+
+    <script>
+        // ========== QUESTION BANK ==========
+        // ========== MEDICINE SUBCATEGORIES ==========
+        const MED_SUBCATEGORIES = {
+            Cardiology: {
+                emoji: "❤️", questions: [
+                    { q: "Most common cause of MI?", o: ["Coronary atherosclerosis", "Coronary spasm", "Embolism", "Vasculitis"], a: 0 },
+                    { q: "Virchow's triad is associated with?", o: ["Cholangitis", "Thrombosis", "Meningitis", "Portal hypertension"], a: 1 },
+                    { q: "Austin Flint murmur is heard in?", o: ["Mitral stenosis", "Aortic regurgitation", "Aortic stenosis", "Tricuspid regurgitation"], a: 1 },
+                    { q: "Pulsus paradoxus is seen in?", o: ["Cardiac tamponade", "Aortic stenosis", "Mitral regurgitation", "VSD"], a: 0 },
+                    { q: "Cannon 'a' waves in JVP are seen in?", o: ["Atrial fibrillation", "Complete heart block", "Mitral stenosis", "Tricuspid regurgitation"], a: 1 },
+                    { q: "Most common valvular lesion in rheumatic heart disease?", o: ["Aortic stenosis", "Mitral stenosis", "Tricuspid regurgitation", "Pulmonary stenosis"], a: 1 },
+                    { q: "Tall T waves on ECG suggest?", o: ["Hypokalemia", "Hyperkalemia", "Hypocalcemia", "Hypercalcemia"], a: 1 },
+                    { q: "Drug of choice for acute SVT?", o: ["Amiodarone", "Adenosine", "Verapamil", "Lidocaine"], a: 1 },
+                    { q: "Kussmaul's sign is positive in?", o: ["Cardiac tamponade", "Constrictive pericarditis", "Aortic dissection", "Mitral stenosis"], a: 1 },
+                    { q: "Opening snap is heard in?", o: ["Mitral stenosis", "Aortic stenosis", "Mitral regurgitation", "Aortic regurgitation"], a: 0 }
+                ]
+            },
+            Neurology: {
+                emoji: "🧠", questions: [
+                    { q: "Drug of choice for Status Epilepticus?", o: ["Phenytoin", "Lorazepam", "Carbamazepine", "Valproate"], a: 1 },
+                    { q: "Most common type of stroke?", o: ["Hemorrhagic", "Ischemic", "TIA", "Subarachnoid"], a: 1 },
+                    { q: "Argyll Robertson pupil is seen in?", o: ["Tabes dorsalis", "Horner syndrome", "Holmes-Adie", "Third nerve palsy"], a: 0 },
+                    { q: "Charcot triad of MS includes all EXCEPT?", o: ["Nystagmus", "Intention tremor", "Scanning speech", "Rigidity"], a: 3 },
+                    { q: "Brown-Séquard syndrome causes ipsilateral?", o: ["Pain loss", "Temperature loss", "Motor paralysis", "Light touch loss"], a: 2 },
+                    { q: "Most common brain tumor in adults?", o: ["Meningioma", "Glioblastoma", "Metastasis", "Schwannoma"], a: 2 },
+                    { q: "Babinski sign indicates?", o: ["LMN lesion", "UMN lesion", "Cerebellar lesion", "Peripheral neuropathy"], a: 1 },
+                    { q: "Lhermitte's sign is seen in?", o: ["MS", "Parkinson's", "MND", "Myasthenia gravis"], a: 0 },
+                    { q: "CSF in tubercular meningitis shows?", o: ["High protein, low sugar, lymphocytes", "Low protein, high sugar", "High protein, high sugar", "Normal findings"], a: 0 },
+                    { q: "Pill-rolling tremor is characteristic of?", o: ["Essential tremor", "Parkinson's disease", "Cerebellar ataxia", "Wilson's disease"], a: 1 }
+                ]
+            },
+            Nephrology: {
+                emoji: "🫘", questions: [
+                    { q: "Most common cause of nephrotic syndrome in adults?", o: ["Minimal change disease", "Membranous nephropathy", "FSGS", "IgA nephropathy"], a: 1 },
+                    { q: "Trousseau's sign is elicited in?", o: ["Hypocalcemia", "Hyperkalemia", "Hyponatremia", "Hypercalcemia"], a: 0 },
+                    { q: "Most common cause of nephrotic syndrome in children?", o: ["Minimal change disease", "Membranous nephropathy", "FSGS", "MPGN"], a: 0 },
+                    { q: "IgA nephropathy typically presents as?", o: ["Nephrotic syndrome", "Gross hematuria after URTI", "Hypertension", "Renal failure"], a: 1 },
+                    { q: "Kimmelstiel-Wilson nodules are seen in?", o: ["Hypertensive nephropathy", "Diabetic nephropathy", "Lupus nephritis", "Amyloidosis"], a: 1 },
+                    { q: "Most common cause of acute renal failure?", o: ["Pre-renal", "Renal", "Post-renal", "Drug-induced"], a: 0 },
+                    { q: "Muddy brown casts are seen in?", o: ["Glomerulonephritis", "ATN", "UTI", "Nephrotic syndrome"], a: 1 },
+                    { q: "Renal tubular acidosis Type 1 shows?", o: ["Metabolic acidosis with hyperkalemia", "Metabolic acidosis with hypokalemia", "Metabolic alkalosis", "Respiratory acidosis"], a: 1 },
+                    { q: "Wire loop lesion is seen in?", o: ["Diabetic nephropathy", "Lupus nephritis Class IV", "IgA nephropathy", "FSGS"], a: 1 },
+                    { q: "Fanconi syndrome affects?", o: ["Glomerulus", "Proximal tubule", "Loop of Henle", "Collecting duct"], a: 1 }
+                ]
+            },
+            Gastroenterology: {
+                emoji: "🫁", questions: [
+                    { q: "Charcot's triad is seen in?", o: ["Cholangitis", "Cholecystitis", "Pancreatitis", "Appendicitis"], a: 0 },
+                    { q: "Spider naevi are seen in?", o: ["Renal failure", "Liver cirrhosis", "Heart failure", "Thyrotoxicosis"], a: 1 },
+                    { q: "Most common cause of portal hypertension in India?", o: ["Alcoholic cirrhosis", "Non-cirrhotic portal fibrosis", "Hepatitis B", "Budd-Chiari"], a: 1 },
+                    { q: "Courvoisier sign is positive when?", o: ["GB is palpable with painless jaundice", "GB is tender", "GB is calcified", "GB is absent"], a: 0 },
+                    { q: "Grey Turner's sign is associated with?", o: ["Appendicitis", "Acute pancreatitis", "Cholecystitis", "Peptic ulcer"], a: 1 },
+                    { q: "Barrett's esophagus increases risk of?", o: ["Squamous cell CA", "Adenocarcinoma", "Lymphoma", "Carcinoid"], a: 1 },
+                    { q: "Celiac disease is associated with which HLA?", o: ["HLA-B27", "HLA-DQ2/DQ8", "HLA-DR4", "HLA-B51"], a: 1 },
+                    { q: "Crohn's disease most commonly affects?", o: ["Rectum", "Terminal ileum", "Sigmoid colon", "Duodenum"], a: 1 },
+                    { q: "Hepatorenal syndrome is characterized by?", o: ["Intrinsic renal disease", "Functional renal failure in liver disease", "Obstructive uropathy", "Glomerulonephritis"], a: 1 },
+                    { q: "Anti-mitochondrial antibodies are seen in?", o: ["Autoimmune hepatitis", "Primary biliary cholangitis", "PSC", "Wilson's disease"], a: 1 }
+                ]
+            },
+            Pulmonology: {
+                emoji: "🌬️", questions: [
+                    { q: "Most common type of lung cancer?", o: ["Squamous cell", "Small cell", "Adenocarcinoma", "Large cell"], a: 2 },
+                    { q: "Most common cause of community-acquired pneumonia?", o: ["Staphylococcus", "Klebsiella", "Streptococcus pneumoniae", "H. influenzae"], a: 2 },
+                    { q: "Pancoast tumor involves?", o: ["Apex of lung", "Hilum", "Base of lung", "Middle lobe"], a: 0 },
+                    { q: "Honeycomb lung is seen in?", o: ["Asthma", "COPD", "IPF", "Pneumonia"], a: 2 },
+                    { q: "Most common cause of exudative pleural effusion?", o: ["Heart failure", "TB", "Pneumonia", "Nephrotic syndrome"], a: 2 },
+                    { q: "Hamman's sign is associated with?", o: ["Pneumothorax", "Pneumomediastinum", "Pleural effusion", "Empyema"], a: 1 },
+                    { q: "PFT in obstructive disease shows?", o: ["Decreased FEV1/FVC", "Increased FEV1/FVC", "Normal FEV1/FVC", "Increased FVC only"], a: 0 },
+                    { q: "Ghon focus in tuberculosis is located in?", o: ["Apex", "Mid-zone", "Lower lobe", "Subpleural region of mid/lower zone"], a: 3 },
+                    { q: "Type 2 respiratory failure is defined by?", o: ["Low PaO2 only", "Low PaO2 + High PaCO2", "High PaO2", "Normal ABG"], a: 1 },
+                    { q: "Curschmann spirals are seen in?", o: ["COPD", "Bronchial asthma", "TB", "Lung cancer"], a: 1 }
+                ]
+            },
+            Endocrinology: {
+                emoji: "🦋", questions: [
+                    { q: "Most common cause of Cushing's syndrome?", o: ["Pituitary adenoma", "Adrenal adenoma", "Ectopic ACTH", "Iatrogenic"], a: 3 },
+                    { q: "HbA1c reflects blood glucose control over?", o: ["1 week", "1 month", "2-3 months", "6 months"], a: 2 },
+                    { q: "Most common cause of hyperthyroidism?", o: ["Toxic adenoma", "Graves' disease", "Thyroiditis", "TSH-secreting adenoma"], a: 1 },
+                    { q: "Chvostek's sign is seen in?", o: ["Hypocalcemia", "Hypercalcemia", "Hyperkalemia", "Hyponatremia"], a: 0 },
+                    { q: "Conn's syndrome is caused by?", o: ["Pheochromocytoma", "Aldosterone-producing adenoma", "Cushing's adenoma", "Adrenal carcinoma"], a: 1 },
+                    { q: "Most common cause of Addison's disease?", o: ["TB", "Autoimmune", "Fungal", "Metastasis"], a: 1 },
+                    { q: "MEN 1 syndrome includes all EXCEPT?", o: ["Pituitary adenoma", "Parathyroid hyperplasia", "Pancreatic tumor", "Medullary thyroid CA"], a: 3 },
+                    { q: "Dawn phenomenon is caused by?", o: ["Insulin excess", "GH surge in early morning", "Somogyi effect", "Cortisol deficiency"], a: 1 },
+                    { q: "DKA is characterized by all EXCEPT?", o: ["Hyperglycemia", "Metabolic acidosis", "Ketonuria", "Hypoglycemia"], a: 3 },
+                    { q: "Thyroid storm is treated with all EXCEPT?", o: ["Propranolol", "PTU", "Lugol's iodine", "Levothyroxine"], a: 3 }
+                ]
+            },
+            Rheumatology: {
+                emoji: "🦴", questions: [
+                    { q: "Rheumatoid factor is an antibody against?", o: ["IgG Fc", "IgM Fc", "IgA", "IgE"], a: 0 },
+                    { q: "Heberden's nodes are seen at?", o: ["PIP joints", "DIP joints", "MCP joints", "Wrist"], a: 1 },
+                    { q: "Anti-CCP antibody is specific for?", o: ["SLE", "Rheumatoid arthritis", "Gout", "Ankylosing spondylitis"], a: 1 },
+                    { q: "Bamboo spine is seen in?", o: ["RA", "OA", "Ankylosing spondylitis", "Psoriatic arthritis"], a: 2 },
+                    { q: "Most specific antibody for SLE?", o: ["ANA", "Anti-dsDNA", "Anti-Smith", "Anti-histone"], a: 2 },
+                    { q: "Negatively birefringent crystals are seen in?", o: ["Gout", "Pseudogout", "RA", "OA"], a: 0 },
+                    { q: "HLA-B27 is associated with?", o: ["RA", "SLE", "Ankylosing spondylitis", "Gout"], a: 2 },
+                    { q: "Schober's test is used to assess?", o: ["Knee mobility", "Lumbar spine flexion", "Shoulder rotation", "Hip flexion"], a: 1 },
+                    { q: "Drug of choice for acute gout?", o: ["Allopurinol", "Colchicine", "NSAIDs", "Steroids"], a: 2 },
+                    { q: "Jaccoud's arthropathy is seen in?", o: ["RA", "SLE", "Gout", "OA"], a: 1 }
+                ]
+            },
+            Hematology: {
+                emoji: "🩸", questions: [
+                    { q: "Target cells are seen in all EXCEPT?", o: ["Thalassemia", "Iron deficiency anemia", "Liver disease", "G6PD deficiency"], a: 3 },
+                    { q: "Reed-Sternberg cells are pathognomonic of?", o: ["NHL", "Hodgkin's lymphoma", "CLL", "Multiple myeloma"], a: 1 },
+                    { q: "Auer rods are seen in?", o: ["AML", "ALL", "CML", "CLL"], a: 0 },
+                    { q: "Philadelphia chromosome is seen in?", o: ["AML", "ALL", "CML", "CLL"], a: 2 },
+                    { q: "Most common inherited bleeding disorder?", o: ["Hemophilia A", "Hemophilia B", "Von Willebrand disease", "Factor V Leiden"], a: 2 },
+                    { q: "Howell-Jolly bodies are seen after?", o: ["Tonsillectomy", "Splenectomy", "Thyroidectomy", "Appendectomy"], a: 1 },
+                    { q: "Bence Jones proteins are found in?", o: ["Hodgkin's lymphoma", "Multiple myeloma", "CLL", "ALL"], a: 1 },
+                    { q: "Ringed sideroblasts are seen in?", o: ["Iron deficiency", "Sideroblastic anemia", "Thalassemia", "Aplastic anemia"], a: 1 },
+                    { q: "Tear drop cells (dacrocytes) are seen in?", o: ["Iron deficiency", "Myelofibrosis", "Thalassemia", "Sickle cell"], a: 1 },
+                    { q: "Most common leukemia in children?", o: ["AML", "ALL", "CML", "CLL"], a: 1 }
+                ]
+            },
+            'Infectious Diseases': {
+                emoji: "🦠", questions: [
+                    { q: "Widal test is used for?", o: ["Typhoid", "Malaria", "TB", "Dengue"], a: 0 },
+                    { q: "Paul-Bunnell test is positive in?", o: ["Malaria", "Infectious mononucleosis", "Typhoid", "Brucellosis"], a: 1 },
+                    { q: "Most common cause of meningitis in neonates?", o: ["N. meningitidis", "S. pneumoniae", "E. coli", "H. influenzae"], a: 2 },
+                    { q: "Koplik spots are pathognomonic of?", o: ["Rubella", "Measles", "Chickenpox", "Scarlet fever"], a: 1 },
+                    { q: "Rose spots are seen in?", o: ["Measles", "Typhoid", "Dengue", "Malaria"], a: 1 },
+                    { q: "Negri bodies are seen in?", o: ["Rabies", "Polio", "Measles", "Mumps"], a: 0 },
+                    { q: "Drug of choice for MRSA?", o: ["Cloxacillin", "Vancomycin", "Amoxicillin", "Ceftriaxone"], a: 1 },
+                    { q: "Most common opportunistic infection in AIDS?", o: ["Candidiasis", "PCP", "Toxoplasmosis", "CMV retinitis"], a: 1 },
+                    { q: "Erythema chronicum migrans is seen in?", o: ["Syphilis", "Lyme disease", "SLE", "Psoriasis"], a: 1 },
+                    { q: "Jarisch-Herxheimer reaction is seen in treatment of?", o: ["TB", "Syphilis", "Malaria", "Leprosy"], a: 1 }
+                ]
+            }
+        };
+
+        const OBG_SUBCATEGORIES = {
+            'Normal Pregnancy': {
+                emoji: "🤰", questions: [
+                    { q: "Duration of normal human pregnancy from LMP?", o: ["36 weeks", "38 weeks", "40 weeks", "42 weeks"], a: 2 },
+                    { q: "Hegar's sign is a sign of?", o: ["Ectopic pregnancy", "Early pregnancy", "Molar pregnancy", "Missed abortion"], a: 1 },
+                    { q: "Quickening in primigravida is felt at?", o: ["12 weeks", "16 weeks", "18-20 weeks", "24 weeks"], a: 2 },
+                    { q: "Chadwick's sign refers to?", o: ["Softening of cervix", "Bluish discoloration of vagina", "Uterine contractions", "Breast changes"], a: 1 },
+                    { q: "Fundal height at umbilicus corresponds to gestational age of?", o: ["16 weeks", "20 weeks", "24 weeks", "28 weeks"], a: 2 },
+                    { q: "Physiological anemia of pregnancy is due to?", o: ["Iron deficiency", "Hemodilution", "B12 deficiency", "Blood loss"], a: 1 },
+                    { q: "Supine hypotension syndrome in pregnancy is due to compression of?", o: ["Aorta", "IVC", "Renal vein", "Portal vein"], a: 1 },
+                    { q: "Linea nigra is caused by increased?", o: ["Estrogen", "Progesterone", "MSH", "Cortisol"], a: 2 },
+                    { q: "Braxton Hicks contractions are?", o: ["True labor pains", "Painless irregular uterine contractions", "Sign of preterm labor", "Post-delivery contractions"], a: 1 },
+                    { q: "Lightening in primigravida occurs at?", o: ["32 weeks", "34 weeks", "36 weeks", "38 weeks"], a: 2 }
+                ]
+            },
+            'General OBG': {
+                emoji: "👩‍⚕️", questions: [
+                    { q: "Most common cause of postpartum hemorrhage?", o: ["Retained placenta", "Uterine atony", "Genital trauma", "Coagulation disorder"], a: 1 },
+                    { q: "Bishop's score is used to assess?", o: ["Fetal maturity", "Cervical favorability", "Gestational age", "Amniotic fluid"], a: 1 },
+                    { q: "Bandl's ring is seen in?", o: ["Normal labor", "Obstructed labor", "Placenta previa", "Vasa previa"], a: 1 },
+                    { q: "Most common ectopic pregnancy site?", o: ["Ovary", "Ampulla of tube", "Isthmus", "Cervix"], a: 1 },
+                    { q: "Sheehan's syndrome is due to?", o: ["Postpartum pituitary necrosis", "Thyroiditis", "Adrenal crisis", "Ovarian failure"], a: 0 },
+                    { q: "PCOD is associated with all EXCEPT?", o: ["Obesity", "Hirsutism", "Decreased LH:FSH ratio", "Insulin resistance"], a: 2 },
+                    { q: "Drug of choice for eclampsia?", o: ["Diazepam", "Phenytoin", "Magnesium sulfate", "Labetalol"], a: 2 },
+                    { q: "Most common ovarian tumor in pregnancy?", o: ["Serous cystadenoma", "Dermoid cyst", "Mucinous cystadenoma", "Fibroma"], a: 1 },
+                    { q: "Partogram helps monitor?", o: ["Fetal Growth", "Progress of labor", "Postpartum recovery", "High-risk pregnancy"], a: 1 },
+                    { q: "Montevideo units measure?", o: ["Cervical dilatation", "Uterine contractions", "Fetal heart rate", "Blood loss"], a: 1 },
+                    { q: "Most common presentation at term?", o: ["Breech", "Vertex", "Transverse", "Face"], a: 1 },
+                    { q: "Krukenberg tumor originates from?", o: ["Ovary", "Stomach", "Breast", "Colon"], a: 1 }
+                ]
+            }
+        };
+
+        // Map parent categories to their subcategory banks
+        const SUBCATEGORIES = {
+            Medicine: MED_SUBCATEGORIES,
+            OBG: OBG_SUBCATEGORIES
+        };
+
+        const QUESTIONS = {
+            Medicine: [], // handled via subcategories
+            Surgery: [
+                { q: "Most common type of hernia?", o: ["Femoral", "Inguinal indirect", "Inguinal direct", "Umbilical"], a: 1 },
+                { q: "McBurney's point tenderness suggests?", o: ["Cholecystitis", "Appendicitis", "Pancreatitis", "Diverticulitis"], a: 1 },
+                { q: "Charcot's joint is seen in?", o: ["RA", "OA", "Diabetes mellitus", "Gout"], a: 2 },
+                { q: "Sister Mary Joseph nodule is found at?", o: ["Left supraclavicular", "Umbilicus", "Axilla", "Groin"], a: 1 },
+                { q: "Most common site of gastric ulcer?", o: ["Greater curvature", "Fundus", "Lesser curvature", "Antrum"], a: 2 },
+                { q: "Virchow's node is located at?", o: ["Right axilla", "Left supraclavicular", "Right inguinal", "Submental"], a: 1 },
+                { q: "Most common cause of surgical jaundice?", o: ["Gallstones", "Pancreatic head CA", "Cholangiocarcinoma", "Hepatitis"], a: 0 },
+                { q: "Battle's sign indicates?", o: ["Anterior skull base #", "Middle cranial fossa #", "Le Fort fracture", "C-spine injury"], a: 1 },
+                { q: "Coulvoisier's law — palpable GB with jaundice suggests?", o: ["Gallstones", "Periampullary carcinoma", "Hepatitis", "Cholangitis"], a: 1 },
+                { q: "Most common thyroid malignancy?", o: ["Follicular", "Papillary", "Medullary", "Anaplastic"], a: 1 },
+                { q: "Rovsing's sign is positive in?", o: ["Cholecystitis", "Appendicitis", "Pancreatitis", "Peptic ulcer"], a: 1 },
+                { q: "Zadek's operation is done for?", o: ["Pilonidal sinus", "Ingrown toenail", "Ganglion", "Lipoma"], a: 1 }
+            ],
+            OBG: [], // handled via subcategories
+            Paeds: [
+                { q: "Most common congenital heart disease?", o: ["ASD", "VSD", "PDA", "TOF"], a: 1 },
+                { q: "Koplik's spots are seen in?", o: ["Rubella", "Measles", "Chickenpox", "Scarlet fever"], a: 1 },
+                { q: "Most common childhood malignancy?", o: ["Wilms tumor", "Neuroblastoma", "ALL", "Retinoblastoma"], a: 2 },
+                { q: "Moro reflex disappears by?", o: ["2 months", "4 months", "6 months", "12 months"], a: 1 },
+                { q: "Social smile appears at?", o: ["Birth", "2 months", "4 months", "6 months"], a: 1 },
+                { q: "Kernicterus is caused by deposition of?", o: ["Direct bilirubin", "Indirect bilirubin", "Bile salts", "Iron"], a: 1 },
+                { q: "ORS composition—sodium concentration (mmol/L)?", o: ["45", "60", "75", "90"], a: 2 },
+                { q: "Retinoblastoma gene is located on chromosome?", o: ["11", "13", "17", "22"], a: 1 },
+                { q: "Pincer grasp develops at?", o: ["6 months", "9 months", "12 months", "15 months"], a: 1 },
+                { q: "Vitamin K prophylaxis at birth prevents?", o: ["Rickets", "Hemorrhagic disease", "Scurvy", "Night blindness"], a: 1 },
+                { q: "Handedness is established by what age?", o: ["1 year", "2 years", "3 years", "5 years"], a: 2 },
+                { q: "Most common organism causing neonatal sepsis?", o: ["E. coli", "GBS", "Staph aureus", "Listeria"], a: 1 }
+            ],
+            ENT: [
+                { q: "Most common cause of epistaxis in children?", o: ["Hypertension", "Nose picking (Little's area)", "Trauma", "Tumor"], a: 1 },
+                { q: "Quinsy is?", o: ["Parapharyngeal abscess", "Peritonsillar abscess", "Retropharyngeal abscess", "Ludwig's angina"], a: 1 },
+                { q: "Rinne test is negative in?", o: ["Sensorineural hearing loss", "Conductive hearing loss", "Mixed hearing loss", "Normal hearing"], a: 1 },
+                { q: "Bezold's abscess is a complication of?", o: ["Tonsillitis", "Acute otitis media", "CSOM", "Sinusitis"], a: 2 },
+                { q: "Trotter's triad is seen in?", o: ["Laryngeal CA", "Nasopharyngeal CA", "Acoustic neuroma", "Cholesteatoma"], a: 1 },
+                { q: "Most common benign tumor of larynx?", o: ["Papilloma", "Fibroma", "Hemangioma", "Adenoma"], a: 0 },
+                { q: "Caldwell-Luc operation is done for?", o: ["Frontal sinusitis", "Maxillary sinusitis", "Ethmoid sinusitis", "Sphenoid sinusitis"], a: 1 },
+                { q: "Gradenigo syndrome involves cranial nerve?", o: ["V and VI", "VII and VIII", "IX and X", "III and IV"], a: 0 },
+                { q: "Most common foreign body site in airway?", o: ["Right main bronchus", "Left main bronchus", "Trachea", "Larynx"], a: 0 },
+                { q: "Le Fort I fracture line passes through?", o: ["Maxilla above teeth", "Across nasal bridge", "Across base of skull", "Zygomatic arch"], a: 0 },
+                { q: "A 28-year-old woman with progressive hearing loss hears better in noisy environments. What is this phenomenon?", o: ["Rinne's paradox", "Paracusis Willisii", "Weber's lateralization", "Schwartze phenomenon"], a: 1 },
+                { q: "Which audiometric finding is characteristically seen in otosclerosis?", o: ["High frequency sensorineural loss", "Flat conductive hearing loss", "Notch at 2000 Hz (Carhart's notch)", "Cookie bite pattern"], a: 2 },
+                { q: "A pink blush seen through intact tympanic membrane in active otosclerosis is called?", o: ["Battle's sign", "Flamingo sign", "Schwartze sign", "Hennebert sign"], a: 2 },
+                { q: "Tympanometry in otosclerosis shows?", o: ["Type B curve", "Type C curve", "Type Ad curve", "Type As curve"], a: 3 },
+                { q: "Most feared complication of stapedotomy?", o: ["Facial nerve injury", "Perilymph fistula", "Sensorineural hearing loss", "Taste disturbance"], a: 2 }
+            ],
+            Ophthalmology: [
+                { q: "Most common cause of preventable blindness worldwide?", o: ["Glaucoma", "Cataract", "Trachoma", "Diabetic retinopathy"], a: 2 },
+                { q: "Marcus Gunn pupil indicates?", o: ["Optic nerve lesion", "Oculomotor palsy", "Horner syndrome", "Adie's pupil"], a: 0 },
+                { q: "Cherry red spot on macula is seen in?", o: ["CRAO", "CRVO", "Diabetic retinopathy", "Papilledema"], a: 0 },
+                { q: "Bitot's spots are due to deficiency of?", o: ["Vitamin A", "Vitamin B12", "Vitamin C", "Vitamin D"], a: 0 },
+                { q: "Most common intraocular malignancy in adults?", o: ["Retinoblastoma", "Uveal melanoma", "Lymphoma", "Medulloepithelioma"], a: 1 },
+                { q: "Fleischer ring is seen in?", o: ["Keratoconus", "Cataract", "Pterygium", "Glaucoma"], a: 0 },
+                { q: "Seidel test is used to detect?", o: ["Retinal detachment", "Aqueous leak", "Glaucoma", "Uveitis"], a: 1 },
+                { q: "Accommodation triad includes all EXCEPT?", o: ["Miosis", "Convergence", "Mydriasis", "Increased lens curvature"], a: 2 },
+                { q: "Most common type of squint in children?", o: ["Esotropia", "Exotropia", "Hypertropia", "Cyclotropia"], a: 0 },
+                { q: "Glaucoma is diagnosed by measuring?", o: ["Visual acuity", "Intraocular pressure", "Refractive error", "Pupil size"], a: 1 }
+            ],
+            Dermatology: [
+                { q: "Nikolsky's sign is positive in?", o: ["Pemphigus vulgaris", "Bullous pemphigoid", "Dermatitis herpetiformis", "Eczema"], a: 0 },
+                { q: "Auspitz sign is seen in?", o: ["Lichen planus", "Psoriasis", "Eczema", "Pityriasis rosea"], a: 1 },
+                { q: "Herald patch is characteristic of?", o: ["Psoriasis", "Pityriasis rosea", "Tinea corporis", "Eczema"], a: 1 },
+                { q: "Wickham's striae are seen in?", o: ["Psoriasis", "Lichen planus", "Vitiligo", "Pemphigus"], a: 1 },
+                { q: "Most common skin malignancy?", o: ["Melanoma", "BCC", "SCC", "Merkel cell carcinoma"], a: 1 },
+                { q: "Koebner phenomenon is seen in all EXCEPT?", o: ["Psoriasis", "Lichen planus", "Vitiligo", "Pemphigoid"], a: 3 },
+                { q: "Dermatitis herpetiformis is associated with?", o: ["Crohn's disease", "Celiac disease", "Ulcerative colitis", "Lactose intolerance"], a: 1 },
+                { q: "Target (iris) lesions are seen in?", o: ["Psoriasis", "Erythema multiforme", "Lichen planus", "SLE"], a: 1 },
+                { q: "Tzanck smear shows acantholytic cells in?", o: ["Pemphigus", "Pemphigoid", "DH", "Psoriasis"], a: 0 },
+                { q: "'Leonine facies' is characteristic of?", o: ["Lepromatous leprosy", "Tuberculoid leprosy", "Psoriasis", "SLE"], a: 0 }
+            ],
+            Ortho: [
+                { q: "Most common carpal bone fracture?", o: ["Lunate", "Scaphoid", "Triquetrum", "Capitate"], a: 1 },
+                { q: "Colles' fracture has?", o: ["Volar displacement", "Dorsal displacement", "Lateral displacement", "No displacement"], a: 1 },
+                { q: "Pott's fracture involves?", o: ["Femur", "Tibia", "Ankle", "Wrist"], a: 2 },
+                { q: "Most common bone tumor?", o: ["Osteosarcoma", "Metastasis", "Ewing's sarcoma", "Chondrosarcoma"], a: 1 },
+                { q: "Garden classification is for fractures of?", o: ["Femoral neck", "Tibial plateau", "Colles", "Scaphoid"], a: 0 },
+                { q: "Erb's palsy involves nerve roots?", o: ["C5-C6", "C7-C8", "C8-T1", "C4-C5"], a: 0 },
+                { q: "Trendelenburg test is positive when which muscle is weak?", o: ["Quadriceps", "Gluteus medius", "Hamstrings", "Iliopsoas"], a: 1 },
+                { q: "Boutonniere deformity is?", o: ["PIP flexion + DIP hyperextension", "PIP hyperextension + DIP flexion", "MCP hyperextension", "All flexion"], a: 0 },
+                { q: "Most common site of osteosarcoma?", o: ["Lower end of femur", "Upper end of tibia", "Upper end of humerus", "Pelvis"], a: 0 },
+                { q: "Thomas test detects?", o: ["Knee flexion deformity", "Hip flexion deformity", "Ankle deformity", "Shoulder deformity"], a: 1 },
+                { q: "Bankart lesion is seen in?", o: ["Knee dislocation", "Shoulder dislocation", "Hip dislocation", "Elbow dislocation"], a: 1 },
+                { q: "Dinner fork deformity is seen in?", o: ["Smith's fracture", "Colles' fracture", "Monteggia", "Galeazzi"], a: 1 }
+            ]
+        };
+
+        const CAT_META = {
+            Medicine: { emoji: "💊", color: "#6c5ce7", hasSubcategories: true }, Surgery: { emoji: "🔪", color: "#e17055" },
+            OBG: { emoji: "🤰", color: "#fd79a8", hasSubcategories: true }, Paeds: { emoji: "👶", color: "#00cec9" },
+            ENT: { emoji: "👂", color: "#fdcb6e" }, Ophthalmology: { emoji: "👁️", color: "#00b894" },
+            Dermatology: { emoji: "🧴", color: "#e84393" }, Ortho: { emoji: "🦴", color: "#0984e3" }
+        };
+
+        const LEVELS = [
+            { max: 10, emoji: "🦧", title: "Tarzan Mode", roast: "You learned medicine from jungle animals. Tarzan knows more anatomy than you." },
+            { max: 25, emoji: "🧒", title: "School Kid", roast: "You know basic biology. Gold star for effort. Maybe stick to Band-Aids." },
+            { max: 40, emoji: "📚", title: "High Schooler", roast: "NEET UG is calling. Maybe answer it. Your textbooks are crying in the corner." },
+            { max: 55, emoji: "🩺", title: "Intern Vibes", roast: "You've opened a textbook at least once. Your seniors are watching... nervously." },
+            { max: 70, emoji: "💊", title: "MBBS Student", roast: "Respectable. Your patients might survive. Emphasis on 'might'." },
+            { max: 82, emoji: "🔬", title: "PG Territory", roast: "MD material. Keep grinding. The coffee machine knows your face by now." },
+            { max: 92, emoji: "👨‍⚕️", title: "Senior Resident", roast: "Grey's Anatomy would cast you. McDreamy who? You're McBrainy." },
+            { max: 99, emoji: "🧠", title: "Consultant Level", roast: "Professors fear you in viva. You make examiners Google answers." },
+            { max: 100, emoji: "🌟", title: "Medical Genius", roast: "Are you even human? Respect. Harrison's was written about you." }
+        ];
+
+        // ========== STATE ==========
+        let currentCat = "", currentQs = [], currentIdx = 0, score = 0, timer = null, timeLeft = 45, answered = false;
+        let userAnswers = []; // tracks what user picked: -1=unanswered, -2=timed out, 0-3=option idx
+
+        // ========== INIT ==========
+        function init() {
+            const grid = document.getElementById('catGrid');
+            grid.innerHTML = '';
+            Object.keys(CAT_META).forEach(cat => {
+                const m = CAT_META[cat];
+                const totalQs = m.hasSubcategories
+                    ? Object.values(SUBCATEGORIES[cat]).reduce((s, sc) => s + sc.questions.length, 0)
+                    : QUESTIONS[cat].length;
+                const d = document.createElement('div');
+                d.className = 'cat-card';
+                d.onclick = () => {
+                    if (m.hasSubcategories) {
+                        showSubcategories(cat);
+                    } else {
+                        startQuiz(cat);
+                    }
+                };
+                d.innerHTML = `<span class="emoji">${m.emoji}</span><div class="name">${cat}</div><div class="count">${totalQs} Qs</div>`;
+                grid.appendChild(d);
+            });
+            updateHomeStats();
+        }
+
+        let currentParentCat = '';
+
+        function showSubcategories(parentCat) {
+            currentParentCat = parentCat;
+            const subData = SUBCATEGORIES[parentCat];
+            const meta = CAT_META[parentCat];
+            document.getElementById('subCatEmoji').textContent = meta.emoji;
+            document.getElementById('subCatTitle').textContent = parentCat;
+            const grid = document.getElementById('subCatGrid');
+            grid.innerHTML = '';
+            Object.keys(subData).forEach(sub => {
+                const sc = subData[sub];
+                const d = document.createElement('div');
+                d.className = 'cat-card';
+                d.onclick = () => startSubQuiz(parentCat, sub);
+                d.innerHTML = `<span class="emoji">${sc.emoji}</span><div class="name">${sub}</div><div class="count">${sc.questions.length} Qs</div>`;
+                grid.appendChild(d);
+            });
+            showScreen('subCatScreen');
+        }
+
+        function startSubQuiz(parentCat, subName) {
+            const sc = SUBCATEGORIES[parentCat][subName];
+            currentCat = subName;
+            currentIdx = 0; answered = false;
+            userAnswers = new Array(10).fill(-1);
+            currentQs = shuffle([...sc.questions]).slice(0, 10);
+            showScreen('quizScreen');
+            document.getElementById('quizCat').textContent = sc.emoji + ' ' + subName;
+            renderQuestion();
+        }
+
+        function updateHomeStats() {
+            const lb = JSON.parse(localStorage.getItem('mbc_leaderboard') || '[]');
+            document.getElementById('totalPlayed').textContent = lb.length;
+            if (lb.length > 0) {
+                const best = Math.max(...lb.map(e => e.pct));
+                const avg = Math.round(lb.reduce((s, e) => s + e.pct, 0) / lb.length);
+                document.getElementById('bestScore').textContent = best + '%';
+                document.getElementById('avgScore').textContent = avg + '%';
+            } else {
+                document.getElementById('bestScore').textContent = '-';
+                document.getElementById('avgScore').textContent = '-';
+            }
+        }
+
+        // ========== SCREENS ==========
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // ========== QUIZ ==========
+        function startQuiz(cat) {
+            currentCat = cat; currentIdx = 0; answered = false;
+            userAnswers = new Array(10).fill(-1);
+            currentQs = shuffle([...QUESTIONS[cat]]).slice(0, 10);
+            showScreen('quizScreen');
+            document.getElementById('quizCat').textContent = CAT_META[cat].emoji + ' ' + cat;
+            renderQuestion();
+        }
+
+        // Renders the current question — either fresh (with timer) or review (already answered)
+        function renderQuestion() {
+            clearInterval(timer);
+            const q = currentQs[currentIdx];
+            const prevAnswer = userAnswers[currentIdx]; // -1 = not yet answered
+            const alreadyDone = prevAnswer !== -1;
+
+            answered = alreadyDone;
+
+            document.getElementById('quizProg').textContent = `${currentIdx + 1}/10`;
+            document.getElementById('qNum').textContent = `QUESTION ${currentIdx + 1} OF 10`;
+            document.getElementById('qText').textContent = q.q;
+
+            const od = document.getElementById('optionsDiv');
+            od.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            q.o.forEach((opt, i) => {
+                const d = document.createElement('div');
+                d.className = 'option';
+                if (alreadyDone) {
+                    d.classList.add('disabled');
+                    if (i === q.a) d.classList.add('correct');
+                    if (prevAnswer >= 0 && i === prevAnswer && prevAnswer !== q.a) d.classList.add('wrong');
+                }
+                d.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+                if (!alreadyDone) d.onclick = () => selectOption(i);
+                od.appendChild(d);
+            });
+
+            if (alreadyDone) {
+                // Review mode — no timer, show explanation + arrows
+                document.getElementById('timerText').textContent = '--';
+                document.getElementById('timerFill').style.width = '0%';
+                document.getElementById('timerFill').className = 'timer-fill';
+                document.getElementById('timerText').className = 'timer-text';
+                showExplanation(q);
+                showQuizNav();
+            } else {
+                // Fresh question — start timer, hide arrows + explanation
+                hideQuizArrows();
+                document.getElementById('expCard').classList.remove('visible');
+                startTimer();
+            }
+        }
+
+        // Legacy alias
+        function loadQuestion() { renderQuestion(); }
+
+        function selectOption(idx) {
+            if (answered) return;
+            answered = true; clearInterval(timer);
+            userAnswers[currentIdx] = idx; // store user's pick
+            const q = currentQs[currentIdx];
+            const opts = document.querySelectorAll('.option');
+            opts.forEach((o, i) => {
+                o.classList.add('disabled');
+                if (i === q.a) o.classList.add('correct');
+                if (i === idx && idx !== q.a) o.classList.add('wrong');
+            });
+            showExplanation(q);
+            showQuizNav();
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx >= 10) { hideQuizArrows(); computeScore(); showResults(); return }
+            renderQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentIdx <= 0) return;
+            currentIdx--;
+            renderQuestion();
+        }
+
+        function computeScore() {
+            score = 0;
+            for (let i = 0; i < 10; i++) {
+                if (userAnswers[i] === currentQs[i].a) score++;
+            }
+        }
+
+        function showQuizNav() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            prevBtn.disabled = currentIdx <= 0;
+            prevBtn.classList.add('visible');
+            nextBtn.textContent = currentIdx === 9 ? '✓' : '→';
+            nextBtn.classList.add('visible');
+        }
+
+        function hideQuizArrows() {
+            document.getElementById('prevBtn').classList.remove('visible');
+            document.getElementById('nextBtn').classList.remove('visible');
+        }
+
+        function startTimer() {
+            timeLeft = 45;
+            const fill = document.getElementById('timerFill');
+            const txt = document.getElementById('timerText');
+            fill.style.width = '100%'; fill.className = 'timer-fill';
+            txt.className = 'timer-text'; txt.textContent = '45';
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                const pct = (timeLeft / 45) * 100;
+                fill.style.width = pct + '%';
+                txt.textContent = timeLeft;
+                if (timeLeft <= 10) { fill.className = 'timer-fill danger'; txt.className = 'timer-text danger' }
+                else if (timeLeft <= 20) { fill.className = 'timer-fill warning'; txt.className = 'timer-text warning' }
+                if (timeLeft <= 0) { clearInterval(timer); timeUp() }
+            }, 1000);
+        }
+
+        function timeUp() {
+            if (answered) return;
+            answered = true;
+            userAnswers[currentIdx] = -2; // timed out
+            const q = currentQs[currentIdx];
+            const opts = document.querySelectorAll('.option');
+            opts.forEach((o, i) => { o.classList.add('disabled'); if (i === q.a) o.classList.add('correct'); });
+            showExplanation(q);
+            showQuizNav();
+        }
+
+        function confirmQuit() {
+            if (confirm('Quit quiz? Progress will be lost.')) { clearInterval(timer); hideQuizArrows(); showScreen('homeScreen'); updateHomeStats() }
+        }
+
+        // ========== RESULTS ==========
+        function showResults() {
+            clearInterval(timer);
+            const pct = Math.round((score / 10) * 100);
+            const level = LEVELS.find(l => pct <= l.max) || LEVELS[LEVELS.length - 1];
+
+            // Save to leaderboard
+            const lb = JSON.parse(localStorage.getItem('mbc_leaderboard') || '[]');
+            lb.push({ cat: currentCat, score, pct, level: level.title, date: new Date().toLocaleDateString(), time: Date.now(), name: getProfileName() });
+            lb.sort((a, b) => b.pct - a.pct || b.time - a.time);
+            if (lb.length > 50) lb.length = 50;
+            localStorage.setItem('mbc_leaderboard', JSON.stringify(lb));
+
+            // Track quiz completion
+            trackEvent('quiz_complete', { category: currentCat, score, pct, level: level.title });
+
+            // Colors for progress bar
+            const barColors = ['#e17055', '#e17055', '#fdcb6e', '#fdcb6e', '#00b894', '#00b894', '#6c5ce7', '#6c5ce7', '#fd79a8'];
+            const levelIdx = LEVELS.indexOf(level);
+            const barColor = barColors[levelIdx] || '#6c5ce7';
+
+            const rc = document.getElementById('resultContainer');
+            rc.innerHTML = `
+<div class="result-emoji">${pct >= 70 ? '🎉' : '🏥'}</div>
+<div class="result-title">Quiz Complete!</div>
+<div class="result-score">${score}/10</div>
+<div class="result-subtitle">${currentCat} • ${pct}% Accuracy</div>
+<div class="score-breakdown">
+<div class="score-item green"><div class="val">${score}</div><div class="lbl">Correct</div></div>
+<div class="score-item red"><div class="val">${10 - score}</div><div class="lbl">Wrong</div></div>
+<div class="score-item orange"><div class="val">${pct}%</div><div class="lbl">Score</div></div>
+</div>
+<div class="progress-container">
+<div class="progress-label">YOUR LEVEL</div>
+<div class="progress-bar-outer">
+<div class="progress-bar-inner" id="resultBar" style="--target-width:${pct}%;background:linear-gradient(90deg,${barColor},${barColor}dd)">${pct}%</div>
+</div>
+</div>
+<div class="personality-card" id="personalityCard">
+<div class="personality-emoji">${level.emoji}</div>
+<div class="personality-level">${level.title}</div>
+<div class="personality-roast">"${level.roast}"</div>
+</div>
+<div class="btn-group">
+<button class="btn btn-share" onclick="shareScore()">📤 Share Score</button>
+<button class="btn" onclick="startQuiz(currentCat)">🔄 Retry ${currentCat}</button>
+<button class="btn btn-outline" onclick="showScreen('homeScreen');updateHomeStats()">🏠 Home</button>
+<button class="btn btn-outline" onclick="showScreen('lbScreen');renderLeaderboard()">🏆 Leaderboard</button>
+</div>`;
+
+            showScreen('resultScreen');
+
+            // Animate progress bar
+            setTimeout(() => { document.getElementById('resultBar').classList.add('animate') }, 300);
+
+            // Confetti for high scores
+            if (pct >= 70) launchConfetti();
+        }
+
+        function shareScore() {
+            const pct = Math.round((score / 10) * 100);
+            const level = LEVELS.find(l => pct <= l.max) || LEVELS[LEVELS.length - 1];
+            const catMeta = CAT_META[currentCat] || MED_SUBCATEGORIES[currentCat] || {emoji:'💊'};
+            const text = `🧠 The Noob Doctor\n${catMeta.emoji} ${currentCat}\n\n📊 Score: ${score}/10 (${pct}%)\n${level.emoji} Level: ${level.title}\n"${level.roast}"\n\n🔥 Can you beat me? Try now!`;
+            if (navigator.share) {
+                navigator.share({ title: 'The Noob Doctor', text }).catch(() => { });
+            } else {
+                navigator.clipboard.writeText(text).then(() => alert('Score copied to clipboard! 📋')).catch(() => { });
+            }
+        }
+
+        // ========== LEADERBOARD ==========
+        function renderLeaderboard() {
+            const lb = JSON.parse(localStorage.getItem('mbc_leaderboard') || '[]');
+            const list = document.getElementById('lbList');
+            if (lb.length === 0) { list.innerHTML = '<p style="text-align:center;color:var(--text2);padding:40px 0">No scores yet. Play a quiz!</p>'; return }
+            list.innerHTML = lb.slice(0, 20).map((e, i) => {
+                const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                return `<div class="lb-item" style="animation-delay:${i * 0.05}s">
+<div class="lb-rank ${rankClass}">${i < 3 ? ['🥇', '🥈', '🥉'][i] : (i + 1)}</div>
+<div class="lb-info"><div class="lb-name">${e.name || 'Player'} • ${CAT_META[e.cat]?.emoji || ''} ${e.cat}</div><div class="lb-detail">${e.level} • ${e.date}</div></div>
+<div class="lb-score">${e.pct}%</div>
+</div>`;
+            }).join('');
+        }
+
+        // ========== HELPERS ==========
+        function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]] } return arr }
+
+        function launchConfetti() {
+            const colors = ['#6c5ce7', '#a29bfe', '#fd79a8', '#00b894', '#fdcb6e', '#e17055', '#00cec9'];
+            for (let i = 0; i < 40; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.animationDelay = Math.random() * 2 + 's';
+                el.style.animationDuration = (2 + Math.random() * 2) + 's';
+                el.style.width = (6 + Math.random() * 8) + 'px';
+                el.style.height = (6 + Math.random() * 8) + 'px';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }
+        }
+
+        function showExplanation(q) {
+            const card = document.getElementById('expCard');
+            const textEl = document.getElementById('expText');
+            const reviseEl = document.getElementById('expRevise');
+            if (q.e) {
+                textEl.innerHTML = q.e;
+                reviseEl.style.display = q.r ? 'block' : 'none';
+                if (q.r) reviseEl.innerHTML = '📚 Revise: ' + q.r;
+                card.classList.add('visible');
+            } else {
+                textEl.innerHTML = '✅ Correct answer: <strong>' + q.o[q.a] + '</strong>';
+                reviseEl.style.display = 'none';
+                card.classList.add('visible');
+            }
+        }
+
+        // ========== EXPLANATIONS ==========
+        const EXP = {
+// Cardiology
+"Most common cause of MI?":["Coronary atherosclerosis causes >90% of MIs via plaque rupture & thrombosis. Spasm (Prinzmetal angina) is rare.","ACS & MI Pathophysiology"],
+"Virchow's triad is associated with?":["Stasis, endothelial injury, and hypercoagulability → thrombosis. Charcot's triad is for cholangitis (fever, jaundice, RUQ pain).","Thrombosis & Virchow's Triad"],
+"Austin Flint murmur is heard in?":["A low-pitched mid-diastolic rumble at apex due to severe AR jet hitting the anterior mitral leaflet. Mimics MS but no opening snap.","Valvular Heart Disease — Murmurs"],
+"Pulsus paradoxus is seen in?":["Exaggerated drop in SBP >10 mmHg during inspiration. Classic in cardiac tamponade & severe asthma. NOT seen in constrictive pericarditis (Kussmaul's sign instead).","Pericardial Diseases"],
+"Cannon 'a' waves in JVP are seen in?":["Atrium contracts against a closed tricuspid valve in complete heart block. In AF, 'a' waves are ABSENT. Giant 'v' waves = tricuspid regurgitation.","JVP Waveform Analysis"],
+"Most common valvular lesion in rheumatic heart disease?":["Mitral stenosis is the hallmark. Mitral valve is most commonly affected, followed by aortic. Pancarditis is the most serious complication.","Rheumatic Heart Disease"],
+"Tall T waves on ECG suggest?":["Hyperkalemia causes tall peaked T waves → widened QRS → sine wave → arrest. Hypokalemia causes flat T waves + U waves.","ECG — Electrolyte Changes"],
+"Drug of choice for acute SVT?":["Adenosine (6mg rapid IV push) blocks AV node conduction. Verapamil is 2nd line. Amiodarone is for VT. Lidocaine is for ventricular arrhythmias.","SVT Management"],
+"Kussmaul's sign is positive in?":["Paradoxical rise in JVP during inspiration in constrictive pericarditis. In tamponade, pulsus paradoxus is seen instead. Classic exam trick!","Constrictive vs Tamponade"],
+"Opening snap is heard in?":["Opening snap (OS) is pathognomonic of mitral stenosis. Closer the OS to S2, more severe the stenosis. NOT heard in calcified/rigid valves.","Mitral Stenosis"],
+// Neurology
+"Drug of choice for Status Epilepticus?":["IV Lorazepam is first-line. Phenytoin/fosphenytoin is second-line. Carbamazepine & valproate are for long-term prophylaxis, not acute status.","Status Epilepticus Protocol"],
+"Most common type of stroke?":["Ischemic strokes account for ~85% of all strokes. Hemorrhagic ~15%. TIA is not a completed stroke. SAH is a subtype of hemorrhagic.","Stroke Classification"],
+"Argyll Robertson pupil is seen in?":["Accommodates but does NOT react to light — 'Prostitute's pupil' (accommodates but doesn't react). Pathognomonic of neurosyphilis/tabes dorsalis.","Pupillary Abnormalities"],
+"Charcot triad of MS includes all EXCEPT?":["Nystagmus + intention tremor + scanning speech = Charcot's triad of MS. Rigidity is seen in Parkinsonism, not MS.","Multiple Sclerosis"],
+"Brown-Séquard syndrome causes ipsilateral?":["Hemisection of cord → ipsilateral motor paralysis + ipsilateral DCML loss + CONTRAlateral pain/temperature loss.","Spinal Cord Lesions"],
+"Most common brain tumor in adults?":["Metastases are the most common intracranial tumors in adults. GBM is the most common PRIMARY brain tumor. Meningioma is most common benign.","CNS Tumors"],
+"Babinski sign indicates?":["Upgoing plantar response = UMN lesion. Normal in infants <1 year. Downgoing = normal adult response. LMN = absent reflex.","UMN vs LMN Lesions"],
+"Lhermitte's sign is seen in?":["Electric shock sensation down spine on neck flexion. Classic in MS (posterior column demyelination). Also in B12 deficiency & cervical spondylosis.","Demyelinating Diseases"],
+"CSF in tubercular meningitis shows?":["High protein, low glucose, lymphocytic pleocytosis with cobweb formation. Bacterial = neutrophils + very low glucose. Viral = lymphocytes + normal glucose.","CSF Analysis"],
+"Pill-rolling tremor is characteristic of?":["Resting tremor at 4-6 Hz is hallmark of Parkinson's disease. Essential tremor = action/postural tremor. Cerebellar = intention tremor. Wilson's = wing-beating.","Movement Disorders"],
+// Nephrology
+"Most common cause of nephrotic syndrome in adults?":["Membranous nephropathy in adults. Minimal change disease in children. FSGS is the most common in African Americans. Key distinction!","Nephrotic Syndrome"],
+"Trousseau's sign is elicited in?":["Carpal spasm on inflating BP cuff = Trousseau's sign of hypocalcemia. Chvostek's = facial twitch on tapping facial nerve. Both indicate low calcium.","Hypocalcemia"],
+"Most common cause of nephrotic syndrome in children?":["Minimal change disease (lipoid nephrosis) — responds dramatically to steroids. Biopsy shows normal LM, foot process effacement on EM.","Nephrotic Syndrome in Children"],
+"IgA nephropathy typically presents as?":["Gross hematuria 1-2 days after URTI (synpharyngitic). PSGN occurs 2-3 WEEKS after infection. This timing difference is a classic exam trap.","Glomerulonephritis"],
+"Kimmelstiel-Wilson nodules are seen in?":["Nodular glomerulosclerosis pathognomonic of diabetic nephropathy. Diffuse type is more common but nodular is more specific.","Diabetic Nephropathy"],
+"Most common cause of acute renal failure?":["Pre-renal azotemia (hypoperfusion) accounts for 55-60% of AKI. FENa <1% = pre-renal. FENa >2% = intrinsic renal.","Acute Kidney Injury"],
+"Muddy brown casts are seen in?":["Pathognomonic of ATN (acute tubular necrosis). RBC casts = glomerulonephritis. WBC casts = pyelonephritis. Waxy casts = chronic renal failure.","Urinary Casts"],
+"Renal tubular acidosis Type 1 shows?":["Distal RTA (Type 1) = hypokalemia + inability to acidify urine (pH >5.5). Type 2 = proximal, also hypokalemia. Type 4 = hyperkalemia (hypoaldo).","Renal Tubular Acidosis"],
+"Wire loop lesion is seen in?":["Class IV diffuse proliferative lupus nephritis — most severe form. Treated with cyclophosphamide + steroids. Most common cause of death in SLE is renal.","Lupus Nephritis"],
+"Fanconi syndrome affects?":["Generalized proximal tubule dysfunction → glycosuria, aminoaciduria, phosphaturia, bicarbonaturia. Causes include Wilson's, cystinosis, myeloma.","Proximal Tubular Disorders"],
+// Gastroenterology
+"Charcot's triad is seen in?":["Fever + jaundice + RUQ pain = Charcot's triad for acute cholangitis. Reynold's pentad adds shock + confusion for suppurative cholangitis.","Cholangitis"],
+"Spider naevi are seen in?":["Arteriolar spider angiomas in SVC distribution due to hyperestrogenism in liver cirrhosis. >5 spider naevi = significant liver disease.","Chronic Liver Disease Signs"],
+"Most common cause of portal hypertension in India?":["Non-cirrhotic portal fibrosis (NCPF/EHPVO) is the most common cause in India. Worldwide, alcoholic cirrhosis is most common.","Portal Hypertension"],
+"Courvoisier sign is positive when?":["Palpable non-tender gallbladder with painless jaundice = periampullary/pancreatic head carcinoma. Gallstones cause fibrosed GB that can't distend.","Obstructive Jaundice"],
+"Grey Turner's sign is associated with?":["Flank ecchymosis in acute pancreatitis (retroperitoneal hemorrhage). Cullen's sign = periumbilical ecchymosis. Both indicate severe hemorrhagic pancreatitis.","Acute Pancreatitis"],
+"Barrett's esophagus increases risk of?":["Intestinal metaplasia (squamous → columnar) from chronic GERD → increased risk of esophageal adenocarcinoma, NOT squamous cell CA.","GERD & Barrett's"],
+"Celiac disease is associated with which HLA?":["HLA-DQ2 (95%) and DQ8 (5%). Anti-tTG IgA is the screening test. Gold standard = duodenal biopsy showing villous atrophy.","Celiac Disease"],
+"Crohn's disease most commonly affects?":["Terminal ileum is the most common site. Skip lesions, transmural inflammation, non-caseating granulomas. UC = continuous, mucosal, starts at rectum.","IBD — Crohn's vs UC"],
+"Hepatorenal syndrome is characterized by?":["Functional renal failure in advanced liver disease with NO intrinsic kidney damage. Kidneys are structurally normal. Poor prognosis without liver transplant.","Hepatorenal Syndrome"],
+"Anti-mitochondrial antibodies are seen in?":["AMA is highly specific (>95%) for primary biliary cholangitis (PBC). PSC = p-ANCA. Autoimmune hepatitis = ANA/anti-SMA. Wilson's = low ceruloplasmin.","Autoimmune Liver Diseases"],
+// Pulmonology
+"Most common type of lung cancer?":["Adenocarcinoma is now the most common (especially in non-smokers & women). Squamous cell was previously #1. Small cell is most aggressive.","Lung Cancer Classification"],
+"Most common cause of community-acquired pneumonia?":["Streptococcus pneumoniae is the #1 CAP pathogen worldwide. Klebsiella = alcoholics (currant jelly sputum). Staph = post-influenza.","Community-Acquired Pneumonia"],
+"Pancoast tumor involves?":["Superior sulcus/apex tumor causing Horner syndrome (miosis, ptosis, anhidrosis) + C8-T1 nerve root involvement. Usually squamous cell type.","Pancoast Tumor"],
+"Honeycomb lung is seen in?":["End-stage IPF (idiopathic pulmonary fibrosis). Shows UIP pattern on HRCT. Restrictive PFTs. Treatment: pirfenidone/nintedanib. Lung transplant for severe cases.","Interstitial Lung Disease"],
+"Most common cause of exudative pleural effusion?":["TB is the most common cause of exudative effusion in India. Worldwide, parapneumonic/pneumonia. Heart failure = most common transudative cause (Light's criteria).","Pleural Effusion"],
+"Hamman's sign is associated with?":["Crunching sound synchronous with heartbeat in pneumomediastinum (mediastinal emphysema). NOT pneumothorax. Boerhaave syndrome is a common cause.","Pneumomediastinum"],
+"PFT in obstructive disease shows?":["FEV1/FVC ratio is DECREASED (<0.7). FEV1 falls more than FVC. In restrictive disease, FEV1/FVC is normal or increased (both reduced proportionally).","Pulmonary Function Tests"],
+"Ghon focus in tuberculosis is located in?":["Primary complex = Ghon focus (subpleural mid/lower zone) + hilar lymphadenopathy. Reactivation TB = apex/upper lobes. Classic exam trap with location!","Primary vs Reactivation TB"],
+"Type 2 respiratory failure is defined by?":["PaO2 <60 + PaCO2 >50 mmHg (hypoxic + hypercapnic). Type 1 = hypoxia only (normal/low CO2). COPD & hypoventilation cause Type 2.","Respiratory Failure Types"],
+"Curschmann spirals are seen in?":["Spiral-shaped mucus casts of small airways in bronchial asthma. Charcot-Leyden crystals = eosinophil breakdown products, also seen in asthma.","Bronchial Asthma Pathology"],
+// Endocrinology
+"Most common cause of Cushing's syndrome?":["Iatrogenic (exogenous steroids) is the most common overall. Most common endogenous cause = pituitary adenoma (Cushing's DISEASE). Classic trap!","Cushing's Syndrome vs Disease"],
+"HbA1c reflects blood glucose control over?":["HbA1c reflects average glucose over 2-3 months (RBC lifespan = 120 days). Fructosamine = 2-3 weeks. SMBG = real-time.","Diabetes Monitoring"],
+"Most common cause of hyperthyroidism?":["Graves' disease (diffuse toxic goiter) — TSI antibodies stimulate TSH receptor. Toxic adenoma = single hot nodule. Thyroiditis = transient.","Hyperthyroidism"],
+"Chvostek's sign is seen in?":["Tapping facial nerve causes facial muscle twitch in hypocalcemia. Trousseau's = carpal spasm with BP cuff. Both indicate neuromuscular irritability.","Calcium Disorders"],
+"Conn's syndrome is caused by?":["Aldosterone-producing adenoma → primary hyperaldosteronism → hypertension + hypokalemia + metabolic alkalosis. Pheochromocytoma produces catecholamines.","Adrenal Tumors"],
+"Most common cause of Addison's disease?":["Autoimmune adrenalitis is #1 in developed countries. TB is #1 worldwide/India. Presents with hyperpigmentation, hypotension, hyperkalemia.","Adrenal Insufficiency"],
+"MEN 1 syndrome includes all EXCEPT?":["MEN 1 = 3 Ps: Pituitary + Parathyroid + Pancreatic tumors. Medullary thyroid CA is part of MEN 2A/2B, NOT MEN 1.","MEN Syndromes"],
+"Dawn phenomenon is caused by?":["Early morning GH & cortisol surge → hyperglycemia at dawn (4-8 AM). Somogyi effect = rebound hyperglycemia after nocturnal hypoglycemia. Different treatment!","Dawn vs Somogyi Effect"],
+"DKA is characterized by all EXCEPT?":["DKA = hyperglycemia + ketoacidosis + ketonuria. It's caused by insulin DEFICIENCY, not excess. More common in Type 1 DM. HHS is more common in Type 2.","Diabetic Emergencies"],
+"Thyroid storm is treated with all EXCEPT?":["Propranolol (symptomatic relief) + PTU (blocks synthesis & conversion) + Lugol's iodine (blocks release). Levothyroxine would WORSEN the storm!","Thyroid Storm Management"],
+// Rheumatology
+"Rheumatoid factor is an antibody against?":["RF is an IgM antibody against the Fc portion of IgG. Present in 70-80% of RA but not specific — also seen in SLE, Sjögren's, infections.","Rheumatoid Arthritis"],
+"Heberden's nodes are seen at?":["Heberden's = DIP joints (osteoarthritis). Bouchard's = PIP joints. RA affects MCP & PIP but SPARES DIP. This is a classic exam distinction!","OA vs RA Joint Involvement"],
+"Anti-CCP antibody is specific for?":["Anti-CCP is more specific than RF for RA (specificity ~95%). Can be positive years before clinical RA develops. RF is less specific.","RA Serology"],
+"Bamboo spine is seen in?":["Ankylosing spondylitis — syndesmophytes bridge vertebral bodies creating bamboo spine on X-ray. HLA-B27 positive. Young males. Sacroiliitis = earliest finding.","Ankylosing Spondylitis"],
+"Most specific antibody for SLE?":["Anti-Smith is most SPECIFIC for SLE. Anti-dsDNA is also specific and correlates with disease activity/nephritis. ANA is most SENSITIVE but least specific.","SLE Antibodies"],
+"Negatively birefringent crystals are seen in?":["Monosodium urate crystals in gout = needle-shaped, negatively birefringent (yellow under parallel light). Pseudogout (CPPD) = rhomboid, positively birefringent.","Crystal Arthropathies"],
+"HLA-B27 is associated with?":["Seronegative spondyloarthropathies: AS, reactive arthritis, psoriatic arthritis, IBD arthritis. NOT associated with RA or SLE (HLA-DR4 for RA).","HLA Associations"],
+"Schober's test is used to assess?":["Measures lumbar spine flexion — mark 10cm above & 5cm below PSIS. <5cm increase on flexion = restricted. Key test for ankylosing spondylitis.","Spinal Examination"],
+"Drug of choice for acute gout?":["NSAIDs (indomethacin) are first-line for acute gout. Colchicine is second-line. Allopurinol is for prophylaxis only — starting it in acute attack worsens flare!","Acute Gout Management"],
+"Jaccoud's arthropathy is seen in?":["Reducible, non-erosive joint deformity in SLE (unlike RA which is erosive & irreducible). Post-rheumatic fever also causes Jaccoud's arthropathy.","SLE Musculoskeletal"],
+// Hematology
+"Target cells are seen in all EXCEPT?":["Target cells = thalassemia, iron deficiency, liver disease, HbC disease. NOT G6PD deficiency (causes bite cells & Heinz bodies instead).","Peripheral Smear Findings"],
+"Reed-Sternberg cells are pathognomonic of?":["Owl-eye giant cells = RS cells in Hodgkin's lymphoma. CD15+ CD30+ (not CD45). Essential for diagnosis. NHL lacks RS cells.","Hodgkin's Lymphoma"],
+"Auer rods are seen in?":["Auer rods (fused azurophilic granules) are pathognomonic of AML, especially M3 (APL). NOT seen in ALL or chronic leukemias. APL = t(15;17).","AML Classification"],
+"Philadelphia chromosome is seen in?":["t(9;22) BCR-ABL fusion → CML (>95%). Also in some ALL (25% adults). Treatment: imatinib (TKI). Not seen in AML or CLL.","CML & Philadelphia Chromosome"],
+"Most common inherited bleeding disorder?":["Von Willebrand disease (vWD) is the most common inherited bleeding disorder. Hemophilia A (Factor VIII) is the most common hemophilia.","Bleeding Disorders"],
+"Howell-Jolly bodies are seen after?":["Nuclear remnants in RBCs normally removed by spleen. Seen after splenectomy, in hyposplenism, and sickle cell disease (functional asplenia).","Splenic Function"],
+"Bence Jones proteins are found in?":["Free immunoglobulin light chains in urine of multiple myeloma patients. Myeloma = M-spike, lytic bone lesions, hypercalcemia, renal failure, anemia.","Multiple Myeloma"],
+"Ringed sideroblasts are seen in?":["Iron-laden mitochondria around the nucleus in sideroblastic anemia. Causes: lead poisoning, isoniazid, alcohol. Treated with pyridoxine (B6).","Sideroblastic Anemia"],
+"Tear drop cells (dacrocytes) are seen in?":["Myelofibrosis is the classic association. Also in myelophthisic anemias (marrow replacement). Dry tap on bone marrow aspiration.","Myelofibrosis"],
+"Most common leukemia in children?":["ALL (acute lymphoblastic leukemia) = most common childhood cancer overall. Peak age 2-5 years. CLL = most common leukemia in adults/elderly.","Childhood Leukemia"],
+// Infectious Diseases
+"Widal test is used for?":["Detects antibodies against Salmonella typhi O & H antigens. Rising titer >1:160 is significant. Best done in 2nd week. Blood culture is gold standard.","Typhoid Fever Diagnosis"],
+"Paul-Bunnell test is positive in?":["Heterophile antibody test for infectious mononucleosis (EBV). Monospot test is more commonly used now. Atypical lymphocytes on smear.","Infectious Mononucleosis"],
+"Most common cause of meningitis in neonates?":["E. coli (K1 strain) and GBS are top causes in neonates. N. meningitidis & S. pneumoniae affect older children/adults. H. influenzae declined post-vaccine.","Neonatal Meningitis"],
+"Koplik spots are pathognomonic of?":["White spots on buccal mucosa opposite molars appearing 2-3 days BEFORE rash. Pathognomonic of measles. Forchheimer spots = rubella (soft palate).","Measles"],
+"Rose spots are seen in?":["Salmon-colored blanching macules on abdomen/chest in typhoid fever (2nd-3rd week). They represent bacterial emboli in the skin.","Typhoid Fever"],
+"Negri bodies are seen in?":["Eosinophilic intracytoplasmic inclusion bodies in hippocampal neurons in rabies. Pathognomonic. Guarnieri bodies = smallpox. Cowdry B = polio.","Rabies"],
+"Drug of choice for MRSA?":["Vancomycin is DOC for serious MRSA infections. Linezolid for vancomycin-resistant. Cloxacillin treats MSSA only. MRSA = resistant to all beta-lactams.","MRSA Treatment"],
+"Most common opportunistic infection in AIDS?":["Pneumocystis jirovecii pneumonia (PCP) at CD4 <200. Candidiasis is the most common overall OI. CMV retinitis at CD4 <50. Toxoplasma at CD4 <100.","HIV/AIDS Opportunistic Infections"],
+"Erythema chronicum migrans is seen in?":["Expanding bulls-eye rash at tick bite site = Lyme disease (Borrelia burgdorferi). Early sign. Treatment: doxycycline (adults), amoxicillin (children/pregnant).","Lyme Disease"],
+"Jarisch-Herxheimer reaction is seen in treatment of?":["Acute febrile reaction after treating spirochetal infections (syphilis, leptospirosis, Lyme). Due to endotoxin release from killed organisms.","Syphilis Treatment"],
+// OBG - Normal Pregnancy
+"Duration of normal human pregnancy from LMP?":["40 weeks (280 days) from LMP. Naegele's rule: LMP + 7 days − 3 months. Term = 37-42 weeks. Preterm <37 weeks. Post-term >42 weeks.","Gestational Age Calculation"],
+"Hegar's sign is a sign of?":["Softening of lower uterine segment at 6-8 weeks — early sign of pregnancy. Goodell's sign = softening of cervix. Chadwick's = bluish vagina.","Early Pregnancy Signs"],
+"Quickening in primigravida is felt at?":["18-20 weeks in primigravida, 16-18 weeks in multigravida. It's the mother's first perception of fetal movement. Earlier in multi due to experience.","Fetal Milestones"],
+"Chadwick's sign refers to?":["Bluish/purplish discoloration of vagina & cervix due to increased vascularity. Seen at 6-8 weeks. Goodell's = cervical softening. Hegar's = uterine softening.","Early Pregnancy Signs"],
+"Fundal height at umbilicus corresponds to gestational age of?":["24 weeks (not 20!). At 20 weeks, fundus is just below umbilicus. At 36 weeks = xiphoid. This is a commonly tested landmark.","Fundal Height Assessment"],
+"Physiological anemia of pregnancy is due to?":["Plasma volume increases more (50%) than RBC mass (30%) → hemodilution → decreased Hb. Max dilution at 32-34 weeks. Not true iron deficiency.","Physiological Changes in Pregnancy"],
+"Supine hypotension syndrome in pregnancy is due to compression of?":["Gravid uterus compresses IVC in supine position → decreased venous return → hypotension. Treatment: left lateral position. Occurs in 3rd trimester.","Pregnancy Hemodynamics"],
+"Linea nigra is caused by increased?":["MSH (melanocyte-stimulating hormone) increases in pregnancy causing linea nigra, chloasma (melasma), and darkening of areola. Estrogen also contributes.","Skin Changes in Pregnancy"],
+"Braxton Hicks contractions are?":["Painless, irregular, non-progressive contractions. NOT associated with cervical dilation. True labor = regular, progressive, with cervical changes. Don't confuse!","True vs False Labor"],
+"Lightening in primigravida occurs at?":["36 weeks — fetal head descends into pelvis. Multigravida = at onset of labor. Primigravida feels relief of dyspnea but increased urinary frequency.","Signs of Approaching Labor"],
+// OBG - General
+"Most common cause of postpartum hemorrhage?":["Uterine atony (75-80%) — failure of uterus to contract after delivery. The 4 T's: Tone (atony), Tissue (retained), Trauma (tears), Thrombin (coagulopathy).","Postpartum Hemorrhage"],
+"Bishop's score is used to assess?":["Cervical favorability for labor induction. Score ≥8 = favorable. Assesses: dilation, effacement, station, consistency, position. Low score → ripen cervix first.","Labor Induction"],
+"Bandl's ring is seen in?":["Pathological retraction ring between upper & lower uterine segments in obstructed labor. Impending rupture sign. IMMEDIATE C-section required.","Obstructed Labor"],
+"Most common ectopic pregnancy site?":["Ampulla of fallopian tube (70-80%). Isthmus is 2nd most common. Risk factors: PID, previous ectopic, tubal surgery, IUD.","Ectopic Pregnancy"],
+"Sheehan's syndrome is due to?":["Postpartum pituitary necrosis from severe hemorrhage/shock. Pituitary enlarges in pregnancy (hyperplasia) making it vulnerable. Failure to lactate is the earliest sign.","Sheehan's Syndrome"],
+"PCOD is associated with all EXCEPT?":["PCOD has INCREASED LH:FSH ratio (>2:1), not decreased. Features: obesity, hirsutism, insulin resistance, anovulation, multiple peripheral ovarian cysts.","PCOD/PCOS"],
+"Drug of choice for eclampsia?":["MgSO4 (Pritchard/Zuspan regimen) is the DOC for seizure prevention & treatment. Therapeutic range: 4-7 mEq/L. Antidote = calcium gluconate.","Eclampsia Management"],
+"Most common ovarian tumor in pregnancy?":["Dermoid cyst (mature cystic teratoma) — most common benign ovarian tumor in reproductive age. Contains teeth, hair, sebum. Bilateral in 10%.","Ovarian Tumors in Pregnancy"],
+"Partogram helps monitor?":["WHO tool to monitor progress of labor — documents cervical dilation, descent, FHR, contractions, vitals. Alert & action lines guide intervention.","Partogram & Labor Monitoring"],
+"Montevideo units measure?":["Intensity of uterine contractions × number of contractions in 10 minutes. >200 MVU = adequate labor. Used to assess adequacy of contractions.","Uterine Contraction Assessment"],
+"Most common presentation at term?":["Vertex (cephalic) — 96% of all term presentations. Breech = 3-4%. Transverse = <1%. Face/brow = very rare.","Fetal Presentation"],
+"Krukenberg tumor originates from?":["Metastatic tumor TO the ovary FROM the stomach (signet ring cells). Spread via transperitoneal route. The question asks origin = stomach, not ovary.","Ovarian Metastases"],
+// Surgery
+"Most common type of hernia?":["Indirect inguinal hernia (through deep ring, lateral to inferior epigastric vessels). Direct = through Hesselbach's triangle, medial to vessels. Femoral = below inguinal ligament.","Hernias"],
+"McBurney's point tenderness suggests?":["Junction of lateral 1/3 & medial 2/3 of line from ASIS to umbilicus. Appendicitis — most common surgical emergency. Rovsing's & Psoas sign also positive.","Appendicitis"],
+"Charcot's joint is seen in?":["Neuropathic joint destruction due to loss of protective sensation in diabetes mellitus (most common cause today). Also: tabes dorsalis, syringomyelia, leprosy.","Neuropathic Joints"],
+"Sister Mary Joseph nodule is found at?":["Umbilical metastatic nodule, usually from GI or ovarian malignancy (transcoelomic spread). Named after a Mayo Clinic surgical assistant.","Metastatic Nodules"],
+"Most common site of gastric ulcer?":["Lesser curvature (especially at incisura angularis). Greater curvature ulcers are rare but more likely to be malignant. Duodenal ulcer = 1st part, anterior wall.","Peptic Ulcer Disease"],
+"Virchow's node is located at?":["Left supraclavicular lymph node — metastasis from abdominal malignancy (especially gastric CA) via thoracic duct. Troisier's sign = palpable Virchow's node.","Lymph Node Metastasis"],
+"Most common cause of surgical jaundice?":["Gallstones (choledocholithiasis) — most common cause of obstructive jaundice requiring surgery. Pancreatic head CA is 2nd most common.","Surgical Jaundice"],
+"Battle's sign indicates?":["Mastoid ecchymosis = middle cranial fossa fracture (temporal bone). Raccoon eyes = anterior cranial fossa fracture. CSF otorrhea may accompany.","Base of Skull Fractures"],
+"Coulvoisier's law — palpable GB with jaundice suggests?":["Palpable non-tender GB + jaundice = NOT gallstones (chronic stones → fibrosed GB). Points to malignant obstruction — periampullary/pancreatic head CA.","Courvoisier's Law"],
+"Most common thyroid malignancy?":["Papillary CA (80%) — best prognosis. Orphan Annie eye nuclei + psammoma bodies. Lymphatic spread. Follicular = hematogenous spread. Anaplastic = worst prognosis.","Thyroid Malignancies"],
+"Rovsing's sign is positive in?":["Pain in RIF on pressing LIF = Rovsing's sign in appendicitis. Indicates peritoneal irritation. Other signs: Psoas, Obturator, Dunphy's (pain on coughing).","Appendicitis Signs"],
+"Zadek's operation is done for?":["Complete nail bed excision + germinal matrix ablation for recurrent ingrown toenail (onychocryptosis). Wedge resection = partial procedure for mild cases.","Ingrown Toenail Surgery"],
+// Paeds
+"Most common congenital heart disease?":["VSD is the most common CHD overall. ASD is the most common acyanotic CHD presenting in adults. TOF is the most common cyanotic CHD after 1 year.","Congenital Heart Disease"],
+"Koplik's spots are seen in?":["White spots on buccal mucosa in measles — pathognomonic. Appear 2-3 days before rash. Forchheimer spots (rubella) are on soft palate.","Measles — Koplik's Spots"],
+"Most common childhood malignancy?":["ALL is the most common childhood cancer. Wilms tumor = most common renal tumor. Neuroblastoma = most common extracranial solid tumor. Retinoblastoma = eye.","Childhood Cancers"],
+"Moro reflex disappears by?":["4 months (some say 3-6). Persistence beyond 6 months = UMN pathology. Asymmetric Moro = Erb's palsy or fracture clavicle.","Primitive Reflexes"],
+"Social smile appears at?":["2 months is the milestone. Stranger anxiety = 8-9 months. Pincer grasp = 9 months. Walking = 12 months. Key developmental milestones!","Developmental Milestones"],
+"Kernicterus is caused by deposition of?":["Unconjugated (indirect) bilirubin crosses BBB and deposits in basal ganglia, hippocampus. Direct bilirubin is water-soluble and does NOT cross BBB.","Neonatal Jaundice"],
+"ORS composition—sodium concentration (mmol/L)?":["Low-osmolarity ORS has Na 75 mmol/L (WHO 2002 formula). Old formula had Na 90. Reduced osmolarity ORS decreases stool output by 25%.","ORS Composition"],
+"Retinoblastoma gene is located on chromosome?":["Chromosome 13q14 (RB1 gene). Two-hit hypothesis (Knudson). Leukocoria (white pupillary reflex) = most common presentation.","Retinoblastoma"],
+"Pincer grasp develops at?":["9 months — thumb-finger opposition for small objects. Palmar grasp = 6 months. Tripod grasp = 12 months. Essential fine motor milestone.","Fine Motor Milestones"],
+"Vitamin K prophylaxis at birth prevents?":["Hemorrhagic disease of the newborn (vitamin K deficiency bleeding). Neonates lack gut flora to synthesize vitamin K. 1mg IM at birth.","Neonatal Vitamin K"],
+"Handedness is established by what age?":["3 years. Established handedness before 18 months suggests contralateral hemiparesis. This is a subtle but important red flag.","Motor Development"],
+"Most common organism causing neonatal sepsis?":["Early-onset (<72h) = GBS (Group B Streptococcus). Late-onset = Staph aureus, CoNS. E. coli is 2nd most common overall in neonatal sepsis.","Neonatal Sepsis"],
+// ENT
+"Most common cause of epistaxis in children?":["Nose picking (digital trauma) at Little's area (Kiesselbach's plexus) on anterior nasal septum. Posterior epistaxis = elderly + hypertension (sphenopalatine artery).","Epistaxis"],
+"Quinsy is?":["Peritonsillar abscess — complication of acute tonsillitis. Presents with trismus, muffled voice, uvula deviation. Treatment: I&D + antibiotics.","Peritonsillar Abscess"],
+"Rinne test is negative in?":["BC > AC = negative Rinne = conductive hearing loss. Normal/SNHL: AC > BC (positive Rinne). False negative Rinne = severe SNHL in one ear.","Tuning Fork Tests"],
+"Bezold's abscess is a complication of?":["CSOM (cholesteatoma) — pus tracks through mastoid tip into SCM/digastric muscles of neck. Mastoiditis complication, NOT acute otitis media.","CSOM Complications"],
+"Trotter's triad is seen in?":["Nasopharyngeal CA: conductive deafness + ipsilateral trigeminal neuralgia + palatal palsy. Due to invasion of parapharyngeal space.","Nasopharyngeal Carcinoma"],
+"Most common benign tumor of larynx?":["Squamous papilloma (caused by HPV 6 & 11). Can be juvenile (multiple, recurrent) or adult (usually solitary). Hemangioma = most common in infants.","Laryngeal Tumors"],
+"Caldwell-Luc operation is done for?":["Radical maxillary antrostomy via canine fossa approach for chronic maxillary sinusitis. Now largely replaced by FESS (functional endoscopic sinus surgery).","Maxillary Sinusitis Surgery"],
+"Gradenigo syndrome involves cranial nerve?":["CN V (trigeminal neuralgia) + CN VI (lateral rectus palsy/diplopia) + otorrhea. Complication of petrous apicitis from otitis media.","Gradenigo Syndrome"],
+"Most common foreign body site in airway?":["Right main bronchus — wider, shorter, more vertical than left. Hence foreign bodies preferentially enter right side. Most common FB in children = peanut.","Airway Foreign Bodies"],
+"Le Fort I fracture line passes through?":["Horizontal fracture above the teeth (maxilla only). Le Fort II = pyramidal (across nasal bridge). Le Fort III = craniofacial dysjunction (across skull base).","Le Fort Fracture Classification"],
+"A 28-year-old woman with progressive hearing loss hears better in noisy environments. What is this phenomenon?":["Paracusis Willisii = hearing better in noise, pathognomonic of otosclerosis. In noise, people speak louder, overcoming the conductive loss.","Otosclerosis"],
+"Which audiometric finding is characteristically seen in otosclerosis?":["Carhart's notch = false bone conduction dip at 2000 Hz. It's mechanical, not true SNHL — disappears after successful stapedotomy.","Otosclerosis Audiometry"],
+"A pink blush seen through intact tympanic membrane in active otosclerosis is called?":["Schwartze sign = flamingo pink/red blush due to active otospongiosis with increased vascularity of promontory seen through intact TM.","Active Otosclerosis"],
+"Tympanometry in otosclerosis shows?":["Type As (shallow/stiff) = reduced compliance due to stapes fixation. Type B = flat (effusion). Type C = negative pressure (Eustachian tube dysfunction). Type Ad = hypermobile.","Impedance Audiometry"],
+"Most feared complication of stapedotomy?":["SNHL is irreversible and most feared — converts a manageable conductive loss to permanent total hearing loss. Perilymph fistula & vertigo are also serious but often treatable.","Stapedotomy Complications"],
+// Ophthalmology
+"Most common cause of preventable blindness worldwide?":["Trachoma (Chlamydia trachomatis A-C) = preventable. Cataract = most common cause of reversible blindness. Glaucoma = most common cause of irreversible blindness.","Preventable Blindness"],
+"Marcus Gunn pupil indicates?":["Relative afferent pupillary defect (RAPD) — swinging flashlight test shows paradoxical dilation when light swings to affected eye. Indicates optic nerve/severe retinal disease.","RAPD"],
+"Cherry red spot on macula is seen in?":["CRAO (central retinal artery occlusion) — macula appears red because choroidal circulation shows through thin fovea while pale ischemic retina surrounds it. Also: Tay-Sachs, Niemann-Pick.","CRAO"],
+"Bitot's spots are due to deficiency of?":["Vitamin A deficiency causes Bitot's spots (triangular, foamy, keratinized conjunctival patches), xerophthalmia, night blindness, keratomalacia.","Vitamin A Deficiency"],
+"Most common intraocular malignancy in adults?":["Uveal melanoma (choroidal melanoma) in adults. Retinoblastoma is the most common in children. Metastasis to eye is actually the most common overall IO tumor.","Intraocular Tumors"],
+"Fleischer ring is seen in?":["Iron deposition (hemosiderin) at base of cone in keratoconus — brownish ring. Kayser-Fleischer ring = Wilson's disease (copper in Descemet's membrane).","Corneal Rings"],
+"Seidel test is used to detect?":["Aqueous humor leak from a corneal/scleral wound. Fluorescein applied → green stream = positive Seidel test. Important post-trauma/post-surgery.","Ocular Trauma Assessment"],
+"Accommodation triad includes all EXCEPT?":["Miosis + convergence + increased lens curvature (for near vision). Mydriasis (pupil dilation) is the OPPOSITE — occurs for distance vision.","Accommodation Reflex"],
+"Most common type of squint in children?":["Esotropia (convergent squint) is more common than exotropia in children. Non-paralytic/concomitant type is most common in pediatric age group.","Pediatric Squint"],
+"Glaucoma is diagnosed by measuring?":["IOP measurement (tonometry) is key for glaucoma diagnosis. But IOP alone isn't sufficient — need optic disc assessment, visual fields (perimetry), and gonioscopy.","Glaucoma Diagnosis"],
+// Dermatology
+"Nikolsky's sign is positive in?":["Lateral pressure on normal-appearing skin causes epidermal separation in pemphigus vulgaris (intraepidermal). NEGATIVE in bullous pemphigoid (subepidermal).","Pemphigus vs Pemphigoid"],
+"Auspitz sign is seen in?":["Removal of psoriatic scales reveals pinpoint bleeding (due to dilated capillaries in elongated dermal papillae). Pathognomonic of psoriasis.","Psoriasis"],
+"Herald patch is characteristic of?":["Initial large oval patch followed by smaller lesions in 'Christmas tree' pattern = pityriasis rosea. Self-limiting. Associated with HHV-6/HHV-7.","Pityriasis Rosea"],
+"Wickham's striae are seen in?":["Fine white lines on surface of lichen planus papules. 5 P's: Purple, Polygonal, Planar, Pruritic Papules. Oral mucosa = lacy white pattern.","Lichen Planus"],
+"Most common skin malignancy?":["BCC (basal cell carcinoma) — locally invasive, rarely metastasizes. Rodent ulcer. SCC = 2nd most common, can metastasize. Melanoma = most lethal.","Skin Malignancies"],
+"Koebner phenomenon is seen in all EXCEPT?":["Koebner (isomorphic response) = new lesions at trauma site. Seen in psoriasis, lichen planus, vitiligo. NOT in pemphigoid. Also seen in warts & molluscum.","Koebner Phenomenon"],
+"Dermatitis herpetiformis is associated with?":["DH is the skin manifestation of celiac disease (gluten sensitivity). IgA deposits at dermal papillae. Intensely pruritic grouped vesicles on extensor surfaces.","Dermatitis Herpetiformis"],
+"Target (iris) lesions are seen in?":["Erythema multiforme — hypersensitivity reaction (HSV, drugs). Central dusky zone + pale ring + erythematous outer ring. Stevens-Johnson = severe form.","Erythema Multiforme"],
+"Tzanck smear shows acantholytic cells in?":["Rounded, detached keratinocytes due to loss of desmosomes (acantholysis) in pemphigus. Tzanck smear also shows multinucleated giant cells in herpes.","Pemphigus — Tzanck Smear"],
+"'Leonine facies' is characteristic of?":["Diffuse infiltration of facial skin with loss of eyebrows in lepromatous leprosy (LL). Tuberculoid = well-defined, hypopigmented, anesthetic patches.","Leprosy Classification"],
+// Ortho
+"Most common carpal bone fracture?":["Scaphoid — most commonly fractured carpal bone (fall on outstretched hand). Anatomical snuffbox tenderness. AVN risk due to retrograde blood supply.","Scaphoid Fractures"],
+"Colles' fracture has?":["Dorsal displacement + dorsal angulation of distal radius fragment = dinner fork deformity. Smith's fracture = reverse (volar displacement) = garden spade deformity.","Distal Radius Fractures"],
+"Pott's fracture involves?":["Ankle fracture-dislocation (bimalleolar/trimalleolar). NOT tibial shaft. Colles = wrist. Named after Percival Pott.","Ankle Fractures"],
+"Most common bone tumor?":["Metastases are the most common bone tumors overall. Osteosarcoma = most common PRIMARY malignant bone tumor. Osteochondroma = most common benign.","Bone Tumors"],
+"Garden classification is for fractures of?":["Femoral neck fractures (intracapsular). Garden I-II = undisplaced (fix). Garden III-IV = displaced (replace — hemiarthroplasty/THR). Higher grade = higher AVN risk.","Femoral Neck Fractures"],
+"Erb's palsy involves nerve roots?":["C5-C6 (upper trunk). Waiter's tip position. Klumpke's palsy = C8-T1 (lower trunk) = claw hand ± Horner syndrome.","Brachial Plexus Injuries"],
+"Trendelenburg test is positive when which muscle is weak?":["Gluteus medius (hip abductor). Standing on affected leg → opposite pelvis drops. Causes: polio, hip pathology, superior gluteal nerve injury.","Hip Examination"],
+"Boutonniere deformity is?":["PIP flexion + DIP hyperextension due to central slip rupture of extensor tendon. Swan neck = opposite (PIP hyperextension + DIP flexion). Both seen in RA.","Hand Deformities"],
+"Most common site of osteosarcoma?":["Lower end of femur (around knee — 60%). Upper tibia is 2nd. Metaphysis of long bones in young adults. Codman's triangle & sunburst pattern on X-ray.","Osteosarcoma"],
+"Thomas test detects?":["Fixed flexion deformity of hip. One hip is maximally flexed to eliminate lumbar lordosis. If opposite leg lifts off the bed → positive Thomas test = FFD.","Hip Examination"],
+"Bankart lesion is seen in?":["Anterior-inferior glenoid labral tear in anterior shoulder dislocation (most common direction). Hill-Sachs = posterolateral humeral head compression fracture.","Shoulder Dislocation"],
+"Dinner fork deformity is seen in?":["Colles' fracture — dorsal displacement of distal radius. Caused by FOOSH (fall on outstretched hand). Occurs in elderly osteoporotic women.","Colles' Fracture"]
+        };
+        // Apply explanations to all questions
+        (function(){
+            function applyExp(questions) {
+                questions.forEach(q => {
+                    const exp = EXP[q.q];
+                    if(exp) { q.e = exp[0]; q.r = exp[1]; }
+                });
+            }
+            Object.values(MED_SUBCATEGORIES).forEach(s => applyExp(s.questions));
+            Object.values(OBG_SUBCATEGORIES).forEach(s => applyExp(s.questions));
+            Object.values(QUESTIONS).forEach(qs => applyExp(qs));
+        })();
+
+        // ========== PROFILE ==========
+        function getProfileName() {
+            const p = JSON.parse(localStorage.getItem('nbd_profile') || '{}');
+            return p.name || 'Player';
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('profileName').value.trim();
+            const email = document.getElementById('profileEmail').value.trim();
+            const err = document.getElementById('nameError');
+            if (!name) { err.style.display = 'block'; document.getElementById('profileName').style.borderColor = 'var(--red)'; return; }
+            err.style.display = 'none';
+            localStorage.setItem('nbd_profile', JSON.stringify({ name, email }));
+            trackEvent('new_user', { name, email });
+            showScreen('homeScreen');
+            updateGreeting();
+            init();
+        }
+
+        function updateGreeting() {
+            const p = JSON.parse(localStorage.getItem('nbd_profile') || '{}');
+            const bar = document.getElementById('greetingBar');
+            if (p.name) {
+                bar.innerHTML = `Hey, <strong>${p.name}</strong>! <button class="edit-profile-btn" onclick="editProfile()">Edit Profile</button>`;
+            }
+        }
+
+        function editProfile() {
+            const p = JSON.parse(localStorage.getItem('nbd_profile') || '{}');
+            document.getElementById('profileName').value = p.name || '';
+            document.getElementById('profileEmail').value = p.email || '';
+            showScreen('profileScreen');
+        }
+
+        // ========== ANALYTICS ==========
+        // 👉 REPLACE THIS URL with your deployed Google Apps Script URL
+        const TRACKING_URL = 'https://script.google.com/macros/s/AKfycbwxFErgPmvEul7E4v-Ba4jb5uSyBONjeSwy1c-WoMyjjE5ZMkvoDZuR995dokrmUgxv/exec';
+
+        const _sessionStart = Date.now();
+
+        function trackEvent(eventType, data = {}) {
+            if (!TRACKING_URL) return; // skip if not configured
+            const profile = JSON.parse(localStorage.getItem('nbd_profile') || '{}');
+            const payload = {
+                event: eventType,
+                name: profile.name || 'Unknown',
+                email: profile.email || '',
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                screenWidth: screen.width,
+                ...data
+            };
+            try {
+                navigator.sendBeacon(TRACKING_URL, JSON.stringify(payload));
+            } catch (e) {
+                fetch(TRACKING_URL, { method: 'POST', body: JSON.stringify(payload), mode: 'no-cors' }).catch(() => {});
+            }
+        }
+
+        // Track time spent when user leaves
+        window.addEventListener('beforeunload', () => {
+            const seconds = Math.round((Date.now() - _sessionStart) / 1000);
+            trackEvent('time_spent', { seconds, minutes: Math.round(seconds / 60 * 10) / 10 });
+        });
+
+        // Boot
+        (function boot() {
+            const profile = JSON.parse(localStorage.getItem('nbd_profile') || '{}');
+            if (!profile.name) {
+                document.getElementById('profileScreen').classList.add('active');
+            } else {
+                document.getElementById('homeScreen').classList.add('active');
+                updateGreeting();
+                trackEvent('visit'); // track returning visitor
+            }
+            init();
+        })();
+    </script>
+</body>
+
+</html>

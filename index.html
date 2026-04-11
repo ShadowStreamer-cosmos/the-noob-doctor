@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noob Doctor – Medical Quiz Dashboard</title>
+    <meta name="description" content="Discord-inspired medical quiz dashboard with smart analytics. 150+ MCQs across 12+ specialties for MBBS, NEET PG, and INI-CET preparation.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Profile Modal Overlay -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <div class="modal-icon">👨‍⚕️</div>
+            <h2>Welcome, Doctor!</h2>
+            <p class="modal-sub">Tell us about yourself to get started</p>
+            <div class="form-group">
+                <label>YOUR NAME <span class="req">*</span></label>
+                <input type="text" id="profileName" placeholder="e.g. Dr. Shadow" maxlength="30">
+                <div class="form-error" id="nameError">Please enter your name</div>
+            </div>
+            <div class="form-group">
+                <label>EMAIL <span class="opt">(optional)</span></label>
+                <input type="email" id="profileEmail" placeholder="shadow@hospital.com">
+            </div>
+            <button class="btn-glow" onclick="saveProfile()">🚀 Let's Go!</button>
+        </div>
+    </div>
+
+    <!-- App Layout -->
+    <div class="app-layout" id="appLayout">
+        <!-- Server Bar -->
+        <nav class="server-bar" id="serverBar">
+            <div class="server-icon active" data-server="home" onclick="selectServer('home')" title="Dashboard">
+                <div class="si-inner home-si">🧠</div>
+                <span class="si-pill"></span>
+            </div>
+            <div class="si-divider"></div>
+            <div id="serverList"></div>
+            <div class="si-divider"></div>
+            <div class="server-icon" data-server="leaderboard" onclick="selectServer('leaderboard')" title="Leaderboard">
+                <div class="si-inner">🏆</div>
+                <span class="si-pill"></span>
+            </div>
+        </nav>
+
+        <!-- Channel Sidebar -->
+        <aside class="channel-sidebar" id="channelSidebar">
+            <div class="sb-header">
+                <h2 id="sidebarTitle">The Noob Doctor</h2>
+                <button class="sb-close" onclick="toggleDrawer()">✕</button>
+            </div>
+            <div class="channel-list" id="channelList"></div>
+            <div class="sb-footer" id="sidebarFooter"></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="mh-left">
+                    <button class="mob-menu" onclick="toggleDrawer()">☰</button>
+                    <span class="mh-hash">#</span>
+                    <h3 id="mainTitle">dashboard</h3>
+                </div>
+                <div class="mh-right">
+                    <button class="mh-btn" onclick="toggleAnalytics()" title="Analytics">📊</button>
+                    <button class="mh-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+                </div>
+            </div>
+            <div class="main-body" id="mainBody"></div>
+        </main>
+
+        <!-- Analytics Sidebar -->
+        <aside class="analytics-sidebar" id="analyticsSidebar">
+            <div class="as-header">
+                <h3>📊 Analytics</h3>
+                <button class="as-close" onclick="toggleAnalytics()">✕</button>
+            </div>
+            <div class="as-body" id="analyticsBody"></div>
+        </aside>
+    </div>
+
+    <!-- Notes Reader Panel -->
+    <div class="notes-reader" id="notesReader">
+        <div class="nr-header">
+            <span class="nr-icon">📝</span>
+            <h3 id="nrTitle">Notes</h3>
+            <button class="nr-open-ext" id="nrExtBtn" onclick="openNoteExternal()">Open ↗</button>
+            <button class="nr-close" onclick="closeNoteReader()">✕</button>
+        </div>
+        <div class="nr-body" id="nrBody">
+            <div class="nr-loading">Loading notes...</div>
+        </div>
+    </div>
+    <div class="drawer-overlay" id="notesOverlay" onclick="closeNoteReader()"></div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="sp-header">
+            <h3>⚙️ Settings</h3>
+            <button class="sp-close" onclick="toggleSettings()">✕</button>
+        </div>
+        <div class="sp-body">
+            <div class="sp-section">
+                <div class="sp-section-title">Appearance</div>
+                <div class="sp-row">
+                    <div class="sp-row-label"><span>🌙</span> Dark Mode</div>
+                    <label class="toggle">
+                        <input type="checkbox" id="themeToggle" onchange="handleThemeToggle(this)" checked>
+                        <div class="toggle-track"></div>
+                        <div class="toggle-thumb"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="sp-section">
+                <div class="sp-section-title">Profile</div>
+                <div class="sp-row">
+                    <div class="sp-row-label"><span>👤</span> <span id="spProfileName">Doctor</span></div>
+                    <button class="sp-close" style="font-size:14px" onclick="editProfile()">✏️</button>
+                </div>
+            </div>
+            <div class="sp-section">
+                <div class="sp-section-title">Data</div>
+                <button class="sp-btn" onclick="exportProgress()">📦 Export Progress</button>
+                <button class="sp-btn danger" onclick="resetAllProgress()">🗑️ Reset All Progress</button>
+            </div>
+            <div class="sp-version">The Noob Doctor v2.0</div>
+        </div>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div class="drawer-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeAllDrawers()"></div>
+
+    <script src="questions.js?v=2"></script>
+    <script src="app.js?v=2"></script>
+</body>
+</html>
