@@ -245,7 +245,7 @@ const SUBJECT_SYSTEMS = {
             emoji: "🫀",
             topics: {
                 "Kidney & Ureter": { emoji: "🫘", questions: [], videos: [], notes: [
-                    { title: "Causes of Haematuria — Investigations & Management", type: "notion", url: "https://www.notion.so/Enumerate-the-causes-of-Haematuria-Describe-the-investigations-and-management-in-a-45-year-old-man--33ec44d482ab8075a595c441892d076a", desc: "45-year-old man with painless hematuria" }
+                    { title: "Causes of Haematuria — Investigations & Management", type: "link", url: "https://shadow-notes.vercel.app/embed/a0f38cb1-747a-4d25-92c4-59579229dcbd", desc: "45-year-old man with painless hematuria" }
                 ] },
                 "Bladder": { emoji: "💛", questions: [], videos: [], notes: [] },
                 "Prostate": { emoji: "🔵", questions: [], videos: [], notes: [] }
