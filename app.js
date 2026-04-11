@@ -569,7 +569,7 @@ function openNoteReader(url, title) {
 
     if (url) {
         const clean = url.split('?')[0];
-        body.innerHTML = '<iframe src="' + clean + '" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>';
+        body.innerHTML = '<iframe src="' + clean + '" style="width:100%;height:100%;border:none;position:absolute;top:0;left:0;right:0;bottom:0;" allowfullscreen></iframe>';
     } else {
         body.innerHTML = `<div class="nr-empty-state">
             <div class="nr-empty-icon">📝</div>
