@@ -72,8 +72,8 @@
 .nr-close:hover{background:var(--bgH);color:var(--t1)}
 .nr-open-ext{background:none;border:1px solid var(--bd);color:var(--t2);font-size:11px;cursor:pointer;padding:4px 10px;border-radius:var(--rS);font-family:'Inter';font-weight:600}
 .nr-open-ext:hover{border-color:var(--ac);color:var(--acL)}
-.nr-body{flex:1;overflow:hidden}
-.nr-body iframe{width:100%;height:100%;border:none}
+.nr-body{flex:1;overflow:auto;position:relative}
+.nr-body iframe{width:100%;height:100%;border:none;position:absolute;top:0;left:0}
 .nr-loading{display:flex;align-items:center;justify-content:center;height:100%;color:var(--t2);font-size:14px}
 #notesOverlay{z-index:205}
 
