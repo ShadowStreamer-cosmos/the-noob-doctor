@@ -168,117 +168,260 @@ const SUBCATEGORIES = {
     OBG: OBG_SUBCATEGORIES
 };
 
-// ========== SUBJECT SYSTEMS (3-level hierarchy) ==========
-// Structure: Subject → System → Topic → {questions, videos, notes}
+// ========== SUBJECT SYSTEMS (4-level hierarchy: Subject → System → Chapter → Topics) ==========
+// Structure: Subject → System → Chapter → {topics with priority colors}
+// Priority: red = frequently asked, purple = normally asked, default = others
+
 const SUBJECT_SYSTEMS = {
     Surgery: {
         "General Principles": {
             emoji: "⚕️",
-            topics: {
-                "Wound Healing & Infections": { emoji: "🩹", questions: [
-                    { q: "Charcot's joint is seen in?", o: ["RA", "OA", "Diabetes mellitus", "Gout"], a: 2 }
-                ], videos: [], notes: [] }
+            chapters: {
+                "Wound Healing": {
+                    topics: [
+                        { name: "Types of wound healing", priority: "default" },
+                        { name: "Phases of healing", priority: "purple" },
+                        { name: "Factors affecting healing", priority: "red" },
+                        { name: "Wound dehiscence", priority: "red" },
+                        { name: "Keloid & Hypertrophic scar", priority: "purple" }
+                    ]
+                },
+                "Infections": {
+                    topics: [
+                        { name: "Surgical site infection", priority: "red" },
+                        { name: "Types of pus", priority: "default" },
+                        { name: "Necrotizing infections", priority: "purple" },
+                        { name: "Tetanus prophylaxis", priority: "red" },
+                        { name: "Antibiotic prophylaxis", priority: "purple" }
+                    ]
+                },
+                "Fluid & Electrolytes": {
+                    topics: [
+                        { name: "Resuscitation fluids", priority: "red" },
+                        { name: "Fluid calculation", priority: "purple" },
+                        { name: "Electrolyte imbalances", priority: "red" },
+                        { name: "Acid-base disorders", priority: "purple" }
+                    ]
+                },
+                "Shock": {
+                    topics: [
+                        { name: "Types of shock", priority: "red" },
+                        { name: "Fluid resuscitation", priority: "red" },
+                        { name: "Vasopressors", priority: "purple" },
+                        { name: "MODS", priority: "purple" }
+                    ]
+                }
             }
         },
         "GI Surgery": {
             emoji: "🫁",
-            topics: {
-                "Stomach & Duodenum": { emoji: "🔴", questions: [
-                    { q: "Most common site of gastric ulcer?", o: ["Greater curvature", "Fundus", "Lesser curvature", "Antrum"], a: 2 },
-                    { q: "Sister Mary Joseph nodule is found at?", o: ["Left supraclavicular", "Umbilicus", "Axilla", "Groin"], a: 1 }
-                ], videos: [], notes: [] },
-                "Appendix": { emoji: "🪱", questions: [
-                    { q: "McBurney's point tenderness suggests?", o: ["Cholecystitis", "Appendicitis", "Pancreatitis", "Diverticulitis"], a: 1 },
-                    { q: "Rovsing's sign is positive in?", o: ["Cholecystitis", "Appendicitis", "Pancreatitis", "Peptic ulcer"], a: 1 }
-                ], videos: [], notes: [] },
-                "Large Intestine": { emoji: "🟤", questions: [], videos: [], notes: [] },
-                "Anus & Rectum": { emoji: "📍", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Appendix": {
+                    topics: [
+                        { name: "McBurney's point", priority: "red" },
+                        { name: "Appendicitis complications", priority: "red" },
+                        { name: "Rovsing's sign", priority: "purple" },
+                        { name: "Appendicular lump", priority: "purple" },
+                        { name: "Meckel's diverticulitis", priority: "default" }
+                    ]
+                },
+                "Hernia": {
+                    topics: [
+                        { name: "Inguinal hernia types", priority: "red" },
+                        { name: "Femoral hernia", priority: "red" },
+                        { name: "Richter's hernia", priority: "purple" },
+                        { name: "Strangulated hernia", priority: "red" },
+                        { name: "Hernia repair methods", priority: "purple" }
+                    ]
+                },
+                "Breast": {
+                    topics: [
+                        { name: "Breast carcinoma types", priority: "red" },
+                        { name: "TNM staging", priority: "red" },
+                        { name: "Fibroadenoma", priority: "purple" },
+                        { name: "Phyllodes tumor", priority: "default" },
+                        { name: "Nipple discharge causes", priority: "purple" }
+                    ]
+                },
+                "Thyroid": {
+                    topics: [
+                        { name: "Thyroid nodule evaluation", priority: "red" },
+                        { name: "Papillary carcinoma", priority: "red" },
+                        { name: "Medullary carcinoma", priority: "purple" },
+                        { name: "Thyroid storm", priority: "red" },
+                        { name: "Recurrent laryngeal nerve", priority: "purple" }
+                    ]
+                },
+                "Stomach & Duodenum": {
+                    topics: [
+                        { name: "Peptic ulcer complications", priority: "red" },
+                        { name: "Billroth procedures", priority: "purple" },
+                        { name: "Dumping syndrome", priority: "red" },
+                        { name: "Gastric carcinoma", priority: "red" },
+                        { name: "Sister Mary Joseph nodule", priority: "purple" }
+                    ]
+                },
+                "Large Intestine": {
+                    topics: [
+                        { name: "Colorectal cancer", priority: "red" },
+                        { name: "Duke's staging", priority: "red" },
+                        { name: "FAP", priority: "purple" },
+                        { name: "Ulcerative colitis", priority: "purple" },
+                        { name: "Bowel obstruction", priority: "red" }
+                    ]
+                }
             }
         },
         "Hepatobiliary & Pancreas": {
             emoji: "🟢",
-            topics: {
-                "Gallbladder & Bile Ducts": { emoji: "💚", questions: [
-                    { q: "Most common cause of surgical jaundice?", o: ["Gallstones", "Pancreatic head CA", "Cholangiocarcinoma", "Hepatitis"], a: 0 },
-                    { q: "Coulvoisier's law — palpable GB with jaundice suggests?", o: ["Gallstones", "Periampullary carcinoma", "Hepatitis", "Cholangitis"], a: 1 }
-                ], videos: [], notes: [] },
-                "Pancreas": { emoji: "🟡", questions: [], videos: [], notes: [] },
-                "Liver": { emoji: "🫘", questions: [], videos: [], notes: [] },
-                "Spleen & Portal HTN": { emoji: "🟣", questions: [], videos: [], notes: [] }
-            }
-        },
-        "Breast": {
-            emoji: "🎀",
-            topics: {
-                "Breast Diseases": { emoji: "🎀", questions: [], videos: [], notes: [] }
-            }
-        },
-        "Endocrine Surgery": {
-            emoji: "🦋",
-            topics: {
-                "Thyroid": { emoji: "🦋", questions: [
-                    { q: "Most common thyroid malignancy?", o: ["Follicular", "Papillary", "Medullary", "Anaplastic"], a: 1 }
-                ], videos: [], notes: [] },
-                "Parathyroid": { emoji: "🔶", questions: [], videos: [], notes: [] },
-                "Adrenal Glands": { emoji: "🔺", questions: [], videos: [], notes: [] }
-            }
-        },
-        "Head & Neck": {
-            emoji: "🗣️",
-            topics: {
-                "Salivary Glands": { emoji: "💧", questions: [
-                    { q: "Virchow's node is located at?", o: ["Right axilla", "Left supraclavicular", "Right inguinal", "Submental"], a: 1 }
-                ], videos: [], notes: [] },
-                "Oral Cavity": { emoji: "👄", questions: [], videos: [], notes: [] }
-            }
-        },
-        "Hernia & Abdominal Wall": {
-            emoji: "🔲",
-            topics: {
-                "Inguinal Hernia": { emoji: "🔲", questions: [
-                    { q: "Most common type of hernia?", o: ["Femoral", "Inguinal indirect", "Inguinal direct", "Umbilical"], a: 1 }
-                ], videos: [], notes: [] },
-                "Other Hernias": { emoji: "⬜", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Gallbladder": {
+                    topics: [
+                        { name: "Gallstone types", priority: "red" },
+                        { name: "Murphy's sign", priority: "red" },
+                        { name: "CBD stones", priority: "red" },
+                        { name: "Charcot's triad", priority: "red" },
+                        { name: "Courvoisier's law", priority: "red" }
+                    ]
+                },
+                "Liver": {
+                    topics: [
+                        { name: "Liver abscess", priority: "purple" },
+                        { name: "Hydatid cyst", priority: "purple" },
+                        { name: "Portal hypertension", priority: "red" },
+                        { name: "Budd-Chiari syndrome", priority: "default" }
+                    ]
+                },
+                "Pancreas": {
+                    topics: [
+                        { name: "Acute pancreatitis", priority: "red" },
+                        { name: "Ranson's criteria", priority: "red" },
+                        { name: "Pseudocyst", priority: "purple" },
+                        { name: "Pancreatic cancer", priority: "red" },
+                        { name: "Whipple's procedure", priority: "purple" }
+                    ]
+                },
+                "Spleen": {
+                    topics: [
+                        { name: "Splenic injury", priority: "red" },
+                        { name: "Hypersplenism", priority: "default" },
+                        { name: "Splenomegaly causes", priority: "purple" }
+                    ]
+                }
             }
         },
         "Urology": {
             emoji: "🫀",
-            topics: {
-                "Kidney & Ureter": { emoji: "🫘", questions: [], videos: [], notes: [
-                    { title: "Causes of Haematuria — Investigations & Management", type: "link", url: "https://shadow-notion.vercel.app/embed/a0f38cb1-747a-4d25-92c4-59579229dcbd", desc: "45-year-old man with painless hematuria" }
-                ] },
-                "Bladder": { emoji: "💛", questions: [], videos: [], notes: [] },
-                "Prostate": { emoji: "🔵", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Kidney": {
+                    topics: [
+                        { name: "Renal calculi", priority: "red" },
+                        { name: "PUJO", priority: "purple" },
+                        { name: "Renal cell carcinoma", priority: "red" },
+                        { name: "Wilms tumor", priority: "purple" }
+                    ]
+                },
+                "Bladder": {
+                    topics: [
+                        { name: "Bladder carcinoma", priority: "red" },
+                        { name: "Urinary retention", priority: "red" },
+                        { name: "Neurogenic bladder", priority: "purple" }
+                    ]
+                },
+                "Prostate": {
+                    topics: [
+                        { name: "BPH", priority: "red" },
+                        { name: "Prostatic carcinoma", priority: "red" },
+                        { name: "TURP", priority: "purple" },
+                        { name: "PSA interpretation", priority: "red" }
+                    ]
+                }
             }
         },
         "Vascular Surgery": {
             emoji: "❤️‍🩹",
-            topics: {
-                "Arterial Disease": { emoji: "🔴", questions: [], videos: [], notes: [] },
-                "Venous Disease": { emoji: "🔵", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Arterial": {
+                    topics: [
+                        { name: "AAA", priority: "red" },
+                        { name: "Buerger's disease", priority: "purple" },
+                        { name: "Takayasu's arteritis", priority: "default" },
+                        { name: "Carotid stenosis", priority: "red" }
+                    ]
+                },
+                "Venous": {
+                    topics: [
+                        { name: "DVT", priority: "red" },
+                        { name: "Varicose veins", priority: "purple" },
+                        { name: "Venous ulcers", priority: "default" }
+                    ]
+                }
             }
         },
         "Trauma & Emergency": {
             emoji: "🚑",
-            topics: {
-                "Head Injury": { emoji: "🤕", questions: [
-                    { q: "Battle's sign indicates?", o: ["Anterior skull base #", "Middle cranial fossa #", "Le Fort fracture", "C-spine injury"], a: 1 }
-                ], videos: [], notes: [] },
-                "Chest Trauma": { emoji: "🫁", questions: [], videos: [], notes: [] },
-                "Abdominal Trauma": { emoji: "🩸", questions: [], videos: [], notes: [] },
-                "Burns": { emoji: "🔥", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Head Injury": {
+                    topics: [
+                        { name: "Battle's sign", priority: "red" },
+                        { name: "Glasgow coma scale", priority: "red" },
+                        { name: "Diffuse axonal injury", priority: "purple" },
+                        { name: "ICP monitoring", priority: "purple" }
+                    ]
+                },
+                "Chest Trauma": {
+                    topics: [
+                        { name: "Flail chest", priority: "red" },
+                        { name: "Tension pneumothorax", priority: "red" },
+                        { name: "Cardiac tamponade", priority: "red" },
+                        { name: "Hemothorax", priority: "purple" }
+                    ]
+                },
+                "Abdominal Trauma": {
+                    topics: [
+                        { name: "Splenic injury", priority: "red" },
+                        { name: "Liver injury", priority: "red" },
+                        { name: "Pancreatic injury", priority: "purple" },
+                        { name: "FAST scan", priority: "red" }
+                    ]
+                },
+                "Burns": {
+                    topics: [
+                        { name: "Rule of 9", priority: "red" },
+                        { name: "Parkland formula", priority: "red" },
+                        { name: "Burn depth", priority: "purple" },
+                        { name: "Inhalation injury", priority: "red" }
+                    ]
+                }
             }
         },
         "Skin & Soft Tissue": {
             emoji: "🧴",
-            topics: {
-                "Cysts, Sinuses & Fistulae": { emoji: "🕳️", questions: [
-                    { q: "Zadek's operation is done for?", o: ["Pilonidal sinus", "Ingrown toenail", "Ganglion", "Lipoma"], a: 1 }
-                ], videos: [], notes: [] },
-                "Skin Tumors": { emoji: "🔬", questions: [], videos: [], notes: [] }
+            chapters: {
+                "Cysts & Sinuses": {
+                    topics: [
+                        { name: "Pilonidal sinus", priority: "purple" },
+                        { name: "Sebaceous cyst", priority: "default" },
+                        { name: "Dermoid cyst", priority: "default" }
+                    ]
+                },
+                "Skin Tumors": {
+                    topics: [
+                        { name: "Basal cell carcinoma", priority: "red" },
+                        { name: "Squamous cell carcinoma", priority: "red" },
+                        { name: "Malignant melanoma", priority: "red" }
+                    ]
+                }
             }
         }
     }
+};
+
+// Priority colors for topics
+const PRIORITY_COLORS = {
+    "red": "#ef4444",      // Frequently asked in exams
+    "purple": "#a855f7",  // Normally asked
+    "default": "#6b7280"  // Others
 };
 
 // ========== VIDEO & NOTES DATA ==========
@@ -456,7 +599,20 @@ function getSystemSubjectQuestions(cat) {
     const all = [];
     if (SUBJECT_SYSTEMS[cat]) {
         Object.values(SUBJECT_SYSTEMS[cat]).forEach(system => {
-            Object.values(system.topics).forEach(topic => all.push(...topic.questions));
+            // Check if new chapter-based structure
+            if (system.chapters) {
+                Object.values(system.chapters).forEach(chapter => {
+                    // Topics in chapters don't have questions yet (placeholder)
+                    // In future, could add questions to topics
+                });
+            } else if (system.topics) {
+                // Old structure for backward compatibility
+                Object.values(system.topics).forEach(topic => {
+                    if (topic.questions) {
+                        all.push(...topic.questions);
+                    }
+                });
+            }
         });
     }
     return all;

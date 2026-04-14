@@ -247,35 +247,121 @@ function renderDirectSubjectChannels(cat) {
     showContentHub(cat, qs, CAT_META[cat].emoji, false, cat);
 }
 
-// ===== SYSTEM-BASED SIDEBAR (collapsible groups) =====
+// ===== SYSTEM-BASED SIDEBAR (4-level: System → Chapter → Topics) =====
 function renderSystemChannels(cat) {
     const systems = SUBJECT_SYSTEMS[cat];
     if (!systems) return;
     currentParentCat = cat;
     const prog = getProgress();
     let html = '';
+    
     Object.entries(systems).forEach(([sysName, sys]) => {
-        const topicCount = Object.keys(sys.topics).length;
-        let totalQs = 0;
-        Object.values(sys.topics).forEach(t => totalQs += t.questions.length);
-        html += `<div class="ch-cat ch-collapsible open" onclick="toggleSystem(this)">
-            <span class="ch-arrow">▼</span> ${sysName}
-            <span class="ch-sys-count">${totalQs}</span>
-        </div>
-        <div class="ch-system-items">`;
-        Object.entries(sys.topics).forEach(([topicName, topic]) => {
-            const tDone = topic.questions.filter(q => prog[q.id]).length;
-            const badge = topic.questions.length > 0 ? `<span class="ch-badge">${tDone}/${topic.questions.length}</span>` : '';
-            html += `<div class="ch-item" onclick="selectSystemTopic('${esc(cat)}','${esc(topicName)}')"><span class="ch-hash">#</span><span class="ch-name">${topicName.toLowerCase()}</span>${badge}</div>`;
-        });
-        html += '</div>';
+        // Check if new chapter-based structure or old topic-based
+        if (sys.chapters) {
+            // NEW: 4-level structure with chapters
+            html += `<div class="ch-cat ch-collapsible open" onclick="toggleSystem(this)">
+                <span class="ch-arrow">▼</span> ${sysName}
+                <span class="ch-sys-count">${Object.keys(sys.chapters).length} chapters</span>
+            </div>
+            <div class="ch-system-items">`;
+            
+            // Render chapters as collapsible
+            Object.entries(sys.chapters).forEach(([chapterName, chapter]) => {
+                html += `<div class="ch-chapter">
+                    <div class="ch-chapter-header" onclick="toggleChapter(this)">
+                        <span class="ch-chapter-arrow">▶</span>
+                        <span class="ch-chapter-name">${chapterName}</span>
+                        <span class="ch-chapter-count">${chapter.topics.length} topics</span>
+                    </div>
+                    <div class="ch-chapter-topics">`;
+                
+                // Render topics with priority colors
+                chapter.topics.forEach(topic => {
+                    const priorityColor = PRIORITY_COLORS[topic.priority] || PRIORITY_COLORS.default;
+                    html += `<div class="ch-item ch-topic" data-priority="${topic.priority}" onclick="selectTopic('${esc(cat)}','${esc(sysName)}','${esc(chapterName)}','${esc(topic.name)}')">
+                        <span class="ch-priority-dot" style="background:${priorityColor}"></span>
+                        <span class="ch-topic-name">${topic.name}</span>
+                    </div>`;
+                });
+                
+                html += `</div></div>`;
+            });
+            html += '</div>';
+        } else if (sys.topics) {
+            // OLD: 3-level structure (backward compatibility)
+            const topicCount = Object.keys(sys.topics).length;
+            let totalQs = 0;
+            Object.values(sys.topics).forEach(t => totalQs += t.questions.length);
+            html += `<div class="ch-cat ch-collapsible open" onclick="toggleSystem(this)">
+                <span class="ch-arrow">▼</span> ${sysName}
+                <span class="ch-sys-count">${totalQs}</span>
+            </div>
+            <div class="ch-system-items">`;
+            Object.entries(sys.topics).forEach(([topicName, topic]) => {
+                const tDone = topic.questions.filter(q => prog[q.id]).length;
+                const badge = topic.questions.length > 0 ? `<span class="ch-badge">${tDone}/${topic.questions.length}</span>` : '';
+                html += `<div class="ch-item" onclick="selectSystemTopic('${esc(cat)}','${esc(topicName)}')"><span class="ch-hash">#</span><span class="ch-name">${topicName.toLowerCase()}</span>${badge}</div>`;
+            });
+            html += '</div>';
+        }
     });
+    
     html += `<div class="ch-cat">Navigation</div>
         <div class="ch-item" onclick="selectServer('home')"><span class="ch-hash">←</span><span class="ch-name">back-home</span></div>`;
     document.getElementById('channelList').innerHTML = html;
+    
     // Show overview of entire subject
-    const allQs = getSystemSubjectQuestions(cat);
-    showContentHub(cat, allQs, CAT_META[cat].emoji, false, cat);
+    showContentHub(cat, [], CAT_META[cat].emoji, false, cat);
+}
+
+function toggleChapter(el) {
+    el.parentElement.classList.toggle('open');
+    const arrow = el.querySelector('.ch-chapter-arrow');
+    if (arrow) arrow.textContent = el.parentElement.classList.contains('open') ? '▼' : '▶';
+}
+
+function selectTopic(cat, sysName, chapterName, topicName) {
+    console.log(`Selected: ${cat} > ${sysName} > ${chapterName} > ${topicName}`);
+    // Show topic in main content
+    const systems = SUBJECT_SYSTEMS[cat];
+    if (systems && systems[sysName] && systems[sysName].chapters && systems[sysName].chapters[chapterName]) {
+        const chapter = systems[sysName].chapters[chapterName];
+        const topic = chapter.topics.find(t => t.name === topicName);
+        
+        // Highlight active topic
+        document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        
+        // Show topic info in content hub (placeholder for now - can add questions later)
+        showTopicContent(cat, sysName, chapterName, topicName);
+    }
+}
+
+function showTopicContent(cat, sysName, chapterName, topicName) {
+    const systems = SUBJECT_SYSTEMS[cat];
+    const chapter = systems[sysName].chapters[chapterName];
+    const topic = chapter.topics.find(t => t.name === topicName);
+    
+    const priorityColor = PRIORITY_COLORS[topic.priority] || PRIORITY_COLORS.default;
+    const priorityLabel = topic.priority === 'red' ? 'Frequently Asked' : (topic.priority === 'purple' ? 'Normally Asked' : 'Other');
+    
+    document.getElementById('mainTitle').textContent = topicName.toLowerCase();
+    document.getElementById('mainBody').innerHTML = `
+        <div class="topic-view">
+            <div class="topic-header">
+                <span class="topic-priority" style="background:${priorityColor}">${priorityLabel}</span>
+                <h2>${topicName}</h2>
+                <p class="topic-path">${cat} > ${sysName} > ${chapterName}</p>
+            </div>
+            <div class="topic-content">
+                <p style="color:var(--t3);padding:20px;text-align:center;">
+                    Questions for this topic coming soon...<br>
+                    <small>Study this topic with Avanti to generate notes</small>
+                </p>
+            </div>
+        </div>
+    `;
+    closeAllDrawers();
 }
 
 function toggleSystem(el) {
