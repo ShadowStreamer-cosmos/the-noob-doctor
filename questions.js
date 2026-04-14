@@ -68,10 +68,17 @@ const SUBCATEGORIES = {
 };
 
 // ========== SUBJECT SYSTEMS (imported from data modules) ==========
-// Surgery data loaded from data/surgery_data.js (defined in index.html)
+// All specialty data modules loaded from data/*.js (defined in index.html)
 
 const SUBJECT_SYSTEMS = {
-    Surgery: SURGERY_DATA
+    Surgery: SURGERY_DATA,
+    Medicine: MEDICINE_DATA,
+    OBG: OBG_DATA,
+    Paeds: PAEDS_DATA,
+    ENT: ENT_DATA,
+    Ophthalmology: OPHTHALMOLOGY_DATA,
+    Dermatology: DERMATOLOGY_DATA,
+    Ortho: ORTHO_DATA
 };
 
 
@@ -163,14 +170,14 @@ const QUESTIONS = {
 };
 
 const CAT_META = {
-    Medicine: { emoji: "💊", color: "#6c5ce7", hasSubcategories: true },
+    Medicine: { emoji: "💊", color: "#6c5ce7", hasSystems: true },
     Surgery: { emoji: "🔪", color: "#e17055", hasSystems: true },
-    OBG: { emoji: "🤰", color: "#fd79a8", hasSubcategories: true },
-    Paeds: { emoji: "👶", color: "#00cec9" },
-    ENT: { emoji: "👂", color: "#fdcb6e" },
-    Ophthalmology: { emoji: "👁️", color: "#00b894" },
-    Dermatology: { emoji: "🧴", color: "#e84393" },
-    Ortho: { emoji: "🦴", color: "#0984e3" }
+    OBG: { emoji: "🤰", color: "#fd79a8", hasSystems: true },
+    Paeds: { emoji: "👶", color: "#00cec9", hasSystems: true },
+    ENT: { emoji: "👂", color: "#fdcb6e", hasSystems: true },
+    Ophthalmology: { emoji: "👁️", color: "#00b894", hasSystems: true },
+    Dermatology: { emoji: "🧴", color: "#e84393", hasSystems: true },
+    Ortho: { emoji: "🦴", color: "#0984e3", hasSystems: true }
 };
 
 const LEVELS = [
