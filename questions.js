@@ -74,11 +74,7 @@ const SUBJECT_SYSTEMS = {
     Surgery: SURGERY_DATA
 };
 
-const PRIORITY_COLORS = {
-    "red": "#ef4444",
-    "purple": "#a855f7",
-    "default": "#6b7280"
-};
+
 
 const SUBJECT_CONTENT = {
     Paeds: { videos: [], notes: [] },
