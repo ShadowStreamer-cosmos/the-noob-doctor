@@ -16,7 +16,19 @@
   --glow:0 0 20px var(--acG);--shadow:0 4px 20px rgba(0,0,0,.3);
   --sW:72px;--sbW:240px;--asW:300px;--hH:52px;
   --r:12px;--rS:8px;--rL:16px;
-  --ease:cubic-bezier(.4,0,.2,1)
+  --ease:cubic-bezier(.4,0,.2,1);
+  
+  /* Hierarchy Colors - Distinct per level */
+  --h1-accent:var(--ac);       /* Subject - Purple accent */
+  --h2-accent:#22d3ee;          /* System - Cyan accent */
+  --h3-accent:#f472b6;         /* Chapter - Pink accent */
+  --h4-accent:#8b8da8;         /* Topic - Muted gray */
+  
+  /* Priority Colors */
+  --priority-high:#ef4444;    /* Red - High priority */
+  --priority-medium:#a855f7;   /* Purple - Medium priority */
+  --priority-standard:#22d3ee;/* Cyan - Standard */
+  --priority-low:#34d399      /* Green -Low priority */
 }
 
 /* ===== LIGHT THEME ===== */
@@ -96,7 +108,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg0);color:va
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeScale{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes fadeScale{from{opacity:0;scale(.92)}to{opacity:1;scale(1)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes glowP{0%,100%{box-shadow:0 0 16px var(--acG)}50%{box-shadow:0 0 36px var(--acG)}}
@@ -104,6 +116,20 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg0);color:va
 @keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(600px) rotate(720deg);opacity:0}}
 @keyframes bounceIn{0%{transform:scale(0);opacity:0}50%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 @keyframes countUp{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+/* Sidebar slide animations */
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes hierarchyFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Level entrance animations - staggered */
+.ch-subject-header{animation:hierarchyFadeIn .3s var(--ease) backwards}
+.ch-system{animation:hierarchyFadeIn .25s var(--ease) backwards}
+.ch-chapter{animation:hierarchyFadeIn .2s var(--ease) backwards}
+.ch-topic{animation:hierarchyFadeIn .15s var(--ease) backwards}
+/* Active glow effect */
+@keyframes activeGlow{0%,100%{box-shadow:0 0 0 var(--acD)}50%{box-shadow:0 0 12px var(--acG)}}
+.ch-topic.active .ch-topic-name,
+.ch-chapter.active .ch-chapter-name,
+.ch-system.active .ch-system-name{animation:activeGlow 2s ease-in-out infinite}
 
 /* ===== MODAL ===== */
 .modal-overlay{
@@ -152,52 +178,338 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg0);color:va
 .server-icon.active .si-pill{height:36px;top:50%;transform:translateY(-50%);background:var(--acL)}
 .si-divider{width:32px;height:2px;background:var(--bdL);margin:6px 0;border-radius:1px}
 
-/* ===== CHANNEL SIDEBAR ===== */
+/* ==============================================
+   SIDEBAR HIERARCHY - VISUAL HIERARCHY REDESIGN
+   Level 1: Subject (largest, boldest)
+   Level 2: System (smaller, semi-bold)  
+   Level 3: Chapter (medium, regular)
+   Level 4: Topic (smallest, lightest)
+   ============================================== */
+
+/* ===== TYPOGRAPHY SCALE ===== */
+:root{
+  --h1-size:18px;/* Subject */
+  --h1-weight:700;
+  --h2-size:15px;/* System */
+  --h2-weight:600;
+  --h3-size:13px;/* Chapter */
+  --h3-weight:500;
+  --h4-size:12px;/* Topic */
+  --h4-weight:400;
+  
+  /* Indentation per level */
+  --indent-1:0px;
+  --indent-2:12px;
+  --indent-3:24px;
+  --indent-4:36px;
+  
+  /* Vertical spacing */
+  --space-subject:20px;
+  --space-system:16px;
+  --space-chapter:8px;
+  --space-topic:4px;
+  
+  /* Icon sizes */
+  --icon-subject:22px;
+  --icon-system:14px;
+  --icon-chapter:10px;
+  --icon-topic:6px;
+  
+  /* Border radius */
+  --r-subject:10px;
+  --r-system:8px;
+  --r-chapter:6px;
+  --r-topic:4px;
+}
+
+/* ===== CHANNEL SIDEBAR BASE ===== */
 .channel-sidebar{background:var(--bg2);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--bd);z-index:15}
 .sb-header{padding:14px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;min-height:var(--hH)}
 .sb-header h2{font-size:15px;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-close{display:none;background:none;border:none;color:var(--t2);font-size:18px;cursor:pointer}
-.channel-list{flex:1;overflow-y:auto;padding:8px}
-.ch-cat{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;padding:14px 8px 4px}
-.ch-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--rS);cursor:pointer;color:var(--t2);font-size:13px;font-weight:500;transition:all .15s var(--ease);margin:1px 0}
-.ch-item:hover{background:var(--bgH);color:var(--t1)}
-.ch-item.active{background:var(--acD);color:var(--t1);font-weight:600}
-.ch-item .ch-hash{font-size:16px;font-weight:700;color:var(--t3);width:18px;flex-shrink:0}
-.ch-item.active .ch-hash{color:var(--acL)}
-.ch-item .ch-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ch-item .ch-badge{font-size:9px;font-weight:700;background:var(--bg5);color:var(--t2);padding:2px 6px;border-radius:10px;flex-shrink:0}
-.ch-item .ch-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ch-dot.done{background:var(--gr)}.ch-dot.partial{background:var(--yl)}.ch-dot.none{background:var(--t3)}
+.channel-list{flex:1;overflow-y:auto;padding:16px 12px}
 
-/* Collapsible system groups */
-.ch-collapsible{cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .15s}
-.ch-collapsible:hover{color:var(--t2)}
-.ch-arrow{font-size:8px;transition:transform .2s var(--ease);display:inline-block}
-.ch-collapsible:not(.open) .ch-arrow{transform:rotate(-90deg)}
-.ch-sys-count{margin-left:auto;font-size:9px;background:var(--bg5);color:var(--t3);padding:1px 5px;border-radius:8px}
-.ch-system-items{overflow:hidden;max-height:500px;transition:max-height .3s var(--ease),opacity .2s}
-.ch-system-items.collapsed{max-height:0;opacity:0;margin:0}
-.ch-system-items .ch-item{padding-left:18px}
+/* ==============================================
+   LEVEL 1: SUBJECT (Highest Level)
+   - Largest, boldest, most prominent
+   - Solid background with colored accent
+   - Stands out as primary navigation
+   ============================================== */
+.ch-subject-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  margin-bottom:var(--space-subject);
+  background:var(--bg4);
+  border-radius:var(--r-subject);
+  border-left:3px solid var(--ac);
+  cursor:pointer;
+  transition:all .2s var(--ease)
+}
+.ch-subject-header:hover{
+  background:var(--bgH);
+  transform:translateX(2px)
+}
+.ch-subject-header.active{
+  background:var(--acD);
+  border-left-color:var(--acL)
+}
+.ch-subject-icon{
+  font-size:var(--icon-subject);
+  flex-shrink:0
+}
+.ch-subject-name{
+  font-size:var(--h1-size);
+  font-weight:var(--h1-weight);
+  color:var(--t1);
+  flex:1
+}
+.ch-subject-collapse{
+  background:none;
+  border:none;
+  color:var(--t3);
+  font-size:12px;
+  cursor:pointer;
+  padding:6px;
+  border-radius:4px;
+  transition:all .15s
+}
+.ch-subject-collapse:hover{
+  background:var(--bg5);
+  color:var(--t2)
+}
+/* Subject progress indicator */
+.ch-subject-progress{
+  font-size:11px;
+  font-weight:600;
+  color:var(--acL);
+  background:var(--acD);
+  padding:3px 8px;
+  border-radius:10px
+}
 
-/* Chapter styles */
-.ch-chapter{margin:4px 0}
-.ch-chapter-header{display:flex;align-items:center;gap:6px;padding:8px 12px;cursor:pointer;border-radius:6px;transition:background .15s}
-.ch-chapter-header:hover{background:var(--bgH)}
-.ch-chapter-arrow{font-size:8px;color:var(--t3);transition:transform .2s}
+/* ==============================================
+   LEVEL 2: SYSTEM (Second Level)
+   - Smaller than Subject, distinctly different
+   - Uses outline/secondary styling
+   - Collapsible group beneath Subject
+   ============================================== */
+.ch-system{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  margin:0 0 var(--space-system) var(--indent-2);
+  background:var(--bg3);
+  border-radius:var(--r-system);
+  cursor:pointer;
+  transition:all .15s var(--ease);
+  border:1px solid transparent
+}
+.ch-system:hover{
+  background:var(--bgH);
+  border-color:var(--bd)
+}
+.ch-system.open{
+  background:var(--bgH);
+  border-color:var(--bd)
+}
+.ch-system-icon{
+  font-size:var(--icon-system);
+  color:var(--t3);
+  transition:transform .2s var(--ease);
+  flex-shrink:0
+}
+.ch-system.open .ch-system-icon{transform:rotate(90deg)}
+.ch-system-name{
+  font-size:var(--h2-size);
+  font-weight:var(--h2-weight);
+  color:var(--t2);
+  flex:1
+}
+.ch-system:hover .ch-system-name,
+.ch-system.open .ch-system-name{
+  color:var(--t1)
+}
+/* System item count */
+.ch-system-count{
+  font-size:10px;
+  font-weight:600;
+  color:var(--t3);
+  background:var(--bg5);
+  padding:2px 8px;
+  border-radius:10px
+}
+
+/* Sub-items container */
+.ch-system-items{
+  display:none;
+  padding-left:8px;
+  margin-bottom:8px
+}
+.ch-system-items.expanded{display:block}
+
+/* ==============================================
+   LEVEL 3: CHAPTER (Third Level)
+   - Medium size, visually lighter
+   - Clear separation from System
+   - Slight indent for grouping
+   ============================================== */
+.ch-chapter{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  margin:0 0 var(--space-chapter) var(--indent-3);
+  border-radius:var(--r-chapter);
+  cursor:pointer;
+  transition:all .12s ease;
+  border-left:2px solid transparent
+}
+.ch-chapter:hover{
+  background:var(--bg1)
+}
+.ch-chapter.active{
+  background:var(--acD);
+  border-left-color:var(--ac)
+}
+/* Arrow indicator for expandable chapters */
+.ch-chapter-arrow{
+  font-size:var(--icon-chapter);
+  color:var(--t3);
+  transition:transform .2s;
+  flex-shrink:0;
+  width:12px;
+  text-align:center
+}
 .ch-chapter.open .ch-chapter-arrow{transform:rotate(90deg)}
-.ch-chapter-name{font-size:12px;font-weight:600;color:var(--t2);flex:1}
-.ch-chapter-count{font-size:9px;color:var(--t3);background:var(--bg5);padding:1px 6px;border-radius:8px}
-.ch-chapter-topics{display:none;padding-left:20px;margin:2px 0}
+.ch-chapter-name{
+  font-size:var(--h3-size);
+  font-weight:var(--h3-weight);
+  color:var(--t2);
+  flex:1
+}
+.ch-chapter:hover .ch-chapter-name,
+.ch-chapter.active .ch-chapter-name{color:var(--t1)}
+/* Topic count badge */
+.ch-chapter-badge{
+  font-size:9px;
+  font-weight:600;
+  color:var(--t3);
+  background:var(--bg5);
+  padding:2px 6px;
+  border-radius:8px
+}
+.ch-chapter-topics{
+  display:none;
+  padding-left:20px;
+  margin-top:4px
+}
 .ch-chapter.open .ch-chapter-topics{display:block}
 
-/* Topic styles with priority colors */
-.ch-topic{display:flex;align-items:center;gap:8px;padding:6px 10px;margin:2px 0;border-radius:4px;cursor:pointer;transition:all .15s}
-.ch-topic:hover{background:var(--bgH)}
-.ch-topic.active{background:var(--bg5);border-left:2px solid var(--ac)}
-.ch-priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ch-topic-name{font-size:11px;color:var(--t2)}
-.ch-topic[data-priority="red"] .ch-topic-name{color:#ef4444;font-weight:600}
-.ch-topic[data-priority="purple"] .ch-topic-name{color:#a855f7;font-weight:600}
+/* ==============================================
+   LEVEL 4: TOPIC (Lowest Level)
+   - Smallest, lightest weight
+   - Subtle hover states
+   - Priority indicators (dot system)
+   ============================================== */
+.ch-topic{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  margin:0 0 var(--space-topic) var(--indent-4);
+  border-radius:var(--r-topic);
+  cursor:pointer;
+  transition:all .12s ease;
+  border-left:2px solid transparent
+}
+.ch-topic:hover{
+  background:var(--bg1)
+}
+.ch-topic.active{
+  background:var(--acD);
+  border-left:2px solid var(--ac)
+}
+/* Priority dot indicator */
+.ch-topic-dot{
+  width:var(--icon-topic);
+  height:var(--icon-topic);
+  border-radius:50%;
+  flex-shrink:0
+}
+.ch-topic-dot.red{background:var(--rd)}
+.ch-topic-dot.purple{background:#a855f7}
+.ch-topic-dot.orange{background:#f97316}
+.ch-topic-dot.default{background:var(--t3)}
+.ch-topic-dot.green{background:var(--gr)}
+/* Priority styling */
+.ch-topic[data-priority="red"] .ch-topic-name{color:var(--rd);font-weight:500}
+.ch-topic[data-priority="purple"] .ch-topic-name{color:#c084fc;font-weight:500}
+.ch-topic[data-priority="orange"] .ch-topic-name{color:#fb923c;font-weight:500}
+.ch-topic-name{
+  font-size:var(--h4-size);
+  font-weight:var(--h4-weight);
+  color:var(--t3);
+  flex:1
+}
+.ch-topic:hover .ch-topic-name,
+.ch-topic.active .ch-topic-name{color:var(--t2)}
+
+/* ==============================================
+   LEGACY CATEGORY (Fallback for non-hierarchical)
+   ============================================== */
+.ch-cat{
+  font-size:11px;
+  font-weight:700;
+  color:var(--t3);
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  padding:16px 8px 8px;
+  margin-top:12px
+}
+
+/* Legacy item style (fallback) */
+.ch-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:var(--rS);
+  cursor:pointer;
+  color:var(--t2);
+  font-size:13px;
+  font-weight:500;
+  transition:all .15s var(--ease);
+  margin:2px 0
+}
+.ch-item:hover{background:var(--bgH);color:var(--t1)}
+.ch-item.active{background:var(--acD);color:var(--t1);font-weight:600}
+.ch-item .ch-hash{
+  font-size:16px;
+  font-weight:700;
+  color:var(--t3);
+  width:18px;
+  flex-shrink:0
+}
+.ch-item.active .ch-hash{color:var(--acL)}
+.ch-item .ch-name{
+  flex:1;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.ch-item .ch-badge{
+  font-size:9px;
+  font-weight:700;
+  background:var(--bg5);
+  color:var(--t2);
+  padding:2px 6px;
+  border-radius:10px;
+  flex-shrink:0
+}
+.ch-item .ch-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* Topic view in main content */
 .topic-view{padding:20px}

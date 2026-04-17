@@ -247,92 +247,161 @@ function renderDirectSubjectChannels(cat) {
     showContentHub(cat, qs, CAT_META[cat].emoji, false, cat);
 }
 
-// ===== SYSTEM-BASED SIDEBAR (4-level: System → Chapter → Topics) =====
+// ===== SYSTEM-BASED SIDEBAR (4-level: Subject → System → Chapter → Topics) =====
 function renderSystemChannels(cat) {
     const systems = SUBJECT_SYSTEMS[cat];
     if (!systems) return;
     currentParentCat = cat;
+    const meta = CAT_META[cat];
     const prog = getProgress();
     let html = '';
-    
+
+    // Level 1: Subject header
+    html += `<div class="ch-subject-header">
+        <span class="ch-subject-icon">${meta.emoji}</span>
+        <span class="ch-subject-name">${cat}</span>
+        <button class="ch-subject-collapse" onclick="toggleAllSystems()" title="Collapse all">▾</button>
+    </div>`;
+
+    // Level 2: Systems
+    let sysIndex = 0;
     Object.entries(systems).forEach(([sysName, sys]) => {
-        // Check if new chapter-based structure or old topic-based
+        sysIndex++;
+        const hasMasterGuide = sys.notesUrl ? true : false;
+        const chapterCount = sys.chapters ? Object.keys(sys.chapters).length : 0;
+        const topicCount = sys.topics ? Object.keys(sys.topics).length : 0;
+        const sysId = 'sys-' + sysIndex;
+
+        html += `<div class="ch-system" id="${sysId}" onclick="toggleSystem('${sysId}', event)">
+            <span class="ch-system-icon">${hasMasterGuide ? '📖' : '▸'}</span>
+            <span class="ch-system-name">${sysName}</span>
+            <span class="ch-system-count">${chapterCount || topicCount}</span>
+        </div>
+        <div class="ch-system-items" id="${sysId}-items" style="display:none">`;
+
+        // Level 3: Chapters (if chapter-based)
         if (sys.chapters) {
-            // NEW: 4-level structure with chapters
-            html += `<div class="ch-cat ch-collapsible open" onclick="toggleSystem(this)">
-                <span class="ch-arrow">▼</span> ${sysName}
-                <span class="ch-sys-count">${Object.keys(sys.chapters).length} chapters</span>
-            </div>
-            <div class="ch-system-items">`;
-            
-            // Render chapters as collapsible
+            let chIndex = 0;
             Object.entries(sys.chapters).forEach(([chapterName, chapter]) => {
-                html += `<div class="ch-chapter">
-                    <div class="ch-chapter-header" onclick="toggleChapter(this)">
-                        <span class="ch-chapter-arrow">▶</span>
-                        <span class="ch-chapter-name">${chapterName}</span>
-                        <span class="ch-chapter-count">${chapter.topics.length} topics</span>
-                    </div>
-                    <div class="ch-chapter-topics">`;
-                
-                // Render topics with priority colors
+                chIndex++;
+                const chId = 'ch-' + sysIndex + '-' + chIndex;
+                html += `<div class="ch-chapter" id="${chId}" onclick="toggleChapter('${chId}', event)">
+                    <span class="ch-chapter-arrow">▸</span>
+                    <span class="ch-chapter-name">${chapterName}</span>
+                    <span class="ch-chapter-badge">${chapter.topics.length}</span>
+                </div>
+                <div class="ch-chapter-topics" id="${chId}-topics" style="display:none">`;
+
+                // Level 4: Topics
                 chapter.topics.forEach(topic => {
-                    const priorityColor = PRIORITY_COLORS[topic.priority] || PRIORITY_COLORS.default;
-                    html += `<div class="ch-item ch-topic" data-priority="${topic.priority}" onclick="selectTopic('${esc(cat)}','${esc(sysName)}','${esc(chapterName)}','${esc(topic.name)}')">
-                        <span class="ch-priority-dot" style="background:${priorityColor}"></span>
+                    const priorityClass = topic.priority || 'default';
+                    html += `<div class="ch-topic" data-priority="${priorityClass}" onclick="selectTopic('${esc(cat)}','${esc(sysName)}','${esc(chapterName)}','${esc(topic.name)}')">
+                        <span class="ch-topic-dot ${priorityClass}"></span>
                         <span class="ch-topic-name">${topic.name}</span>
                     </div>`;
                 });
-                
-                html += `</div></div>`;
+
+                html += `</div>`;
             });
-            html += '</div>';
         } else if (sys.topics) {
-            // OLD: 3-level structure (backward compatibility)
-            const topicCount = Object.keys(sys.topics).length;
-            let totalQs = 0;
-            Object.values(sys.topics).forEach(t => totalQs += t.questions.length);
-            html += `<div class="ch-cat ch-collapsible open" onclick="toggleSystem(this)">
-                <span class="ch-arrow">▼</span> ${sysName}
-                <span class="ch-sys-count">${totalQs}</span>
-            </div>
-            <div class="ch-system-items">`;
+            // Legacy: topic-based (no chapters)
             Object.entries(sys.topics).forEach(([topicName, topic]) => {
                 const tDone = topic.questions.filter(q => prog[q.id]).length;
-                const badge = topic.questions.length > 0 ? `<span class="ch-badge">${tDone}/${topic.questions.length}</span>` : '';
-                html += `<div class="ch-item" onclick="selectSystemTopic('${esc(cat)}','${esc(topicName)}')"><span class="ch-hash">#</span><span class="ch-name">${topicName.toLowerCase()}</span>${badge}</div>`;
+                html += `<div class="ch-topic" onclick="selectSystemTopic('${esc(cat)}','${esc(topicName)}')">
+                    <span class="ch-topic-dot"></span>
+                    <span class="ch-topic-name">${topicName}</span>
+                </div>`;
             });
-            html += '</div>';
         }
+
+        html += `</div>`;
     });
-    
-    html += `<div class="ch-cat">Navigation</div>
-        <div class="ch-item" onclick="selectServer('home')"><span class="ch-hash">←</span><span class="ch-name">back-home</span></div>`;
+
+    html += `<div class="ch-item" style="margin-top:16px" onclick="selectServer('home')">
+        <span class="ch-hash">←</span><span class="ch-name">back to dashboard</span>
+    </div>`;
     document.getElementById('channelList').innerHTML = html;
-    
-    // Show overview of entire subject
-    showContentHub(cat, [], CAT_META[cat].emoji, false, cat);
+
+    // All systems start collapsed (user clicks to expand)
+
+    showContentHub(cat, [], meta.emoji, false, cat);
 }
 
-function toggleChapter(el) {
-    el.parentElement.classList.toggle('open');
-    const arrow = el.querySelector('.ch-chapter-arrow');
-    if (arrow) arrow.textContent = el.parentElement.classList.contains('open') ? '▼' : '▶';
+function toggleSystem(sysId, event) {
+    if (event) event.stopPropagation();
+    const el = document.getElementById(sysId);
+    const items = document.getElementById(sysId + '-items');
+    if (el && items) {
+        const isOpen = items.style.display !== 'none';
+        items.style.display = isOpen ? 'none' : 'block';
+        // Toggle open class for styling
+        el.classList.toggle('open', !isOpen);
+    }
+}
+
+function toggleAllSystems() {
+    const btn = document.querySelector('.ch-subject-collapse');
+    const items = document.querySelectorAll('.ch-system-items');
+    const firstItem = items[0];
+    const isCollapsed = firstItem && firstItem.style.display !== 'none';
+    items.forEach(i => i.style.display = isCollapsed ? 'none' : 'block');
+    btn.textContent = isCollapsed ? '▾' : '▔';
+}
+
+function toggleChapter(chId, event) {
+    if (event) event.stopPropagation();
+    const el = document.getElementById(chId);
+    const topicsDiv = document.getElementById(chId + '-topics');
+    if (el && topicsDiv) {
+        const isOpen = topicsDiv.style.display !== 'none';
+        topicsDiv.style.display = isOpen ? 'none' : 'block';
+        el.classList.toggle('open', !isOpen);
+        const arrow = el.querySelector('.ch-chapter-arrow');
+        if (arrow) arrow.textContent = isOpen ? '▸' : '▾';
+    }
 }
 
 function selectTopic(cat, sysName, chapterName, topicName) {
     console.log(`Selected: ${cat} > ${sysName} > ${chapterName} > ${topicName}`);
-    // Show topic in main content
+
+    // Find and expand parent elements
     const systems = SUBJECT_SYSTEMS[cat];
     if (systems && systems[sysName] && systems[sysName].chapters && systems[sysName].chapters[chapterName]) {
         const chapter = systems[sysName].chapters[chapterName];
         const topic = chapter.topics.find(t => t.name === topicName);
-        
+
+        // Expand system if collapsed
+        const sysEl = document.querySelector(`.ch-system[data-system="${esc(sysName)}"]`);
+        if (sysEl && !sysEl.classList.contains('open')) {
+            sysEl.classList.add('open');
+            sysEl.nextElementSibling.classList.add('expanded');
+        }
+
+        // Expand chapter if collapsed (find chapter next to clicked topic's parent)
+        document.querySelectorAll('.ch-chapter').forEach(c => {
+            if (c.dataset.chapter === chapterName && !c.classList.contains('open')) {
+                c.classList.add('open');
+                const topicsDiv = c.nextElementSibling;
+                if (topicsDiv && topicsDiv.classList.contains('ch-chapter-topics')) {
+                    topicsDiv.style.display = 'block';
+                }
+            }
+        });
+
         // Highlight active topic
-        document.querySelectorAll('.ch-item').forEach(el => el.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-        
-        // Show topic info in content hub (placeholder for now - can add questions later)
+        document.querySelectorAll('.ch-topic').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.ch-chapter').forEach(el => el.classList.remove('active'));
+        if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+        // Highlight parent chapter
+        const topicEl = event && event.currentTarget;
+        if (topicEl) {
+            const prevChapter = topicEl.previousElementSibling;
+            if (prevChapter && prevChapter.classList.contains('ch-chapter')) {
+                prevChapter.classList.add('active');
+            }
+        }
+
         showTopicContent(cat, sysName, chapterName, topicName);
     }
 }
@@ -364,12 +433,17 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
     closeAllDrawers();
 }
 
-function toggleSystem(el) {
-    el.classList.toggle('open');
-    const items = el.nextElementSibling;
-    if (items && items.classList.contains('ch-system-items')) {
-        items.classList.toggle('collapsed');
-    }
+// Removed duplicate toggleSystem - using the one above with sysId
+
+function openMasterGuide(cat, sysName, notesUrl) {
+    console.log('Opening master guide:', sysName, notesUrl);
+    const notes = [{ title: sysName + ' Master Guide', url: notesUrl, type: 'local' }];
+    showContentHub(sysName, [], '📖', false, cat);
+    
+    // After showing content, open notes reader with the URL
+    setTimeout(() => {
+        openNoteReader(notesUrl, sysName + ' Master Guide');
+    }, 100);
 }
 
 function selectSystemTopic(cat, topicName) {
@@ -527,12 +601,12 @@ function showContentHub(catName, questions, emoji, isSubcat, parentCat) {
     let notesHtml = '';
     if (notes.length > 0) {
         notesHtml = `<div class="note-grid">${notes.map((n, i) => {
-            const icon = n.type === 'notion' ? '📓' : n.type === 'link' ? '📄' : '📝';
+            const icon = n.type === 'notion' ? '📓' : n.type === 'link' ? '📄' : n.type === 'local' ? '📖' : '📝';
             const arrow = '→';
             const escAttr = s => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');
             const url = escAttr(n.url || '');
             const title = escAttr(n.title || '');
-            return `<div class="note-card" data-url="${url}" data-title="${title}" onclick="openNoteReader(this.dataset.url,this.dataset.title)"><div class="nc-icon">${icon}</div><div class="nc-info"><div class="nc-title">${n.title}</div><div class="nc-desc">${n.desc || (n.type === 'notion' ? 'Notion Notes' : 'Notes')}</div></div><div class="nc-arrow">${arrow}</div></div>`;
+            return `<div class="note-card" data-url="${url}" data-title="${title}" onclick="openNoteReader(this.dataset.url,this.dataset.title)"><div class="nc-icon">${icon}</div><div class="nc-info"><div class="nc-title">${n.title}</div><div class="nc-desc">${n.desc || (n.type === 'notion' ? 'Notion' : n.type === 'local' ? 'Master Guide' : 'Notes')}</div></div><div class="nc-arrow">${arrow}</div></div>`;
         }).join('')}</div>`;
     }
     // Always add a general notes card for this topic

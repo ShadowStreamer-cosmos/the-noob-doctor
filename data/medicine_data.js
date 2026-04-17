@@ -272,6 +272,7 @@ const MEDICINE_DATA = {
     },
     "Rheumatology": {
         emoji: "💪",
+        notesUrl: "refined/rheumatology_master_guide.html",
         chapters: {
             "RA": {
                 topics: [
@@ -288,6 +289,22 @@ const MEDICINE_DATA = {
                     { name: "ANA", priority: "red" },
                     { name: "Anti-dsDNA", priority: "red" },
                     { name: "Lupus nephritis", priority: "red" }
+                ]
+            },
+            "SSc": {
+                topics: [
+                    { name: "Systemic sclerosis", priority: "red" },
+                    { name: "CREST syndrome", priority: "red" },
+                    { name: "Raynaud's phenomenon", priority: "red" },
+                    { name: "Scleroderma renal crisis", priority: "red" }
+                ]
+            },
+            "SpA": {
+                topics: [
+                    { name: "Ankylosing spondylitis", priority: "red" },
+                    { name: "HLA-B27", priority: "red" },
+                    { name: "Seronegative arthritis", priority: "purple" },
+                    { name: "Reactive arthritis", priority: "purple" }
                 ]
             },
             "Crystal Arthritis": {
