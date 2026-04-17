@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mitral Stenosis Masterclass</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <script>
+    // Check theme from URL param or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const theme = urlParams.get('theme') || localStorage.getItem('nbd_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg: #0a0d14;
+      --surface: #111520;
+      --surface2: #161b28;
+      --surface3: #1c2235;
+      --border: #252d42;
+      --accent: #e05c5c;
+      --accent2: #f0a050;
+      --accent3: #5cb8e0;
+      --accent4: #7ec88a;
+      --accent5: #c87ee0;
+      --text: #e8eaf2;
+      --text-muted: #7a849e;
+      --text-dim: #4a5268;
+      --gold: #d4a843;
+      --highlight-bg: rgba(224, 92, 92, 0.10);
+      --mnemonic-bg: rgba(126, 200, 138, 0.10);
+      --trap-bg: rgba(240, 160, 80, 0.10);
+      --case-bg: rgba(92, 184, 224, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #0a0d14 0%, #0f1520 40%, #1a0a14 100%);
+      padding: 60px 40px 50px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(224, 92, 92, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: 30%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(92, 184, 224, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(224, 92, 92, 0.4);
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 18px;
+      background: rgba(224, 92, 92, 0.06);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .exam-tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .exam-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .tag-inicet {
+      background: rgba(224, 92, 92, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(224, 92, 92, 0.3);
+    }
+
+    .tag-neet {
+      background: rgba(240, 160, 80, 0.15);
+      color: var(--accent2);
+      border: 1px solid rgba(240, 160, 80, 0.3);
+    }
+
+    .tag-usmle {
+      background: rgba(92, 184, 224, 0.15);
+      color: var(--accent3);
+      border: 1px solid rgba(92, 184, 224, 0.3);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .main-content {
+      padding: 40px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── NAV TABS ── */
+    .tab-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+    .tab-nav:active {
+      cursor: grabbing;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 14px 16px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-muted);
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .card.accent2::before {
+      background: var(--accent2);
+    }
+
+    .card.accent3::before {
+      background: var(--accent3);
+    }
+
+    .card.accent4::before {
+      background: var(--accent4);
+    }
+
+    .card.accent5::before {
+      background: var(--accent5);
+    }
+
+    .card.gold::before {
+      background: var(--gold);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title .icon {
+      font-size: 1.1rem;
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    h2.section-title span {
+      color: var(--accent);
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h3.sub-heading {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent3);
+      margin: 18px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    thead tr {
+      background: var(--surface3);
+    }
+
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid rgba(37, 45, 66, 0.5);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .td-highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .td-ok {
+      color: var(--accent4);
+    }
+
+    .td-warn {
+      color: var(--accent2);
+    }
+
+    .td-severe {
+      color: var(--accent);
+    }
+
+    /* ── MNEMONICS ── */
+    .mnemonic-box {
+      background: var(--mnemonic-bg);
+      border: 1px solid rgba(126, 200, 138, 0.25);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      position: relative;
+    }
+
+    .mnemonic-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent4);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mnemonic-word {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent4);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .mnemonic-list {
+      list-style: none;
+    }
+
+    .mnemonic-list li {
+      padding: 3px 0;
+      font-size: 14px;
+    }
+
+    .mnemonic-list li strong {
+      color: var(--accent4);
+      font-size: 16px;
+      margin-right: 6px;
+    }
+
+    /* ── TRAP BOX ── */
+    .trap-box {
+      background: var(--trap-bg);
+      border: 1px solid rgba(240, 160, 80, 0.3);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 14px 0;
+    }
+
+    .trap-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+
+    /* ── CLINICAL CASE ── */
+    .case-box {
+      background: var(--case-bg);
+      border: 1px solid rgba(92, 184, 224, 0.2);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .case-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .case-scenario {
+      font-size: 14.5px;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .case-q {
+      font-weight: 600;
+      color: var(--accent3);
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    /* ── MCQ ── */
+    .mcq-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 22px;
+      transition: border-color 0.2s;
+    }
+
+    .mcq-card:hover {
+      border-color: rgba(224, 92, 92, 0.3);
+    }
+
+    .mcq-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .mcq-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      background: rgba(224, 92, 92, 0.1);
+      border: 1px solid rgba(224, 92, 92, 0.3);
+      border-radius: 4px;
+      padding: 3px 8px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .mcq-q {
+      font-size: 14.5px;
+      font-weight: 500;
+      line-height: 1.7;
+    }
+
+    .mcq-options {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .mcq-options li {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      gap: 10px;
+    }
+
+    .mcq-options li:hover {
+      border-color: rgba(92, 184, 224, 0.3);
+      background: var(--surface3);
+      cursor: pointer;
+    }
+
+    .mcq-options li .opt-letter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 18px;
+    }
+
+    .mcq-options li.correct,
+    .mcq-options li.wrong {
+      border-color: var(--border);
+      background: var(--surface2);
+      opacity: 1;
+    }
+
+    .mcq-options li.correct .opt-letter,
+    .mcq-options li.wrong .opt-letter {
+      color: var(--text-muted);
+    }
+
+    li.revealed.correct {
+      border-color: rgba(126, 200, 138, 0.5);
+      background: rgba(126, 200, 138, 0.12);
+    }
+
+    li.revealed.correct .opt-letter {
+      color: var(--accent4);
+    }
+
+    li.revealed.wrong {
+      border-color: rgba(224, 92, 92, 0.3);
+      background: rgba(224, 92, 92, 0.08);
+      opacity: 0.8;
+    }
+
+    li.revealed.wrong .opt-letter {
+      color: var(--accent);
+    }
+
+    /* Selected states */
+    li.selected-correct {
+      border-color: var(--accent4) !important;
+      background: rgba(126, 200, 138, 0.25) !important;
+    }
+
+    li.selected-correct .opt-letter {
+      color: var(--accent4) !important;
+    }
+
+    li.selected-wrong {
+      border-color: var(--accent) !important;
+      background: rgba(224, 92, 92, 0.15) !important;
+    }
+
+    li.selected-wrong .opt-letter {
+      color: var(--accent) !important;
+    }
+
+    li.show-correct {
+      border-color: var(--accent4) !important;
+      background: rgba(126, 200, 138, 0.12) !important;
+    }
+
+    li.show-correct .opt-letter {
+      color: var(--accent4) !important;
+    }
+
+    .mcq-explain {
+      display: none;
+    }
+
+    .mcq-explain.show {
+      display: block;
+      margin-top: 14px;
+      padding: 16px 18px;
+      background: var(--surface3);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent4);
+      font-size: 13.5px;
+      line-height: 1.8;
+    }
+
+    .reveal-btn {
+      display: none;
+    }
+
+    .reveal-btn.show {
+      display: inline-block;
+    }
+
+    .mcq-explain .ans-line {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent4);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .mcq-explain p {
+      margin-bottom: 6px;
+    }
+
+    .mcq-explain .wrong-opt {
+      color: var(--accent2);
+    }
+
+    .reveal-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reveal-btn:hover {
+      border-color: var(--accent4);
+      color: var(--accent4);
+    }
+
+    /* ── HIGH YIELD BOX ── */
+    .hy-box {
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.07), rgba(212, 168, 67, 0.03));
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 16px 0;
+    }
+
+    .hy-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hy-list {
+      list-style: none;
+    }
+
+    .hy-list li {
+      padding: 5px 0;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(212, 168, 67, 0.08);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .hy-list li:last-child {
+      border-bottom: none;
+    }
+
+    .hy-list li::before {
+      content: '▸';
+      color: var(--gold);
+      font-size: 10px;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    /* ── HIGHLIGHT TEXT ── */
+    .hl {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hl2 {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    .hl3 {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    .hl4 {
+      color: var(--accent4);
+      font-weight: 600;
+    }
+
+    .hl5 {
+      color: var(--accent5);
+      font-weight: 600;
+    }
+
+    .hlg {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ── FORMULA BOX ── */
+    .formula {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 18px;
+      margin: 8px 0;
+      font-size: 13px;
+      color: var(--accent3);
+      line-height: 1.6;
+      width: 100%;
+    }
+
+    /* ── SEVERITY TABLE ── */
+    .severity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .sev-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .sev-card .sev-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 8px;
+    }
+
+    .sev-card .sev-val {
+      font-size: 1.3rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sev-normal .sev-val {
+      color: var(--accent4);
+    }
+
+    .sev-mild .sev-val {
+      color: #c8e07e;
+    }
+
+    .sev-mod .sev-val {
+      color: var(--accent2);
+    }
+
+    .sev-sev .sev-val {
+      color: var(--accent);
+    }
+
+    .sev-card .sev-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── AUSCULTATION DIAGRAM ── */
+    .sound-timeline {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 12px 0;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .sound-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 60px;
+      position: relative;
+    }
+
+    .sound-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative;
+      height: 100%;
+      font-weight: 600;
+    }
+
+    .s1-seg {
+      background: rgba(224, 92, 92, 0.25);
+      border-radius: 6px 0 0 6px;
+      padding: 0 14px;
+      color: var(--accent);
+      border: 1px solid rgba(224, 92, 92, 0.4);
+      min-width: 50px;
+    }
+
+    .sys-seg {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0 28px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      min-width: 80px;
+      font-size: 10px;
+    }
+
+    .s2-seg {
+      background: rgba(92, 184, 224, 0.2);
+      padding: 0 14px;
+      color: var(--accent3);
+      border: 1px solid rgba(92, 184, 224, 0.3);
+      min-width: 50px;
+    }
+
+    .os-seg {
+      background: rgba(126, 200, 138, 0.2);
+      padding: 0 12px;
+      color: var(--accent4);
+      border: 1px solid rgba(126, 200, 138, 0.3);
+      min-width: 60px;
+      font-size: 10px;
+    }
+
+    .md-seg {
+      background: rgba(200, 126, 224, 0.2);
+      padding: 0 30px;
+      color: var(--accent5);
+      border: 1px solid rgba(200, 126, 224, 0.3);
+      min-width: 100px;
+      font-size: 10px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .sound-labels {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── WILKINS SCORE ── */
+    .wilkins-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .wilkins-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .wilkins-item .wi-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent3);
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .wilkins-item .wi-scale {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .score-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-good {
+      background: rgba(126, 200, 138, 0.15);
+      color: var(--accent4);
+      border: 1px solid rgba(126, 200, 138, 0.3);
+    }
+
+    .badge-bad {
+      background: rgba(224, 92, 92, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(224, 92, 92, 0.3);
+    }
+
+    /* ── COMPARISON ── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .compare-col {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .compare-col .cc-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-col ul {
+      list-style: none;
+    }
+
+    .compare-col ul li {
+      font-size: 13px;
+      padding: 3px 0;
+      color: var(--text-muted);
+    }
+
+    .compare-col ul li strong {
+      color: var(--text);
+    }
+
+    /* ── PATHOPHYS FLOW ── */
+    .flow-chart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 16px 0;
+    }
+
+    .flow-node {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 13.5px;
+      text-align: center;
+      min-width: 260px;
+      max-width: 380px;
+      transition: border-color 0.2s;
+    }
+
+    .flow-node:hover {
+      border-color: var(--accent3);
+    }
+
+    .flow-node.red {
+      border-color: rgba(224, 92, 92, 0.4);
+      color: var(--accent);
+    }
+
+    .flow-node.blue {
+      border-color: rgba(92, 184, 224, 0.4);
+      color: var(--accent3);
+    }
+
+    .flow-node.green {
+      border-color: rgba(126, 200, 138, 0.4);
+      color: var(--accent4);
+    }
+
+    .flow-node.orange {
+      border-color: rgba(240, 160, 80, 0.4);
+      color: var(--accent2);
+    }
+
+    .flow-arrow {
+      width: 2px;
+      height: 22px;
+      background: var(--border);
+      position: relative;
+    }
+
+    .flow-arrow::after {
+      content: '▼';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text-dim);
+      font-size: 10px;
+    }
+
+    /* ── PROGRESS / QUICK REF ── */
+    .quick-ref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .qr-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+
+    .qr-item .qr-key {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .qr-item .qr-val {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .qr-item .qr-val span {
+      color: var(--accent);
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--surface3);
+      border-radius: 3px;
+    }
+
+    /* ── MURMUR DECODER ── */
+    .decoder {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 12px 0;
+    }
+
+    .decoder-row {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(37, 45, 66, 0.6);
+      font-size: 13.5px;
+      align-items: center;
+    }
+
+    .decoder-row:last-child {
+      border-bottom: none;
+    }
+
+    .decoder-key {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+
+    .decoder-val {
+      color: var(--text);
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 36px 20px 36px;
+      }
+
+      .main-content {
+        padding: 24px 16px;
+      }
+
+      .severity-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wilkins-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-ref-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px 18px;
+      }
+
+      .decoder-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 60px;
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    /* ===== LIGHT MODE OVERRIDES ===== */
+    html[data-theme="light"] {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --surface2: #f0f0f3;
+      --surface3: #e8e8ec;
+      --border: #d0d0d8;
+      --text: #1a1a2e;
+      --text-muted: #6b6b80;
+      --text-dim: #9a9ab0;
+      --highlight-bg: rgba(224, 92, 92, 0.08);
+      --mnemonic-bg: rgba(126, 200, 138, 0.08);
+      --trap-bg: rgba(240, 160, 80, 0.08);
+      --case-bg: rgba(92, 184, 224, 0.06);
+    }
+
+    html[data-theme="light"] .hero {
+      background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ec 40%, #f5e8e8 100%);
+    }
+
+    html[data-theme="light"] .tab-nav {
+      background: var(--surface);
+    }
+    html[data-theme="light"] .tab-btn {
+      color: var(--text-muted);
+    }
+    html[data-theme="light"] .tab-btn.active {
+      color: var(--accent);
+    }
+
+    html[data-theme="light"] .hero h1,
+    html[data-theme="light"] h2.section-title {
+      color: #1a1a2e;
+    }
+
+    html[data-theme="light"] .card,
+    html[data-theme="light"] .mcq-card,
+    html[data-theme="light"] .sound-timeline,
+    html[data-theme="light"] .decoder {
+      background: var(--surface);
+    }
+
+    html[data-theme="light"] .table-wrap table {
+      background: var(--surface);
+    }
+
+    html[data-theme="light"] ::-webkit-scrollbar-track {
+      background: var(--surface2);
+    }
+
+    html[data-theme="light"] ::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    /* Hide MCQ answers until revealed - neutral styling */
+    .mcq-options li.correct,
+    .mcq-options li.wrong {
+      border-color: var(--border) !important;
+      background: var(--surface2) !important;
+      opacity: 1 !important;
+    }
+
+    .mcq-options li.correct .opt-letter,
+    .mcq-options li.wrong .opt-letter {
+      color: var(--text-muted) !important;
+    }
+
+    /* Revealed state */
+    .mcq-options li.revealed.correct {
+      border-color: rgba(126, 200, 138, 0.5) !important;
+      background: rgba(126, 200, 138, 0.12) !important;
+    }
+
+    .mcq-options li.revealed.correct .opt-letter {
+      color: var(--accent4) !important;
+    }
+
+    .mcq-options li.revealed.wrong {
+      border-color: rgba(224, 92, 92, 0.3) !important;
+      background: rgba(224, 92, 92, 0.08) !important;
+      opacity: 0.8 !important;
+    }
+
+    .mcq-options li.revealed.wrong .opt-letter {
+      color: var(--accent) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════ HERO ════ -->
+  <div class="hero">
+    <div class="container">
+      <div class="hero-badge">♥ Cardiology Masterclass</div>
+      <h1>Mitral <span>Stenosis</span></h1>
+      <div class="hero-sub">// complete high-yield guide — pathophysiology → management → MCQs</div>
+      <div class="exam-tags">
+        <span class="exam-tag tag-inicet">INICET</span>
+        <span class="exam-tag tag-neet">NEET PG</span>
+        <span class="exam-tag tag-usmle">USMLE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ NAV ════ -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('patho')">Pathophysiology</button>
+    <button class="tab-btn" onclick="showTab('clinical')">Clinical Features</button>
+    <button class="tab-btn" onclick="showTab('investigations')">Investigations</button>
+    <button class="tab-btn" onclick="showTab('murmurs')">Murmurs & Sounds</button>
+    <button class="tab-btn" onclick="showTab('management')">Management</button>
+    <button class="tab-btn" onclick="showTab('mcqs')">MCQs Drilldown</button>
+    <button class="tab-btn" onclick="showTab('special')">Special Scenarios</button>
+  </div>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main-content">
+
+    <!-- ══════════════════════ TAB 1: PATHOPHYSIOLOGY ══════════════════════ -->
+    <div id="tab-patho" class="section active">
+      <h2 class="section-title"><span>01.</span> Pathophysiology</h2>
+      <div class="section-sub">// The "why" behind everything</div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🦠</span> Etiology — What Causes MS?</div>
+        <p><span class="hl">Rheumatic fever</span> → most common cause worldwide (>99% in developing countries like
+          India). RF causes leaflet thickening, commissural fusion, subvalvular fusion, and calcification over
+          years-decades.</p>
+        <br>
+        <p>Other rare causes: Congenital MS (Lutembacher syndrome = congenital MS + ASD), carcinoid syndrome
+          (right-sided valves mostly), SLE (Libman-Sacks), mucopolysaccharidoses.</p>
+        <div class="trap-box">
+          <div class="trap-label">⚠ EXAM TRAP</div>
+          <p><span class="hl2">Rheumatic fever affects the MITRAL valve most commonly</span>, followed by Aortic >
+            Tricuspid > Pulmonary. Remember: <span class="hlg">MAP-T</span> (Mitral, Aortic, Pulmonary, Tricuspid — in
+            order of frequency).</p>
+          <br>
+          <p>RF causes <span class="hl">stenosis</span> in the mitral valve but can cause <span
+              class="hl2">regurgitation + stenosis</span> in others. The mitral valve is preferentially stenosed because
+            it bears the greatest diastolic pressure load.</p>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">🔬</span> Pathological Changes (Gross & Micro)</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Description</th>
+                <th>Consequence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Commissural fusion</td>
+                <td>Leaflet edges fuse together</td>
+                <td>↓ valve area</td>
+              </tr>
+              <tr>
+                <td>Leaflet thickening</td>
+                <td>Fibrosis + calcification</td>
+                <td>Restricted leaflet motion</td>
+              </tr>
+              <tr>
+                <td>Chordae tendineae</td>
+                <td>Thickened, shortened, fused</td>
+                <td>Subvalvular obstruction</td>
+              </tr>
+              <tr>
+                <td>Anterior MV leaflet</td>
+                <td><span class="hl3">Hockey stick deformity</span> on echo</td>
+                <td>Pathognomonic finding</td>
+              </tr>
+              <tr>
+                <td>Calcium deposits</td>
+                <td>In leaflets/annulus</td>
+                <td>Makes BMV risky</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card accent4">
+        <div class="card-title"><span class="icon">⚡</span> Hemodynamic Cascade — The Domino Effect</div>
+        <div class="flow-chart">
+          <div class="flow-node red">↓ Mitral Valve Area (Normal: 4–6 cm²)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">LA cannot empty → ↑ Left Atrial Pressure</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node blue">↑ Pulmonary Venous Pressure → Pulmonary Congestion</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node orange">Pulmonary Arterial Hypertension (PAH)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node red">RV Pressure Overload → RV Failure (Cor Pulmonale)</div>
+          <div class="flow-arrow"></div>
+          <div class="flow-node">↑ RA → Tricuspid Regurgitation (functional)</div>
+        </div>
+        <div class="hy-box" style="margin-top:16px">
+          <div class="hy-label">⭐ KEY HEMODYNAMIC FACT</div>
+          <ul class="hy-list">
+            <li>Normal MVA = 4–6 cm². Symptoms begin when MVA &lt; 2 cm²</li>
+            <li>Severe MS = MVA &lt; 1 cm². Critical = MVA &lt; 0.6 cm²</li>
+            <li>LA pressure must rise 10–20 mmHg above LV diastolic pressure to push blood through</li>
+            <li>CO remains normal at rest until very late (compensated by ↑ HR) — but ↑ HR worsens MS (less diastolic
+              filling time)!</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent2">
+        <div class="card-title"><span class="icon">📊</span> Severity Classification — Know These Numbers Cold</div>
+        <div class="severity-grid">
+          <div class="sev-card sev-normal">
+            <div class="sev-label">Normal</div>
+            <div class="sev-val">4–6</div>
+            <div class="sev-sub">cm² MVA</div>
+          </div>
+          <div class="sev-card sev-mild">
+            <div class="sev-label">Mild MS</div>
+            <div class="sev-val">&gt;1.5</div>
+            <div class="sev-sub">cm² MVA</div>
+          </div>
+          <div class="sev-card sev-mod">
+            <div class="sev-label">Moderate MS</div>
+            <div class="sev-val">1–1.5</div>
+            <div class="sev-sub">cm² MVA</div>
+          </div>
+          <div class="sev-card sev-sev">
+            <div class="sev-label">Severe MS</div>
+            <div class="sev-val">&lt;1</div>
+            <div class="sev-sub">cm² MVA</div>
+          </div>
+        </div>
+        <div class="trap-box" style="margin-top:14px">
+          <div class="trap-label">⚠ PRESSURE HALF-TIME — Exam Favourite</div>
+          <div class="formula">MVA (cm²) = 220 / Pressure Half-Time (ms)<br>
+            PHT normal = ~60 ms | PHT in severe MS = >220 ms<br>
+            Longer PHT = Smaller MVA = More Severe</div>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:8px">Think: pressure takes longer to equalize
+            because there's a tighter obstruction → PHT ↑ as severity ↑</p>
+        </div>
+      </div>
+
+      <div class="card gold">
+        <div class="card-title"><span class="icon">🧠</span> Why Does MS Get Worse With Tachycardia?</div>
+        <p>In MS, blood flow from LA to LV depends on the <span class="hlg">duration of diastole</span>. During
+          tachycardia (e.g., AF, exercise, fever, pregnancy):</p>
+        <br>
+        <p>↑ Heart Rate → <span class="hl">↓ Diastolic filling time</span> → LA cannot empty → ↑↑ LAP → acute pulmonary
+          edema</p>
+        <br>
+        <p>This is why <span class="hl2">atrial fibrillation</span> (most common complication of MS) can precipitate
+          acute decompensation — loss of atrial kick + fast ventricular rate = double blow.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 2: CLINICAL FEATURES ══════════════════════ -->
+    <div id="tab-clinical" class="section">
+      <h2 class="section-title"><span>02.</span> Clinical Features</h2>
+      <div class="section-sub">// What the patient looks, sounds, and feels like</div>
+
+      <div class="quick-ref-grid">
+        <div class="qr-item">
+          <div class="qr-key">Most common symptom</div>
+          <div class="qr-val"><span>Exertional dyspnea</span></div>
+        </div>
+        <div class="qr-item">
+          <div class="qr-key">Most common complication</div>
+          <div class="qr-val"><span>Atrial Fibrillation</span></div>
+        </div>
+        <div class="qr-item">
+          <div class="qr-key">Most dangerous complication</div>
+          <div class="qr-val"><span>Systemic embolism</span></div>
+        </div>
+        <div class="qr-item">
+          <div class="qr-key">Characteristic facies</div>
+          <div class="qr-val"><span>Malar flush (mitral facies)</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">😷</span> Symptoms — Chronological Progression</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Symptom</th>
+                <th>Mechanism</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Early</td>
+                <td>Exertional dyspnea, fatigue</td>
+                <td>↑ LAP on exertion → pulmonary congestion</td>
+              </tr>
+              <tr>
+                <td>Early</td>
+                <td>Orthopnea, PND</td>
+                <td>Supine position → ↑ venous return → ↑ LAP</td>
+              </tr>
+              <tr>
+                <td>Mid</td>
+                <td><span class="hl">Hemoptysis</span></td>
+                <td>Rupture of pulmonary-bronchial anastomoses (Virchow's anastomosis); also in pulmonary edema</td>
+              </tr>
+              <tr>
+                <td>Mid</td>
+                <td>Palpitations</td>
+                <td>Atrial fibrillation</td>
+              </tr>
+              <tr>
+                <td>Late</td>
+                <td>Systemic embolism (stroke)</td>
+                <td>LA thrombus (LA appendage) in AF</td>
+              </tr>
+              <tr>
+                <td>Late</td>
+                <td>Hoarseness (Ortner's syndrome)</td>
+                <td>Enlarged LA compresses left recurrent laryngeal nerve</td>
+              </tr>
+              <tr>
+                <td>Late</td>
+                <td>Dysphagia</td>
+                <td>Enlarged LA compresses esophagus</td>
+              </tr>
+              <tr>
+                <td>Very late</td>
+                <td>Right heart failure features</td>
+                <td>PAH → RV failure → JVD, ascites, pedal edema</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 MNEMONIC</div>
+          <div class="mnemonic-word">D-HOPE</div>
+          <ul class="mnemonic-list">
+            <li><strong>D</strong>yspnea (most common symptom)</li>
+            <li><strong>H</strong>emoptysis</li>
+            <li><strong>O</strong>rtner's syndrome (hoarseness)</li>
+            <li><strong>P</strong>alpitations (AF)</li>
+            <li><strong>E</strong>mbolism (systemic)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">🔍</span> Physical Examination — Sign by Sign</div>
+        <h3 class="sub-heading">General & Peripheral</h3>
+        <p><span class="hl3">Malar flush (mitral facies)</span> — Bilateral dusky-pink flushing of cheeks. Due to low CO
+          → peripheral vasodilation → dilated capillaries. Seen in severe MS with low output state.</p>
+        <br>
+        <h3 class="sub-heading">Pulse</h3>
+        <p>Low volume pulse. Irregularly irregular in AF. <span class="hl">Pulse deficit</span> present in AF (apical
+          rate > radial rate).</p>
+        <br>
+        <h3 class="sub-heading">JVP</h3>
+        <p>Elevated with prominent <span class="hl2">a-wave</span> (if sinus rhythm, due to RV stiffness from PAH). In
+          AF → a-wave absent. Giant v-waves suggest functional TR.</p>
+        <br>
+        <h3 class="sub-heading">Precordial Examination</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Finding</th>
+                <th>What You Feel/See</th>
+                <th>Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl3">Tapping apex beat</span></td>
+                <td>Palpable S1 at apex</td>
+                <td>Loud S1 transmitted to chest wall; pathognomonic feel of MS</td>
+              </tr>
+              <tr>
+                <td><span class="hl3">Parasternal heave</span></td>
+                <td>Sustained lift at left sternal border</td>
+                <td>RV hypertrophy/enlargement from PAH</td>
+              </tr>
+              <tr>
+                <td>Palpable P2</td>
+                <td>Palpable pulmonary component at 2nd left ICS</td>
+                <td>Severe PAH; P2 &gt; A2</td>
+              </tr>
+              <tr>
+                <td>Diastolic thrill at apex</td>
+                <td>Palpable murmur</td>
+                <td>Severe MS with loud murmur</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap-box" style="margin-top:14px">
+          <div class="trap-label">⚠ APEX BEAT TRAP — INICET Favourite</div>
+          <p><span class="hl2">Apex beat in MS is NOT displaced</span> — the LV is small/normal (because it's
+            underfilled). The apex feels "tapping" due to palpable loud S1. If the apex is displaced outward and
+            downward → suggests associated MR or AS (LV enlargement).</p>
+        </div>
+      </div>
+
+      <div class="card accent5">
+        <div class="card-title"><span class="icon">💉</span> Complications — The MS Disaster List</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Complication</th>
+                <th>Mechanism</th>
+                <th>Exam Point</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="hl5">Atrial fibrillation</td>
+                <td>LA enlargement → atrial stretch → fibrosis of SA node</td>
+                <td>Most common complication; precipitates acute decompensation</td>
+              </tr>
+              <tr>
+                <td class="hl5">Systemic embolism</td>
+                <td>LA thrombus (especially LA appendage) → emboli</td>
+                <td>Most in AF; can occur in sinus rhythm too; anticoagulate</td>
+              </tr>
+              <tr>
+                <td class="hl5">Pulmonary HTN</td>
+                <td>Chronic ↑ LAP → reactive PAH</td>
+                <td>Fixed PAH = contraindication to surgery? No, but ↑ risk</td>
+              </tr>
+              <tr>
+                <td class="hl5">Hemoptysis</td>
+                <td>Ruptured bronchial veins OR pulmonary edema</td>
+                <td>Frank hemorrhage = ruptured anastomoses (not dangerous); pink frothy = pulmonary edema (dangerous)
+                </td>
+              </tr>
+              <tr>
+                <td class="hl5">Infective endocarditis</td>
+                <td>Less common than in MR/AS</td>
+                <td>MS has LOW risk of IE compared to MR. Why? Stenotic valve has less turbulence</td>
+              </tr>
+              <tr>
+                <td class="hl5">Ortner's syndrome</td>
+                <td>Enlarged LA compresses L. recurrent laryngeal nerve</td>
+                <td>Hoarseness + MS = Ortner's; LRLN runs under aortic arch</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="case-box">
+        <div class="case-label">🏥 CLINICAL CASE 1</div>
+        <div class="case-scenario">A 28-year-old woman presents with progressive exertional dyspnea and palpitations for
+          3 months. She had recurrent throat infections as a child treated with penicillin. On exam: irregularly
+          irregular pulse, malar flush, tapping apex, parasternal heave. Auscultation reveals a loud S1, opening snap,
+          and a low-pitched diastolic rumble.</div>
+        <div class="case-q">Q: What is the most likely diagnosis, and what does the presence of parasternal heave
+          indicate?</div>
+        <div class="mcq-explain show" style="margin-top:12px">
+          <div class="ans-line">✓ ANSWER & REASONING</div>
+          <p><strong>Diagnosis:</strong> Rheumatic Mitral Stenosis with Atrial Fibrillation and Pulmonary Arterial
+            Hypertension</p>
+          <p><strong>Parasternal heave</strong> = RV hypertrophy/enlargement → indicates significant PAH has developed.
+            This is a bad prognostic sign.</p>
+          <p><strong>Tapping apex</strong> = palpable loud S1. <strong>Malar flush</strong> = low CO state.
+            <strong>AF</strong> = irregularly irregular pulse in a young woman with rheumatic history = classic MS
+            presentation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 3: INVESTIGATIONS ══════════════════════ -->
+    <div id="tab-investigations" class="section">
+      <h2 class="section-title"><span>03.</span> Investigations</h2>
+      <div class="section-sub">// What each test shows and why it matters</div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">📋</span> ECG Findings</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Finding</th>
+                <th>Details</th>
+                <th>Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl4">P-mitrale</span></td>
+                <td>Broad, bifid P wave in lead II; duration &gt;0.12s; P-wave area &gt;0.04 mm²s in V1</td>
+                <td>LA enlargement; <strong>not seen in AF</strong></td>
+              </tr>
+              <tr>
+                <td><span class="hl4">AF pattern</span></td>
+                <td>Absent P waves, irregular R-R interval, fibrillatory baseline</td>
+                <td>Most common arrhythmia; indicates LA dilation</td>
+              </tr>
+              <tr>
+                <td><span class="hl4">RVH</span></td>
+                <td>Right axis deviation, R &gt; S in V1, deep S in V5/V6</td>
+                <td>PAH → RV hypertrophy</td>
+              </tr>
+              <tr>
+                <td>P in V1</td>
+                <td>Terminal negative P deflection &gt;0.04 mm²s</td>
+                <td>LA abnormality (Morris sign/Macruz index)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="trap-box">
+          <div class="trap-label">⚠ TRAP: P-MITRALE vs P-PULMONALE</div>
+          <p><strong>P-mitrale</strong> (LA enlargement): Broad, bifid P in lead II — seen in MS, MR, DCM<br>
+            <strong>P-pulmonale</strong> (RA enlargement): Tall, peaked P in lead II (&gt;2.5 mm) — seen in COPD,
+            tricuspid disease, PAH
+          </p>
+        </div>
+      </div>
+
+      <div class="card accent2">
+        <div class="card-title"><span class="icon">🫁</span> Chest X-Ray — The MS CXR is a Classic!</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Finding</th>
+                <th>What It Means</th>
+                <th>Which Border?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hlg">Straightening of left heart border</span></td>
+                <td>Loss of cardiac waist; 4th arch (LA appendage enlargement)</td>
+                <td>Left</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Double density shadow</span></td>
+                <td>Enlarged LA behind the right heart border</td>
+                <td>Right (posterior LA seen through RA shadow)</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Splaying of carina (&gt;70°)</span></td>
+                <td>Enlarged LA pushing up left main bronchus</td>
+                <td>Mediastinum</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Prominent pulmonary arteries</span></td>
+                <td>PAH → dilated main pulmonary artery</td>
+                <td>Upper left mediastinum</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Kerley B lines</span></td>
+                <td>Horizontal lines at costophrenic angles; thickened interlobular septa from ↑ pulmonary venous
+                  pressure</td>
+                <td>Lung bases</td>
+              </tr>
+              <tr>
+                <td>Pulmonary edema pattern</td>
+                <td>Bat-wing pattern in acute decompensation</td>
+                <td>Both lungs</td>
+              </tr>
+              <tr>
+                <td>Hemosiderosis</td>
+                <td>Fine mottling in lung fields (old blood in alveoli)</td>
+                <td>Both lungs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 MNEMONIC — MS CXR Signs</div>
+          <div class="mnemonic-word">4 BORDERS of MS CXR</div>
+          <ul class="mnemonic-list">
+            <li><strong>1.</strong> Left border STRAIGHT (LA appendage prominence)</li>
+            <li><strong>2.</strong> Right border DOUBLE (LA behind RA)</li>
+            <li><strong>3.</strong> Carina WIDE (LA pushes up L. bronchus)</li>
+            <li><strong>4.</strong> Lung fields show KERLEY B lines</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">🔊</span> Echocardiography — The Gold Standard</div>
+        <p>2D Echo + Doppler is the <span class="hl3">investigation of choice</span> for diagnosing and grading MS
+          severity.</p>
+        <br>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Echo Finding</th>
+                <th>Description</th>
+                <th>Significance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl3">Hockey stick deformity</span></td>
+                <td>Anterior MV leaflet bowing toward LV in diastole; restricted posterior leaflet</td>
+                <td>Pathognomonic of rheumatic MS</td>
+              </tr>
+              <tr>
+                <td><span class="hl3">Doming of anterior leaflet</span></td>
+                <td>Leaflet bows like a dome/parachute into LV</td>
+                <td>Classic for rheumatic MS</td>
+              </tr>
+              <tr>
+                <td><span class="hl3">E-F slope ↓ on M-mode</span></td>
+                <td>Normally steep; flattened in MS due to slow LV filling</td>
+                <td>M-mode classic finding — historical but tested</td>
+              </tr>
+              <tr>
+                <td><span class="hl3">Pressure Half-Time (PHT)</span></td>
+                <td>Time for mitral gradient to fall by half; MVA = 220/PHT</td>
+                <td>Most accurate non-invasive MVA estimation</td>
+              </tr>
+              <tr>
+                <td><span class="hl3">Planimetry</span></td>
+                <td>Direct tracing of MVA in parasternal short axis</td>
+                <td>Most accurate echo method for MVA</td>
+              </tr>
+              <tr>
+                <td>LA enlargement</td>
+                <td>LA size &gt;4 cm</td>
+                <td>Risk of AF, thrombus</td>
+              </tr>
+              <tr>
+                <td>LA thrombus</td>
+                <td>Especially in LA appendage</td>
+                <td>Contraindication to BMV without anticoagulation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap-box">
+          <div class="trap-label">⚠ PHT vs Planimetry — When Each Is Used</div>
+          <p><strong>Planimetry</strong> = most accurate, used when image quality good. Underestimates MVA after
+            BMV.<br>
+            <strong>PHT</strong> = affected by LV compliance, AR, acute settings. <span class="hl2">Unreliable
+              immediately after BMV</span> (compliance changes).<br>
+            <strong>Continuity equation & PISA</strong> = alternative methods.
+          </p>
+        </div>
+      </div>
+
+      <div class="card accent4">
+        <div class="card-title"><span class="icon">🧮</span> Wilkins Score — BMV Decision Maker</div>
+        <p>Used to decide if patient is suitable for <span class="hl4">Balloon Mitral Valvuloplasty (BMV)</span>. Each
+          parameter scored 1–4:</p>
+        <div class="wilkins-grid">
+          <div class="wilkins-item">
+            <div class="wi-title">Leaflet Mobility</div>
+            <div class="wi-scale">1 = highly mobile, pliable → 4 = minimal movement</div>
+          </div>
+          <div class="wilkins-item">
+            <div class="wi-title">Leaflet Thickening</div>
+            <div class="wi-scale">1 = near-normal (4–5mm) → 4 = severe (>8–10mm)</div>
+          </div>
+          <div class="wilkins-item">
+            <div class="wi-title">Subvalvular Thickening</div>
+            <div class="wi-scale">1 = minimal → 4 = severe with extensive chordae involvement</div>
+          </div>
+          <div class="wilkins-item">
+            <div class="wi-title">Calcification</div>
+            <div class="wi-scale">1 = single area → 4 = extensive throughout leaflets</div>
+          </div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+          <span class="score-badge badge-good">Score ≤8 → Suitable for BMV ✓</span>
+          <span class="score-badge badge-bad">Score &gt;8 → Surgery preferred ✗</span>
+        </div>
+        <div class="hy-box" style="margin-top:14px">
+          <div class="hy-label">⭐ TEE BEFORE BMV — Always Remember</div>
+          <ul class="hy-list">
+            <li>Transesophageal Echo (TEE) is mandatory before BMV to <strong>rule out LA thrombus</strong> (especially
+              LA appendage)</li>
+            <li>LA thrombus = absolute contraindication to BMV</li>
+            <li>If thrombus found → 3 months anticoagulation → repeat TEE → BMV if thrombus resolved</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="case-box">
+        <div class="case-label">🏥 CLINICAL CASE 2 — INICET Style</div>
+        <div class="case-scenario">A 32-year-old woman with rheumatic MS is being evaluated for balloon mitral
+          valvuloplasty. Echocardiography shows: MVA by PHT = 0.9 cm², leaflet mobility score 2, leaflet thickening 2,
+          subvalvular thickening 2, calcification 1. TEE shows no LA thrombus.</div>
+        <div class="case-q">Q: What is the Wilkins score? Is she suitable for BMV?</div>
+        <div class="mcq-explain show" style="margin-top:12px">
+          <div class="ans-line">✓ ANSWER</div>
+          <p><strong>Wilkins score = 2+2+2+1 = 7</strong> → Score ≤ 8 → <span class="hl4">SUITABLE for BMV</span></p>
+          <p>MVA of 0.9 cm² = severe MS, and score is favorable. No LA thrombus on TEE. She can proceed with BMV.</p>
+          <p><strong>Bonus:</strong> Even though MVA &lt; 1 cm² is severe, BMV is the treatment of choice here because
+            of favorable anatomy and young age.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 4: MURMURS & SOUNDS ══════════════════════ -->
+    <div id="tab-murmurs" class="section">
+      <h2 class="section-title"><span>04.</span> Murmurs & Heart Sounds</h2>
+      <div class="section-sub">// The most tested auscultatory findings in all of medicine</div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🎵</span> Auscultatory Sequence in MS</div>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px">Best heard at apex in left lateral
+          decubitus position with bell of stethoscope</p>
+        <div class="sound-timeline">
+          <div class="sound-bar">
+            <div class="sound-segment s1-seg">LOUD S1</div>
+            <div class="sound-segment sys-seg">SYSTOLE<br>(quiet)</div>
+            <div class="sound-segment s2-seg">S2</div>
+            <div class="sound-segment os-seg">Opening<br>Snap</div>
+            <div class="sound-segment md-seg">Mid-Diastolic<br>Rumble ± PSA</div>
+          </div>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 MNEMONIC — MS Sounds</div>
+          <div class="mnemonic-word">"LSOR-D"</div>
+          <ul class="mnemonic-list">
+            <li><strong>L</strong>oud S1</li>
+            <li><strong>S</strong>2 (normal or loud P2 if PAH)</li>
+            <li><strong>O</strong>pening Snap</li>
+            <li><strong>R</strong>umble (mid-diastolic)</li>
+            <li><strong>D</strong>ependent presystolic accentuation (lost in AF)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">💥</span> Loud S1 — Why?</div>
+        <p>In MS, the mitral leaflets remain wide open in diastole (due to ↑ LAP pushing them open). When ventricular
+          systole starts, the leaflets snap shut abruptly from a wide-open position → <span class="hl3">loud, "tapping"
+            S1</span>.</p>
+        <div class="trap-box" style="margin-top:12px">
+          <div class="trap-label">⚠ WHEN S1 BECOMES SOFT IN MS</div>
+          <p>S1 becomes soft/inaudible when:</p>
+          <p>1. Severe calcification of mitral leaflets (immobile leaflets can't snap loudly)<br>
+            2. Long PR interval (leaflets drift back to near-closed position before systole)<br>
+            3. Severe MR coexisting<br>
+            4. <span class="hl2">This means: SOFT S1 in MS = more severe/calcified disease</span></p>
+        </div>
+      </div>
+
+      <div class="card accent2">
+        <div class="card-title"><span class="icon">🎯</span> Opening Snap — The Most Tested Sound in MS</div>
+        <div class="decoder">
+          <div class="decoder-row">
+            <div class="decoder-key">What is it?</div>
+            <div class="decoder-val">High-pitched early diastolic sound after S2; snapping open of stiffened (but
+              mobile) MV leaflets</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Where heard best?</div>
+            <div class="decoder-val">Medial to apex; also well heard at left sternal border with diaphragm</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">S2-OS interval</div>
+            <div class="decoder-val"><span class="hl2">SHORTER = MORE SEVERE</span> (inversely proportional to severity)
+            </div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Why shorter = severe?</div>
+            <div class="decoder-val">Higher LAP → aortic valve closes → pressure equalization is faster → valve snaps
+              open sooner after S2</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">When is OS absent?</div>
+            <div class="decoder-val">Severe calcification (immobile leaflets cannot snap), congenital MS, Wilkins score
+              &gt; 8</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Mimics</div>
+            <div class="decoder-val">S3 (lower pitch, later, at apex), pericardial knock (after pericardiectomy,
+              constriction), P2 (at left 2nd ICS)</div>
+          </div>
+        </div>
+        <div class="hy-box" style="margin-top:12px">
+          <div class="hy-label">⭐ KEY: S2-OS INTERVAL FACTS</div>
+          <ul class="hy-list">
+            <li>Normal/mild MS: S2-OS interval = 80–100 ms (longer, LAP not very high)</li>
+            <li>Severe MS: S2-OS interval = 30–60 ms (shorter, LAP very high)</li>
+            <li><strong>Mnemonic: "SEVERE = SHORTER snap"</strong></li>
+            <li>On exertion: interval becomes shorter (LAP rises with exertion)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent5">
+        <div class="card-title"><span class="icon">🌊</span> Mid-Diastolic Rumble — The Murmur of MS</div>
+        <div class="decoder">
+          <div class="decoder-row">
+            <div class="decoder-key">Character</div>
+            <div class="decoder-val">Low-pitched, rumbling, diastolic murmur</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Timing</div>
+            <div class="decoder-val">Mid-diastolic; begins after OS</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Location</div>
+            <div class="decoder-val">Apex only (localized; does NOT radiate)</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Position</div>
+            <div class="decoder-val">Left lateral decubitus position enhances it (apex closer to chest wall)</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Instrument</div>
+            <div class="decoder-val"><span class="hl5">Bell of stethoscope</span> (low-frequency sounds)</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Presystolic accentuation</div>
+            <div class="decoder-val">Increase at end of diastole due to atrial contraction → <span class="hl2">ABSENT in
+                AF</span></div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Duration matters</div>
+            <div class="decoder-val">Longer murmur = more severe (more time in diastole with gradient)</div>
+          </div>
+          <div class="decoder-row">
+            <div class="decoder-key">Maneuver to enhance</div>
+            <div class="decoder-val">Exercise (↑ CO, ↑ HR briefly); Amyl nitrite (↑ HR); Left lateral decubitus</div>
+          </div>
+        </div>
+        <div class="trap-box" style="margin-top:12px">
+          <div class="trap-label">⚠ PRESYSTOLIC ACCENTUATION — TRAP!</div>
+          <p>Presystolic accentuation (PSA) = crescendo increase in murmur intensity at end of diastole just before S1.
+            It is due to <span class="hl2">atrial contraction squeezing blood through narrow mitral valve</span>.</p>
+          <br>
+          <p><span class="hl">In AF: PSA is ABSENT</span> because there's no coordinated atrial contraction.</p>
+          <br>
+          <p>However, some older studies suggest PSA can occur in AF (due to increased flow velocity as LV contracts).
+            For exams: <strong>PSA = ABSENT in AF</strong>.</p>
+        </div>
+      </div>
+
+      <div class="card gold">
+        <div class="card-title"><span class="icon">🔀</span> Other Murmurs Associated With MS</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Murmur</th>
+                <th>Description</th>
+                <th>How to Remember</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hlg">Graham Steell murmur</span></td>
+                <td>Early diastolic murmur at left sternal border; due to <strong>pulmonary regurgitation secondary to
+                    PAH in MS</strong></td>
+                <td>Graham Steell = PAH → PR (not primary aortic valve disease)</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Austin Flint murmur</span></td>
+                <td>Mid-diastolic rumble at apex; due to <strong>aortic regurgitation jet hitting mitral valve, causing
+                    it to flutter</strong></td>
+                <td>Mimics MS murmur; heard in AR; no OS; no loud S1</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Carey Coombs murmur</span></td>
+                <td>Mid-diastolic murmur in <strong>acute rheumatic fever</strong>; due to mitral valvulitis causing
+                  mitral regurgitation jet on to anterior leaflet</td>
+                <td>Carey Coombs = ACUTE rheumatic fever (not chronic MS)</td>
+              </tr>
+              <tr>
+                <td><span class="hlg">Functional TR murmur</span></td>
+                <td>Pansystolic at lower sternal border; due to RV dilation from PAH</td>
+                <td>Increases with inspiration (Carvallo's sign)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 MNEMONIC — Diastolic Murmur Mimics</div>
+          <div class="mnemonic-word">"GAC" = 3 Diastolic Lookalikes</div>
+          <ul class="mnemonic-list">
+            <li><strong>G</strong>raham Steell — PR from PAH (in MS)</li>
+            <li><strong>A</strong>ustin Flint — AR jet on MV (mimics MS)</li>
+            <li><strong>C</strong>arey Coombs — Acute RF valvulitis</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent4">
+        <div class="card-title"><span class="icon">📊</span> Summary: Severity vs Auscultatory Findings</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Mild MS</th>
+                <th>Severe MS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S1</td>
+                <td class="td-ok">Loud</td>
+                <td class="td-warn">Soft (if calcified)</td>
+              </tr>
+              <tr>
+                <td>S2-OS interval</td>
+                <td class="td-ok">Long (80–100 ms)</td>
+                <td class="td-severe">Short (30–60 ms)</td>
+              </tr>
+              <tr>
+                <td>Murmur duration</td>
+                <td class="td-ok">Short (early diastole)</td>
+                <td class="td-severe">Long (whole diastole)</td>
+              </tr>
+              <tr>
+                <td>P2</td>
+                <td class="td-ok">Normal</td>
+                <td class="td-severe">Loud, palpable (PAH)</td>
+              </tr>
+              <tr>
+                <td>Opening snap</td>
+                <td class="td-ok">Present (mobile)</td>
+                <td class="td-severe">Absent (if calcified)</td>
+              </tr>
+              <tr>
+                <td>PSA</td>
+                <td class="td-ok">Present in SR</td>
+                <td class="td-warn">Absent in AF</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 5: MANAGEMENT ══════════════════════ -->
+    <div id="tab-management" class="section">
+      <h2 class="section-title"><span>05.</span> Management</h2>
+      <div class="section-sub">// Medical, Interventional, Surgical — Know the Decision Tree</div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">💊</span> Medical Management</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Drug/Intervention</th>
+                <th>Indication</th>
+                <th>Mechanism / Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl">Beta-blockers</span> (metoprolol, atenolol)</td>
+                <td>Rate control in AF or sinus tachycardia</td>
+                <td>↓ HR → ↑ diastolic filling time → ↓ LAP; drug of choice for rate control in MS</td>
+              </tr>
+              <tr>
+                <td><span class="hl">Digoxin</span></td>
+                <td>Rate control in AF (especially with HF)</td>
+                <td>↑ AV nodal refractory period; also mild positive inotropy</td>
+              </tr>
+              <tr>
+                <td><span class="hl">Diuretics</span> (furosemide)</td>
+                <td>Pulmonary congestion symptoms</td>
+                <td>↓ preload → ↓ LAP → ↓ dyspnea; avoid over-diuresis (↓ CO)</td>
+              </tr>
+              <tr>
+                <td><span class="hl4">Warfarin anticoagulation</span></td>
+                <td>AF + MS; LA thrombus; prior embolism</td>
+                <td>Target INR 2–3; NOT NOACs (NOACs not approved for AF in mechanical valves or severe MS)</td>
+              </tr>
+              <tr>
+                <td><span class="hl2">RF prophylaxis</span></td>
+                <td>All rheumatic MS</td>
+                <td>Monthly Benzathine Penicillin IM; prevents further RF attacks; continue until age 40 or 10 years
+                  after last RF episode</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="trap-box">
+          <div class="trap-label">⚠ TRAP: ACE INHIBITORS / ARBs IN MS</div>
+          <p><span class="hl2">ACEi/ARBs are generally NOT beneficial</span> in isolated MS (no LV dysfunction to
+            treat). They cause vasodilation → ↑ reflex HR → worsens MS. However, they may be used for concomitant HTN.
+          </p>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">🎈</span> Balloon Mitral Valvuloplasty (BMV / PTMC)</div>
+        <p><span class="hl3">Percutaneous Transvenous Mitral Commissurotomy (PTMC)</span> — the procedure of choice for
+          suitable MS patients.</p>
+        <br>
+        <h3 class="sub-heading">Indications</h3>
+        <ul style="list-style:none; font-size:14px">
+          <li style="padding:4px 0">▸ Symptomatic MS (NYHA II–IV) with MVA ≤ 1.5 cm² AND Wilkins score ≤ 8</li>
+          <li style="padding:4px 0">▸ Asymptomatic MS with MVA &lt; 1 cm²</li>
+          <li style="padding:4px 0">▸ MS with new-onset AF</li>
+          <li style="padding:4px 0">▸ Severe MS in pregnancy (preferred over surgery)</li>
+        </ul>
+        <br>
+        <h3 class="sub-heading">Contraindications</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Absolute Contraindication</th>
+                <th>Relative Contraindication</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LA thrombus (especially appendage)</td>
+                <td>Mild-moderate MR coexisting</td>
+              </tr>
+              <tr>
+                <td>Moderate-severe MR</td>
+                <td>Suboptimal anatomy (high Wilkins score)</td>
+              </tr>
+              <tr>
+                <td>Wilkins score &gt; 8</td>
+                <td>Prior BMV with restenosis</td>
+              </tr>
+              <tr>
+                <td>Severe calcification</td>
+                <td>Severe PAH (relative)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hy-box" style="margin-top:14px">
+          <div class="hy-label">⭐ BMV PROCEDURE FACTS</div>
+          <ul class="hy-list">
+            <li>Transseptal puncture → balloon inflated across MV → commissures split</li>
+            <li>Inoue balloon technique = most commonly used</li>
+            <li>Endpoint: MVA &gt; 1.5 cm² OR mean gradient &lt; 5 mmHg</li>
+            <li>Most common complication: MR (due to leaflet tear)</li>
+            <li>Success rate: ~80–95% in favorable anatomy</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title"><span class="icon">🔪</span> Surgical Management</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Procedure</th>
+                <th>Indication</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="hl">Closed Mitral Valvotomy (CMV)</span></td>
+                <td>Pliable valve without calcification; limited settings</td>
+                <td>Blind procedure using Tubbs dilator via left thoracotomy; historical; still done in India in some
+                  centers</td>
+              </tr>
+              <tr>
+                <td><span class="hl">Open Mitral Commissurotomy (OMC)</span></td>
+                <td>Calcified/thickened valve; better results than CMV</td>
+                <td>On cardiopulmonary bypass; direct visualization; better than CMV for moderate calcification</td>
+              </tr>
+              <tr>
+                <td><span class="hl">Mitral Valve Replacement (MVR)</span></td>
+                <td>Unsuitable for BMV/commissurotomy; severe MR; Wilkins &gt;8; failed BMV</td>
+                <td>Mechanical (lifelong anticoagulation) vs Bioprosthetic (no anticoagulation after 3 months; wears out
+                  in 10–15 years)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card accent4">
+        <div class="card-title"><span class="icon">🤰</span> MS in Pregnancy — HIGH YIELD!</div>
+        <p>Pregnancy causes <span class="hl">↑ blood volume (30–50%)</span>, ↑ HR, ↑ CO → all worsen MS significantly.
+        </p>
+        <br>
+        <p><strong>Critical period:</strong> 28–32 weeks of gestation (maximum hemodynamic stress) + labor/delivery +
+          early postpartum period.</p>
+        <div class="table-wrap" style="margin-top:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Management</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rate control</td>
+                <td>Beta-blockers (metoprolol); avoid atenolol (IUGR risk)</td>
+              </tr>
+              <tr>
+                <td>Anticoagulation</td>
+                <td>LMWH in 1st trimester and near term; Warfarin in 2nd trimester (safer period)</td>
+              </tr>
+              <tr>
+                <td>BMV in pregnancy</td>
+                <td>Preferred if MVA &lt; 1.5 cm² and symptomatic; done after 20 weeks; lead apron shielding</td>
+              </tr>
+              <tr>
+                <td>Surgery</td>
+                <td>Last resort; high fetal mortality (~25%)</td>
+              </tr>
+              <tr>
+                <td>Delivery</td>
+                <td>Vaginal preferred; epidural analgesia; avoid tachycardia; avoid Valsalva</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="trap-box" style="margin-top:12px">
+          <div class="trap-label">⚠ TRAP: MS vs MR in Pregnancy</div>
+          <p><span class="hl2">MS WORSENS in pregnancy</span> (↑ HR + ↑ volume = ↑ LAP across stenosis)<br>
+            <span class="hl4">MR TOLERATES pregnancy better</span> (↓ SVR in pregnancy ↓ regurgitant fraction)
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 6: MCQs ══════════════════════ -->
+    <div id="tab-mcqs" class="section">
+      <h2 class="section-title"><span>06.</span> MCQ Drilldown</h2>
+      <div class="section-sub">// 10 high-yield questions — INICET / USMLE / NEET PG calibre</div>
+
+      <!-- MCQ 1 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 01</div>
+          <div class="mcq-q">A 30-year-old woman with rheumatic mitral stenosis develops acute-onset dyspnea and
+            palpitations. Her pulse is 130/min, irregularly irregular. Which of the following explains the acute
+            deterioration?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Decreased systemic vascular resistance</li>
+          <li class="correct"><span class="opt-letter">B</span> Loss of atrial kick + reduced diastolic filling time
+          </li>
+          <li class="wrong"><span class="opt-letter">C</span> Increased left ventricular end-diastolic volume</li>
+          <li class="wrong"><span class="opt-letter">D</span> Decreased left atrial pressure</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: B</div>
+          <p>New onset AF causes two simultaneous problems: (1) Loss of atrial kick (25–30% of CO) and (2) Tachycardia
+            reduces diastolic filling time → LA cannot empty → ↑↑ LAP → acute pulmonary edema.</p>
+          <p class="wrong-opt">A — ↓SVR would actually help MS (less afterload). B is correct.</p>
+          <p class="wrong-opt">C — LV is underfilled in MS (not overfilled). LV is small/normal.</p>
+          <p class="wrong-opt">D — LAP actually INCREASES (not decreases) causing pulmonary edema.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 2 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 02</div>
+          <div class="mcq-q">In a patient with mitral stenosis, the S2-opening snap interval is 40 ms. What does this
+            indicate?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Mild MS with low left atrial pressure</li>
+          <li class="wrong"><span class="opt-letter">B</span> Pliable, mobile mitral valve leaflets</li>
+          <li class="correct"><span class="opt-letter">C</span> Severe MS with high left atrial pressure</li>
+          <li class="wrong"><span class="opt-letter">D</span> The opening snap is a normal finding</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p><strong>S2-OS interval is INVERSELY proportional to LA pressure and severity of MS.</strong> A short
+            interval (40 ms) = high LAP = severe MS. After S2, the higher the LAP, the faster it equilibrates with the
+            LV pressure that has just fallen → mitral valve snaps open sooner → shorter interval.</p>
+          <p class="wrong-opt">A — Low LAP = longer S2-OS interval (mild MS).</p>
+          <p class="wrong-opt">B — Pliable leaflets allow an OS to be present, but mobility doesn't determine the
+            interval length.</p>
+          <p class="wrong-opt">D — Opening snap is always pathological.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 3 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 03</div>
+          <div class="mcq-q">A 35-year-old woman with known MS presents with hoarseness of voice. Laryngoscopy shows
+            left vocal cord palsy. What is the most likely cause?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Thyroid enlargement compressing the nerve</li>
+          <li class="correct"><span class="opt-letter">B</span> Left recurrent laryngeal nerve compression by enlarged
+            left atrium</li>
+          <li class="wrong"><span class="opt-letter">C</span> Right recurrent laryngeal nerve palsy</li>
+          <li class="wrong"><span class="opt-letter">D</span> Aortic aneurysm</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: B — Ortner's Syndrome</div>
+          <p><strong>Ortner's (cardiovocal) syndrome</strong> = hoarseness due to enlarged left atrium compressing the
+            <strong>left recurrent laryngeal nerve</strong> as it loops under the aortic arch. Classic complication of
+            severe MS with massive LA enlargement.</p>
+          <p class="wrong-opt">A — Thyroid would not cause this in the context of MS.</p>
+          <p class="wrong-opt">C — The RIGHT recurrent laryngeal nerve loops around the right subclavian artery, not
+            near the LA.</p>
+          <p class="wrong-opt">D — Aortic aneurysm can cause Ortner's but is far less common than MS-related LA
+            enlargement.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 4 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 04</div>
+          <div class="mcq-q">A patient with MS and AF is found to have a left atrial thrombus on TEE. They are currently
+            on warfarin with INR 1.5 (subtherapeutic). What is the most appropriate next step?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Proceed immediately with BMV</li>
+          <li class="wrong"><span class="opt-letter">B</span> Switch to NOAC</li>
+          <li class="correct"><span class="opt-letter">C</span> Optimize warfarin (INR 2–3), recheck TEE after 3 months,
+            then proceed with BMV</li>
+          <li class="wrong"><span class="opt-letter">D</span> Perform emergency MVR</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p>LA thrombus is an <strong>absolute contraindication to BMV</strong> (risk of embolization during
+            procedure). Correct approach: therapeutic anticoagulation (warfarin, target INR 2–3) for at least 3 months →
+            repeat TEE → if thrombus has resolved → proceed with BMV.</p>
+          <p class="wrong-opt">A — Catastrophic risk of systemic embolism. Never proceed with LA thrombus present.</p>
+          <p class="wrong-opt">B — NOACs (rivaroxaban, apixaban) are <strong>NOT approved</strong> for AF with severe
+            rheumatic MS (INVICTUS trial showed worse outcomes). Use warfarin.</p>
+          <p class="wrong-opt">D — Surgery is not an emergency here and is not the first step.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 5 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 05</div>
+          <div class="mcq-q">A 28-year-old woman at 30 weeks gestation with rheumatic MS (MVA 1.0 cm²) develops NYHA
+            class III dyspnea despite maximal medical therapy. What is the best intervention?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Emergency Caesarean section</li>
+          <li class="wrong"><span class="opt-letter">B</span> Mitral valve replacement on cardiopulmonary bypass</li>
+          <li class="correct"><span class="opt-letter">C</span> Percutaneous balloon mitral valvuloplasty (BMV)</li>
+          <li class="wrong"><span class="opt-letter">D</span> Closed mitral valvotomy</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p><strong>BMV (PTMC) is the preferred intervention in pregnant women with severe MS</strong> who fail medical
+            therapy. It is done after 20 weeks, with lead apron shielding to protect the fetus. It avoids
+            cardiopulmonary bypass (which has ~25% fetal mortality).</p>
+          <p class="wrong-opt">A — C-section only addresses delivery, not the underlying valve problem. At 30 weeks, the
+            fetus is premature.</p>
+          <p class="wrong-opt">B — MVR requires CPB → very high fetal mortality (~25%). Reserved only as last resort.
+          </p>
+          <p class="wrong-opt">D — Closed mitral valvotomy is largely historical and inferior to BMV.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 6 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 06</div>
+          <div class="mcq-q">A 45-year-old man with MS is found to have a Wilkins score of 10. He has no LA thrombus, no
+            significant MR, but is symptomatic (NYHA III). What is the most appropriate treatment?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> BMV (Balloon Mitral Valvuloplasty)</li>
+          <li class="correct"><span class="opt-letter">B</span> Mitral valve replacement surgery</li>
+          <li class="wrong"><span class="opt-letter">C</span> Closed mitral valvotomy</li>
+          <li class="wrong"><span class="opt-letter">D</span> Continue medical therapy and reassess in 6 months</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: B</div>
+          <p>Wilkins score &gt;8 = unfavorable anatomy for BMV (heavy calcification, restricted mobility, subvalvular
+            disease). The preferred treatment here is <strong>surgical MVR</strong>. Open mitral commissurotomy may be
+            possible if there is minimal calcification, but MVR is usually the definitive answer when Wilkins &gt;8.</p>
+          <p class="wrong-opt">A — BMV in Wilkins &gt;8 has poor outcomes and high risk of MR. Contraindicated.</p>
+          <p class="wrong-opt">C — Closed valvotomy = historical, inferior results even for suitable anatomy.</p>
+          <p class="wrong-opt">D — Patient is symptomatic NYHA III and has severe MS. Medical therapy alone is
+            insufficient.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 7 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 07</div>
+          <div class="mcq-q">A patient with rheumatic MS has a mid-diastolic rumble at the apex. On examination,
+            presystolic accentuation (PSA) is absent. The most likely reason is:</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Mild MS</li>
+          <li class="wrong"><span class="opt-letter">B</span> Increased left atrial pressure</li>
+          <li class="correct"><span class="opt-letter">C</span> Atrial fibrillation</li>
+          <li class="wrong"><span class="opt-letter">D</span> Pliable mitral leaflets</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p>PSA (presystolic accentuation) is caused by <strong>atrial contraction</strong> squeezing blood through the
+            narrowed mitral valve at end-diastole. In <strong>AF, there is no coordinated atrial contraction</strong> →
+            PSA disappears. This is a classic and frequently tested exam point.</p>
+          <p class="wrong-opt">A — Mild MS would have PSA intact (atria still functioning in sinus rhythm).</p>
+          <p class="wrong-opt">B — ↑ LAP increases the transvalvular gradient but doesn't remove PSA; it actually makes
+            the murmur louder overall.</p>
+          <p class="wrong-opt">D — Leaflet pliability affects opening snap, not presystolic accentuation.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 8 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 08</div>
+          <div class="mcq-q">A 40-year-old woman with severe MS (MVA 0.8 cm²) in sinus rhythm is asymptomatic. What is
+            the most appropriate management?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Annual follow-up only</li>
+          <li class="wrong"><span class="opt-letter">B</span> Start warfarin anticoagulation immediately</li>
+          <li class="correct"><span class="opt-letter">C</span> BMV if anatomy favorable, even though asymptomatic</li>
+          <li class="wrong"><span class="opt-letter">D</span> MVR immediately</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p>According to guidelines (AHA/ACC): Intervention is recommended for <strong>asymptomatic severe MS (MVA
+              &lt;1 cm²)</strong> even without symptoms, because very tight MS carries risk of sudden deterioration, AF,
+            and embolism. If anatomy favorable (Wilkins ≤8, no thrombus) → BMV is preferred.</p>
+          <p class="wrong-opt">A — Watchful waiting is appropriate for mild/moderate MS, not severe (MVA &lt;1 cm²).</p>
+          <p class="wrong-opt">B — Anticoagulation is indicated for AF with MS or prior embolism, not just severe MS in
+            sinus rhythm without thrombus.</p>
+          <p class="wrong-opt">D — Surgery (MVR) is reserved when BMV is not feasible.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 9 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 09</div>
+          <div class="mcq-q">A patient with long-standing MS has Graham Steell murmur. Which of the following best
+            describes this murmur?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Mid-diastolic rumble due to aortic regurgitation jet
+            hitting the mitral valve</li>
+          <li class="wrong"><span class="opt-letter">B</span> Mid-diastolic murmur of acute rheumatic fever</li>
+          <li class="correct"><span class="opt-letter">C</span> Early diastolic murmur of pulmonary regurgitation
+            secondary to pulmonary hypertension</li>
+          <li class="wrong"><span class="opt-letter">D</span> Pansystolic murmur due to mitral regurgitation</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p><strong>Graham Steell murmur</strong> = early diastolic, decrescendo murmur heard at the left sternal
+            border (2nd–4th ICS), due to <strong>pulmonary regurgitation secondary to PAH</strong>. The pulmonary valve
+            is structurally normal; it regurgitates because the pulmonary artery is dilated from high pressure.</p>
+          <p class="wrong-opt">A — This describes <strong>Austin Flint murmur</strong> (AR jet → MV flutter →
+            mid-diastolic rumble).</p>
+          <p class="wrong-opt">B — This describes <strong>Carey Coombs murmur</strong> (acute rheumatic fever).</p>
+          <p class="wrong-opt">D — Pansystolic murmur of MR is a separate finding.</p>
+        </div>
+      </div>
+
+      <!-- MCQ 10 -->
+      <div class="mcq-card">
+        <div class="mcq-header">
+          <div class="mcq-number">Q 10</div>
+          <div class="mcq-q">On CXR of a patient with MS, you note elevation of the left main bronchus, a double density
+            at the right cardiac border, and prominent upper lobe vessels. What additional finding would suggest severe
+            pulmonary hypertension?</div>
+        </div>
+        <ul class="mcq-options">
+          <li class="wrong"><span class="opt-letter">A</span> Kerley B lines</li>
+          <li class="wrong"><span class="opt-letter">B</span> Pulmonary venous congestion</li>
+          <li class="correct"><span class="opt-letter">C</span> Dilated main pulmonary artery and right heart
+            enlargement</li>
+          <li class="wrong"><span class="opt-letter">D</span> Straightening of left heart border</li>
+        </ul>
+        <button class="reveal-btn" onclick="toggleExplain(this)">Reveal Explanation</button>
+        <div class="mcq-explain">
+          <div class="ans-line">✓ ANSWER: C</div>
+          <p>The question asks specifically about PAH features on CXR. <strong>PAH → dilated main pulmonary artery
+              (prominent PA knuckle) + RV enlargement (boot-shaped heart or filling of retrosternal space)</strong>.
+            Pruning of peripheral pulmonary vessels is also seen.</p>
+          <p class="wrong-opt">A — Kerley B lines = interstitial pulmonary edema from ↑ pulmonary venous pressure, not
+            specifically PAH.</p>
+          <p class="wrong-opt">B — Pulmonary venous congestion (upper lobe diversion) indicates elevated LAP — earlier
+            finding before PAH.</p>
+          <p class="wrong-opt">D — Straightening of left border = LA appendage enlargement, present in any degree of MS.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════ TAB 7: SPECIAL SCENARIOS ══════════════════════ -->
+    <div id="tab-special" class="section">
+      <h2 class="section-title"><span>07.</span> Special Scenarios</h2>
+      <div class="section-sub">// Edge cases and clinical scenarios that trip up even good students</div>
+
+      <div class="card gold">
+        <div class="card-title"><span class="icon">⚡</span> MS + AF — The Dangerous Duo</div>
+        <p>AF complicates MS in <span class="hlg">30–40% of patients</span>. It is the most common complication and most
+          common cause of hospitalization.</p>
+        <br>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Management</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>New-onset AF with hemodynamic compromise</td>
+                <td>DC cardioversion + anticoagulate + treat MS</td>
+              </tr>
+              <tr>
+                <td>Chronic AF with MS (rate control adequate)</td>
+                <td>Rate control (beta-blocker ± digoxin) + Warfarin (INR 2–3); NOACs contraindicated in moderate-severe
+                  rheumatic MS</td>
+              </tr>
+              <tr>
+                <td>AF after successful BMV</td>
+                <td>Sinus rhythm may restore; anticoagulate for at least 3–6 months post-BMV; if AF &gt;1 year or LA
+                  very large, unlikely to restore SR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="trap-box" style="margin-top:12px">
+          <div class="trap-label">⚠ NOAC vs WARFARIN IN MS — INICET/USMLE TRAP</div>
+          <p>The <span class="hl2">INVICTUS trial (2022)</span> specifically tested rivaroxaban vs warfarin in AF with
+            rheumatic heart disease (mostly MS). Result: <strong>Rivaroxaban was INFERIOR to warfarin</strong> — higher
+            stroke + systemic embolism + death. Therefore: <span class="hl">Warfarin remains standard of care for AF in
+              MS</span>. NOACs are NOT approved here.</p>
+        </div>
+      </div>
+
+      <div class="card accent3">
+        <div class="card-title"><span class="icon">🩸</span> Hemoptysis in MS — 4 Different Types</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Mechanism</th>
+                <th>Character</th>
+                <th>Danger Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pulmonary apoplexy (epistaxis of lung)</td>
+                <td>Rupture of pulmonary-bronchial venous anastomoses (Virchow's anastomosis)</td>
+                <td>Sudden, profuse, bright red blood; typically in severe ↑ LAP</td>
+                <td class="td-warn">Moderate; self-limiting</td>
+              </tr>
+              <tr>
+                <td>Pulmonary edema</td>
+                <td>Very high LAP → fluid transudation into alveoli</td>
+                <td>Pink frothy sputum</td>
+                <td class="td-severe">HIGH — emergency!</td>
+              </tr>
+              <tr>
+                <td>Pulmonary infarction</td>
+                <td>Pulmonary embolism complicating MS (due to LA thrombus or RV thrombus)</td>
+                <td>Frank blood, pleuritic chest pain</td>
+                <td class="td-warn">Moderate-High</td>
+              </tr>
+              <tr>
+                <td>Chronic bronchitis (blood-streaked sputum)</td>
+                <td>Chronic pulmonary venous congestion → recurrent bronchitis</td>
+                <td>Streaky, chronic, small amounts</td>
+                <td class="td-ok">Low</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card accent2">
+        <div class="card-title"><span class="icon">🏥</span> Lutembacher Syndrome</div>
+        <p><span class="hl2">Congenital ASD + Rheumatic MS</span> = Lutembacher syndrome. The ASD is usually of secundum
+          type. The combination creates a left-to-right shunt that decompresses the LA (so symptoms of MS are modified —
+          less dyspnea than expected), but right heart dilation is exaggerated.</p>
+        <div class="hy-box" style="margin-top:12px">
+          <div class="hy-label">⭐ EXAM POINTS</div>
+          <ul class="hy-list">
+            <li>LA pressure is lower than expected (ASD allows LA decompression)</li>
+            <li>Loud S1 and opening snap may be softer than expected</li>
+            <li>Right heart is grossly enlarged (↑ shunt flow)</li>
+            <li>Treatment: Close ASD surgically + address MS (BMV or MVR)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <div class="card-title"><span class="icon">💊</span> Rheumatic Fever Prophylaxis — The Timeline</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RF without carditis</td>
+                <td>5 years or until age 21 (whichever longer)</td>
+              </tr>
+              <tr>
+                <td>RF with carditis, no residual heart disease</td>
+                <td>10 years or until age 21</td>
+              </tr>
+              <tr>
+                <td>RF with carditis + residual heart disease (valvular)</td>
+                <td><span class="hl">10 years or until age 40</span> (whichever longer); some say lifelong</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:10px;font-size:13px"><strong>Drug of choice:</strong> Benzathine Penicillin G 1.2 MU IM
+          every 3–4 weeks. Alternatively: Penicillin V 250 mg PO BD or Erythromycin 250 mg PO BD (if allergic).</p>
+      </div>
+
+      <div class="case-box">
+        <div class="case-label">🏥 CLINICAL CASE 3 — USMLE Step 2 Style</div>
+        <div class="case-scenario">A 55-year-old man with known MS presents with progressive dyspnea. He has irregularly
+          irregular pulse at 100/min, loud P2, parasternal heave, and a low-pitched diastolic murmur at the apex. Echo
+          shows MVA 1.2 cm², Wilkins score 12, moderate MR, no LA thrombus. Pulmonary artery systolic pressure = 65
+          mmHg.</div>
+        <div class="case-q">Q: What is the most appropriate next step in management?</div>
+        <div class="mcq-explain show" style="margin-top:12px">
+          <div class="ans-line">✓ ANSWER & ANALYSIS</div>
+          <p><strong>MVR (Mitral Valve Replacement)</strong> — BMV is contraindicated here because:</p>
+          <p>1. Wilkins score = 12 (&gt;8 = unfavorable anatomy)<br>
+            2. Moderate MR is a relative-to-absolute contraindication for BMV (risk of tearing → severe MR)<br>
+            3. High Wilkins score indicates heavy calcification/subvalvular disease — poor BMV result expected</p>
+          <p>PAH (PA pressure 65 mmHg) will improve after valve replacement in many patients if it is reactive (not
+            fixed fibrous PAH).</p>
+        </div>
+      </div>
+
+      <div class="card accent5">
+        <div class="card-title"><span class="icon">📊</span> MS vs MR vs AS — Quick Differentiator</div>
+        <div class="compare-grid">
+          <div class="compare-col">
+            <div class="cc-title" style="color:var(--accent)">Mitral Stenosis</div>
+            <ul>
+              <li><strong>Murmur:</strong> Mid-diastolic rumble</li>
+              <li><strong>S1:</strong> Loud (→ soft if calcified)</li>
+              <li><strong>Extra sound:</strong> Opening snap</li>
+              <li><strong>Apex:</strong> Tapping, not displaced</li>
+              <li><strong>LV size:</strong> Normal/small</li>
+              <li><strong>Main complication:</strong> AF, embolism</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="cc-title" style="color:var(--accent3)">Mitral Regurgitation</div>
+            <ul>
+              <li><strong>Murmur:</strong> Pansystolic, to axilla</li>
+              <li><strong>S1:</strong> Soft/absent</li>
+              <li><strong>Extra sound:</strong> S3</li>
+              <li><strong>Apex:</strong> Displaced, hyperdynamic</li>
+              <li><strong>LV size:</strong> Enlarged</li>
+              <li><strong>Main complication:</strong> LV failure</li>
+            </ul>
+          </div>
+          <div class="compare-col">
+            <div class="cc-title" style="color:var(--accent2)">Aortic Stenosis</div>
+            <ul>
+              <li><strong>Murmur:</strong> Ejection systolic, to neck</li>
+              <li><strong>S1:</strong> Normal</li>
+              <li><strong>Extra sound:</strong> Reverse split S2</li>
+              <li><strong>Apex:</strong> Heaving, not displaced</li>
+              <li><strong>LV size:</strong> Concentric hypertrophy</li>
+              <li><strong>Main complication:</strong> Syncope, angina, HF</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon">🧠</span> Master Summary — All Mnemonics Collected</div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 RF VALVE ORDER</div>
+          <div class="mnemonic-word">MAP-T</div>
+          <ul class="mnemonic-list">
+            <li><strong>M</strong>itral (most common)</li>
+            <li><strong>A</strong>ortic</li>
+            <li><strong>P</strong>ulmonary</li>
+            <li><strong>T</strong>ricuspid (least common)</li>
+          </ul>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 MS SYMPTOMS</div>
+          <div class="mnemonic-word">D-HOPE</div>
+          <ul class="mnemonic-list">
+            <li><strong>D</strong>yspnea | <strong>H</strong>emoptysis | <strong>O</strong>rtner's |
+              <strong>P</strong>alpitations | <strong>E</strong>mbolism</li>
+          </ul>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 SEVERITY vs SOUNDS</div>
+          <div class="mnemonic-word">"Shorter = Severer"</div>
+          <ul class="mnemonic-list">
+            <li>S2-OS interval SHORTER = MORE SEVERE (high LAP → faster equilibration)</li>
+          </ul>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 3 DIASTOLIC MIMICS</div>
+          <div class="mnemonic-word">GAC</div>
+          <ul class="mnemonic-list">
+            <li><strong>G</strong>raham Steell (PAH → PR) | <strong>A</strong>ustin Flint (AR → MV flutter) |
+              <strong>C</strong>arey Coombs (Acute RF)</li>
+          </ul>
+        </div>
+        <div class="mnemonic-box">
+          <div class="mnemonic-label">🧠 WILKINS SCORE COMPONENTS</div>
+          <div class="mnemonic-word">MTSC</div>
+          <ul class="mnemonic-list">
+            <li><strong>M</strong>obility | <strong>T</strong>hickening | <strong>S</strong>ubvalvular |
+              <strong>C</strong>alcification — each 1–4, total ≤8 = BMV suitable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    ♥ MITRAL STENOSIS MASTERCLASS — INICET · NEET PG · USMLE · Shadow's Study Arsenal
+  </div>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function chooseOption(li, card) {
+      if (card.classList.contains('answered')) return;
+      card.classList.add('answered');
+      const correct = li.classList.contains('correct');
+      const opts = card.querySelectorAll('.mcq-options li');
+      opts.forEach(opt => {
+        opt.classList.add('revealed');
+        if (opt.classList.contains('correct')) {
+          opt.classList.add('show-correct');
+        }
+      });
+      if (correct) {
+        li.classList.add('selected-correct');
+      } else {
+        li.classList.add('selected-wrong');
+      }
+      // Show explanation automatically
+      const btn = card.querySelector('.reveal-btn');
+      if (btn) {
+        btn.classList.add('show');
+        const explain = btn.nextElementSibling;
+        if (explain) explain.classList.add('show');
+        btn.textContent = 'Hide Explanation';
+      }
+    }
+
+    document.querySelectorAll('.mcq-options li').forEach(li => {
+      li.addEventListener('click', function () {
+        const card = this.closest('.mcq-card');
+        chooseOption(this, card);
+      });
+    });
+
+    function toggleExplain(btn) {
+      const explain = btn.nextElementSibling;
+      const isShown = explain.classList.toggle('show');
+      btn.textContent = isShown ? 'Hide Explanation' : 'Reveal Explanation';
+      if (isShown) {
+        const card = btn.closest('.mcq-card');
+        const opts = card.querySelectorAll('.mcq-options li');
+        opts.forEach(li => {
+          li.classList.add('revealed');
+        });
+      }
+    }
+
+    // Animate cards on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.05 });
+
+    document.querySelectorAll('.card, .mcq-card, .case-box').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      observer.observe(el);
+    });
+
+    // Listen for theme changes from parent
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.theme) {
+        document.documentElement.setAttribute('data-theme', e.data.theme);
+      }
+    });
+
+    // Horizontal scroll on hover with mouse wheel
+    const tabNav = document.querySelector('.tab-nav');
+    if (tabNav) {
+      tabNav.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          this.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, { passive: false });
+    }
+  </script>
+</body>
+
+</html>

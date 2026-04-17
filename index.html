@@ -74,6 +74,7 @@
 
         <!-- Analytics Sidebar -->
         <aside class="analytics-sidebar" id="analyticsSidebar">
+            <button class="sidebar-float-btn" onclick="toggleAnalyticsCollapse()" title="Collapse">▶</button>
             <div class="as-header">
                 <h3>📊 Analytics</h3>
                 <button class="as-close" onclick="toggleAnalytics()">✕</button>
@@ -82,19 +83,20 @@
         </aside>
     </div>
 
-    <!-- Notes Reader Panel -->
-    <div class="notes-reader" id="notesReader">
+    <!-- MCQ Panel -->
+    <div class="notes-reader" id="mcqPanel">
+        <div class="mcq-resize-handle" id="mcqResizeHandle"></div>
+        <div class="mcq-fullscreen-btn" id="mcqFullscreenBtn" onclick="toggleMcqFullscreen()">⛶</div>
         <div class="nr-header">
-            <span class="nr-icon">📝</span>
-            <h3 id="nrTitle">Notes</h3>
-            <button class="nr-open-ext" id="nrExtBtn" onclick="openNoteExternal()">Open ↗</button>
-            <button class="nr-close" onclick="closeNoteReader()">✕</button>
+            <span class="nr-icon">🎯</span>
+            <h3 id="nrTitle">MCQs</h3>
+            <button class="nr-close" onclick="closeMcqPanel()">✕</button>
         </div>
-        <div class="nr-body" id="nrBody">
-            <div class="nr-loading">Loading notes...</div>
+        <div class="nr-body" id="mcqBody">
+            <div class="nr-loading">Loading MCQs...</div>
         </div>
     </div>
-    <div class="drawer-overlay" id="notesOverlay" onclick="closeNoteReader()"></div>
+    <div class="drawer-overlay" id="mcqOverlay" onclick="closeMcqPanel()"></div>
 
     <!-- Settings Panel -->
     <div class="settings-panel" id="settingsPanel">

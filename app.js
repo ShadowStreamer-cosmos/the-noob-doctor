@@ -9,6 +9,7 @@ let pendingPool = [], pendingEmoji = '', pendingParent = '', pendingIsSubcat = f
 let activeServer = 'home', activeChannel = null;
 let chartInstances = {};
 let currentParentCat = '';
+let currentTopicInfo = { cat: '', sys: '', chapter: '', topic: '' };
 var TRACKING_URL = 'https://script.google.com/macros/s/AKfycbwxFErgPmvEul7E4v-Ba4jb5uSyBONjeSwy1c-WoMyjjE5ZMkvoDZuR995dokrmUgxv/exec';
 var _sessionStart = Date.now();
 
@@ -21,6 +22,39 @@ function saveQuestionProgress(q, userAns, isCorrect) {
 }
 function isAnswered(q) { return getProgress().hasOwnProperty(q.id); }
 function wasCorrect(q) { const p = getProgress()[q.id]; return p && p.correct; }
+
+// ===== THEME SYNC FOR IFRAMES =====
+function syncThemeToIframe(iframe) {
+    try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const theme = localStorage.getItem('nbd_theme') || 'dark';
+        if (doc.documentElement) {
+            doc.documentElement.setAttribute('data-theme', theme);
+        }
+        // Inject theme-aware styles
+        const style = doc.createElement('style');
+        if (theme === 'light') {
+            style.textContent = `body { background: #f5f5f7 !important; color: #1a1a2e !important; }
+              .card, .card-title, .section, .section-title, .topic-view, .topic-header, h1, h2, h3 { background: #ffffff !important; color: #1a1a2e !important; }
+              a { color: #2563eb !important; }
+              table, th, td { border-color: #e5e5e5 !important; }
+              th { background: #f0f0f5 !important; }`;
+        } else {
+            style.textContent = ''; // Reset to dark default
+        }
+        doc.head.appendChild(style);
+    } catch (e) { console.log('Theme sync blocked:', e.message); }
+}
+
+// Listen for theme changes and update all iframes
+function updateAllIframes() {
+    const theme = localStorage.getItem('nbd_theme') || 'dark';
+    document.querySelectorAll('iframe[data-theme]').forEach(iframe => {
+        try {
+            iframe.contentWindow.postMessage({ theme: theme }, '*');
+        } catch (e) { console.log('Theme update blocked'); }
+    });
+}
 
 // ===== CHART HELPERS =====
 function destroyChart(id) { if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; } }
@@ -65,6 +99,7 @@ function handleThemeToggle(el) {
     const theme = el.checked ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('nbd_theme', theme);
+    updateAllIframes();
 }
 
 function exportProgress() {
@@ -245,6 +280,7 @@ function renderDirectSubjectChannels(cat) {
         <div class="ch-item" onclick="selectServer('home')"><span class="ch-hash">←</span><span class="ch-name">back-home</span></div>
     `;
     showContentHub(cat, qs, CAT_META[cat].emoji, false, cat);
+    renderAnalytics(cat, cat);
 }
 
 // ===== SYSTEM-BASED SIDEBAR (4-level: Subject → System → Chapter → Topics) =====
@@ -272,8 +308,11 @@ function renderSystemChannels(cat) {
         const topicCount = sys.topics ? Object.keys(sys.topics).length : 0;
         const sysId = 'sys-' + sysIndex;
 
+        // If has master guide, click on icon opens notes, click on name toggles
+        const iconClick = hasMasterGuide ? `onclick="openMasterGuideFromSidebar('${esc(cat)}','${esc(sysName)}','${sys.notesUrl}', event)"` : '';
+        
         html += `<div class="ch-system" id="${sysId}" onclick="toggleSystem('${sysId}', event)">
-            <span class="ch-system-icon">${hasMasterGuide ? '📖' : '▸'}</span>
+            <span class="ch-system-icon" ${iconClick}>${hasMasterGuide ? '📖' : '▸'}</span>
             <span class="ch-system-name">${sysName}</span>
             <span class="ch-system-count">${chapterCount || topicCount}</span>
         </div>
@@ -325,6 +364,7 @@ function renderSystemChannels(cat) {
     // All systems start collapsed (user clicks to expand)
 
     showContentHub(cat, [], meta.emoji, false, cat);
+    renderAnalytics(cat, cat);
 }
 
 function toggleSystem(sysId, event) {
@@ -407,33 +447,339 @@ function selectTopic(cat, sysName, chapterName, topicName) {
 }
 
 function showTopicContent(cat, sysName, chapterName, topicName) {
-    const systems = SUBJECT_SYSTEMS[cat];
-    const chapter = systems[sysName].chapters[chapterName];
-    const topic = chapter.topics.find(t => t.name === topicName);
+    // Get topic data - try direct data access first
+    let topicData;
+    let dataSource;
+    if (cat === 'Medicine') dataSource = MEDICINE_DATA;
+    else if (cat === 'Surgery') dataSource = SURGERY_DATA;
+    else if (cat === 'OBG') dataSource = OBG_DATA;
+    
+    if (dataSource && dataSource[sysName] && dataSource[sysName].chapters && dataSource[sysName].chapters[chapterName]) {
+        const chapter = dataSource[sysName].chapters[chapterName];
+        topicData = chapter.topics.find(t => t.name === topicName);
+    } else {
+        // Fallback to SUBJECT_SYSTEMS
+        const systems = SUBJECT_SYSTEMS[cat];
+        const chapter = systems[sysName].chapters[chapterName];
+        topicData = chapter.topics.find(t => t.name === topicName);
+    }
+    
+    const topic = topicData;
     
     const priorityColor = PRIORITY_COLORS[topic.priority] || PRIORITY_COLORS.default;
     const priorityLabel = topic.priority === 'red' ? 'Frequently Asked' : (topic.priority === 'purple' ? 'Normally Asked' : 'Other');
     
     document.getElementById('mainTitle').textContent = topicName.toLowerCase();
+    
+    // Check if topic has notesUrl and get current theme
+    const hasNotes = topic.notesUrl ? true : false;
+    const currentTheme = localStorage.getItem('nbd_theme') || 'dark';
+    const notesHtml = hasNotes ? `<iframe src="${topic.notesUrl}?theme=${currentTheme}" data-theme="${currentTheme}" onload="syncThemeToIframe(this)" style="width:100%;height:calc(100vh - 140px);border:none;margin-top:10px;border-radius:8px;overflow:hidden;"></iframe>` : `
+        <div class="topic-content">
+            <p style="color:var(--t3);padding:20px;text-align:center;">
+                Questions for this topic coming soon...<br>
+                <small>Study this topic with Avanti to generate notes</small>
+            </p>
+        </div>
+    `;
+    
     document.getElementById('mainBody').innerHTML = `
         <div class="topic-view">
             <div class="topic-header">
                 <span class="topic-priority" style="background:${priorityColor}">${priorityLabel}</span>
                 <h2>${topicName}</h2>
                 <p class="topic-path">${cat} > ${sysName} > ${chapterName}</p>
+                <button class="topic-sections-btn" onclick="toggleSectionChecklist()">📋 Sections</button>
+                <button class="topic-mcq-btn" onclick="openMcqPanel()">🎯 MCQs</button>
             </div>
-            <div class="topic-content">
-                <p style="color:var(--t3);padding:20px;text-align:center;">
-                    Questions for this topic coming soon...<br>
-                    <small>Study this topic with Avanti to generate notes</small>
-                </p>
+            <div class="section-checklist" id="sectionChecklist" style="display:none">
+                <div class="section-checklist-header">
+                    <span>📖 Study Progress</span>
+                    <button onclick="toggleSectionChecklist()">✕</button>
+                </div>
+                <div class="section-checklist-body" id="sectionChecklistBody"></div>
             </div>
+            ${notesHtml}
         </div>
     `;
+    
+    setTimeout(() => {
+        renderSectionChecklist();
+    }, 100);
+    
     closeAllDrawers();
+    storeCurrentTopic(cat, sysName, chapterName, topicName);
+    renderAnalytics();
+}
+
+function getTopicSections(topicName) {
+    // Try to extract sections from the loaded iframe notes
+    const iframe = document.querySelector('.topic-view iframe');
+    if (iframe && iframe.contentDocument) {
+        const doc = iframe.contentDocument;
+        
+        // Get all section titles from the notes HTML
+        const h2Sections = doc.querySelectorAll('h2.section-title');
+        const h3Sections = doc.querySelectorAll('h3.sub-heading');
+        const cardTitles = doc.querySelectorAll('.card-title');
+        
+        let sections = [];
+        let majorIndex = 1;
+        
+        // Process h2 sections as major
+        h2Sections.forEach((el, idx) => {
+            const text = el.textContent?.trim() || '';
+            if (text) {
+                sections.push({ text: text, type: 'major' });
+                majorIndex++;
+            }
+        });
+        
+        // Process h3 and card-title as sub-sections
+        h3Sections.forEach(el => {
+            const text = el.textContent?.trim() || '';
+            if (text && text.length > 2) {
+                sections.push({ text: text, type: 'sub' });
+            }
+        });
+        
+        cardTitles.forEach(el => {
+            const text = el.textContent?.trim() || '';
+            if (text && text.length > 2) {
+                // Avoid duplicates
+                const exists = sections.some(s => s.text.includes(text.substring(0, 30)));
+                if (!exists) {
+                    sections.push({ text: text, type: 'sub' });
+                }
+            }
+        });
+        
+        // If we found sections, return them
+        if (sections.length > 0) {
+            return sections;
+        }
+    }
+    
+    // Fallback: default sections if iframe not accessible
+    return [
+        { text: '01. Introduction', type: 'major' },
+        { text: '02. Etiology', type: 'major' },
+        { text: '03. Pathophysiology', type: 'major' },
+        { text: '04. Clinical Features', type: 'major' },
+        { text: '05. Investigations', type: 'major' },
+        { text: '06. Management', type: 'major' },
+        { text: '07. Summary', type: 'major' }
+    ];
+}
+
+function renderSectionChecklist() {
+    const topicKey = currentTopicInfo.topic;
+    if (!topicKey) return;
+    
+    // Get sections dynamically from loaded notes
+    const sections = getTopicSections(topicKey);
+    
+    const body = document.getElementById('sectionChecklistBody');
+    if (!body) return;
+    
+    let html = '';
+    sections.forEach((sec, idx) => {
+        const checkKey = 'section_done_' + topicKey + '_' + idx;
+        const isChecked = localStorage.getItem(checkKey) === 'true';
+        html += `<label class="checklist-item ${sec.type} ${isChecked ? 'checked' : ''}">
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSectionItem(${idx}, this.checked)">
+            <span class="checklist-box">${isChecked ? '✓' : ''}</span>
+            <span class="checklist-text">${sec.text}</span>
+        </label>`;
+    });
+    
+    body.innerHTML = html;
+}
+
+function toggleSectionChecklist() {
+    const panel = document.getElementById('sectionChecklist');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleSectionItem(idx, checked) {
+    const topicKey = currentTopicInfo.topic;
+    if (!topicKey) return;
+    const checkKey = 'section_done_' + topicKey + '_' + idx;
+    localStorage.setItem(checkKey, checked ? 'true' : 'false');
+    renderSectionChecklist();
+    renderMultiRingChart();
+}
+
+function renderMultiRingChart() {
+    const sectionData = getSectionCompletion();
+    const prog = getProgress();
+    const qs = topicQuestions || [];
+    
+    let mcqCorrect = 0, mcqWrong = 0;
+    const mcqTotal = qs.length;
+    qs.forEach((q, i) => {
+        const qId = q.id || 'tq' + i;
+        if (prog[qId]) {
+            if (prog[qId].correct) mcqCorrect++;
+            else mcqWrong++;
+        }
+    });
+    
+    const notesPct = sectionData.total > 0 ? (sectionData.completed / sectionData.total) * 100 : 0;
+    const notesDone = Math.round(notesPct);
+    const notesLeft = 100 - notesDone;
+    
+    destroyChart('completion');
+    const ctx = document.getElementById('completionChart');
+    if (!ctx) return;
+    
+    chartInstances['completion'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Correct', 'Wrong', 'Unattempted'],
+            datasets: [
+                // Outer ring - MCQ data (weight 1)
+                {
+                    data: [mcqCorrect, mcqWrong, mcqTotal - mcqCorrect - mcqWrong],
+                    backgroundColor: ['#22c55e', '#ef4444', '#374151'],
+                    borderWidth: 0,
+                    weight: 1.2
+                },
+                // Inner ring - Notes data (weight 0.6)
+                {
+                    data: [notesDone, notesLeft],
+                    backgroundColor: ['#6366f1', '#1e1e2e'],
+                    borderWidth: 0,
+                    weight: 0.7
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            cutout: '40%',
+            animation: { duration: 600, easing: 'easeOutQuart' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    titleFont: { size: 13, weight: '600' },
+                    bodyFont: { size: 12 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: function(context) {
+                            const datasetIndex = context.datasetIndex;
+                            if (datasetIndex === 0) {
+                                const labels = ['Correct', 'Wrong', 'Unattempted'];
+                                return ` MCQ ${labels[context.dataIndex]}: ${context.raw}`;
+                            } else {
+                                return context.dataIndex === 0 ? ` Notes Done: ${notesDone}%` : ` Notes Left: ${notesLeft}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function injectSectionCheckboxes() {
+    const iframe = document.querySelector('.topic-view iframe');
+    if (!iframe || !iframe.contentDocument) return;
+    
+    const doc = iframe.contentDocument;
+    const topicKey = currentTopicInfo.topic;
+    if (!topicKey) return;
+    
+    // Target main section titles (h2 with class section-title) and cards
+    const selectors = ['h2.section-title', 'div.card-title'];
+    let idx = 0;
+    
+    selectors.forEach(selector => {
+        const elements = doc.querySelectorAll(selector);
+        elements.forEach(el => {
+            if (el.querySelector('.section-check')) return; // Already has checkbox
+            
+            const sectionText = el.textContent?.trim().substring(0, 40) || 'Section';
+            const checkKey = 'section_done_' + topicKey + '_' + idx;
+            const isChecked = localStorage.getItem(checkKey) === 'true';
+            
+            // Create inline checkbox
+            const checkLabel = doc.createElement('label');
+            checkLabel.className = 'section-check-label';
+            checkLabel.innerHTML = `<input type="checkbox" ${isChecked ? 'checked' : ''}> <span class="check-mark">${isChecked ? '✓' : '○'}</span>`;
+            checkLabel.style.cssText = 'margin-left:12px;cursor:pointer;vertical-align:middle;display:inline-flex;align-items:center;gap:4px;font-size:12px;';
+            checkLabel.onclick = (e) => e.stopPropagation();
+            checkLabel.onchange = function() {
+                const checked = this.querySelector('input').checked;
+                localStorage.setItem(checkKey, checked ? 'true' : 'false');
+                this.querySelector('.check-mark').textContent = checked ? '✓' : '○';
+                renderAnalytics();
+            };
+            
+            el.appendChild(checkLabel);
+            idx++;
+        });
+    });
+    
+    console.log('Injected', idx, 'section checkboxes for', topicKey);
+}
+
+function getSectionCompletion() {
+    if (!currentTopicInfo.topic) return { completed: 0, total: 0 };
+    
+    const topicKey = currentTopicInfo.topic;
+    const sections = getTopicSections(topicKey);
+    let completed = 0;
+    const total = sections.length;
+    
+    // Count completed sections for this specific topic
+    for (let i = 0; i < total; i++) {
+        const checkKey = 'section_done_' + topicKey + '_' + i;
+        if (localStorage.getItem(checkKey) === 'true') {
+            completed++;
+        }
+    }
+    
+return { completed, total };
+}
+
+// Toggle sidebar panel visibility
+function toggleSidebar(panel) {
+    const sidebar = document.getElementById('channelSidebar');
+    const btn = sidebar.querySelector('.sidebar-float-btn');
+    
+    if (panel === 'left') {
+        sidebar.classList.toggle('collapsed');
+        
+        // Update button icon
+        if (btn) {
+            btn.innerHTML = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+        }
+    }
+}
+
+// Toggle analytics panel collapse (Desktop)
+function toggleAnalyticsCollapse() {
+    const panel = document.getElementById('analyticsSidebar');
+    const btn = panel.querySelector('.sidebar-float-btn');
+    
+    if (panel) {
+        panel.classList.toggle('collapsed');
+        
+        // Update button icon
+        if (btn) {
+            btn.innerHTML = panel.classList.contains('collapsed') ? '◀' : '▶';
+        }
+    }
 }
 
 // Removed duplicate toggleSystem - using the one above with sysId
+
+function openMasterGuideFromSidebar(cat, sysName, notesUrl, event) {
+    if (event) event.stopPropagation();
+    openMasterGuide(cat, sysName, notesUrl);
+}
 
 function openMasterGuide(cat, sysName, notesUrl) {
     console.log('Opening master guide:', sysName, notesUrl);
@@ -754,6 +1100,317 @@ function openNoteExternal() {
     if (currentNoteUrl) window.open(currentNoteUrl, '_blank');
 }
 
+// ===== MCQ PANEL =====
+function storeCurrentTopic(cat, sys, chapter, topic) {
+    currentTopicInfo = { cat, sys, chapter, topic };
+}
+let currentMcqType = 'all';
+let topicQuestions = [];
+
+function openMcqPanel() {
+    const panel = document.getElementById('mcqPanel');
+    const overlay = document.getElementById('mcqOverlay');
+    
+    panel.classList.add('open');
+    overlay.classList.add('vis');
+    currentMcqType = 'all';
+    
+    // Get and store current topic questions
+    topicQuestions = getTopicMcqs();
+    initMcqResize();
+    renderMcqPanel();
+}
+
+function closeMcqPanel() {
+    const panel = document.getElementById('mcqPanel');
+    const overlay = document.getElementById('mcqOverlay');
+    panel.classList.remove('open');
+    panel.classList.remove('fullscreen');
+    overlay.classList.remove('vis');
+}
+
+let mcqIsFullscreen = false;
+function toggleMcqFullscreen() {
+    const panel = document.getElementById('mcqPanel');
+    mcqIsFullscreen = !mcqIsFullscreen;
+    if (mcqIsFullscreen) {
+        panel.classList.add('fullscreen');
+        panel.style.width = (window.innerWidth * 0.75) + 'px';
+    } else {
+        panel.classList.remove('fullscreen');
+        panel.style.width = '400px';
+    }
+}
+
+function initMcqResize() {
+    const panel = document.getElementById('mcqPanel');
+    const handle = document.getElementById('mcqResizeHandle');
+    if (!handle) return;
+    
+    let isResizing = false;
+    let startX, startWidth;
+    
+    handle.onmousedown = function(e) {
+        isResizing = true;
+        startX = e.clientX;
+        startWidth = panel.offsetWidth;
+        panel.classList.add('resizing');
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    
+    document.onmousemove = function(e) {
+        if (!isResizing) return;
+        // Moving mouse left = more width, right = less width
+        const delta = startX - e.clientX;
+        const newWidth = startWidth + delta;
+        
+        // Fullscreen at 75% of screen (gives 25% space on right)
+        const fullscreenThreshold = window.innerWidth * 0.75;
+        
+        if (newWidth > fullscreenThreshold) {
+            panel.classList.add('fullscreen');
+            mcqIsFullscreen = true;
+            panel.style.width = fullscreenThreshold + 'px';
+        } else if (newWidth >= 380) {
+            panel.classList.remove('fullscreen');
+            mcqIsFullscreen = false;
+            panel.style.width = newWidth + 'px';
+        } else {
+            panel.style.width = '380px';
+        }
+    };
+    
+    document.onmouseup = function() {
+        if (isResizing) {
+            isResizing = false;
+            panel.classList.remove('resizing');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        }
+    };
+}
+
+function getTopicMcqs() {
+    const { cat, sys, chapter, topic } = currentTopicInfo;
+    if (!cat || !sys || !chapter || !topic) return [];
+    
+    // Access data directly from MEDICINE_DATA etc
+    let dataSource;
+    if (cat === 'Medicine') dataSource = MEDICINE_DATA;
+    else if (cat === 'Surgery') dataSource = SURGERY_DATA;
+    else if (cat === 'OBG') dataSource = OBG_DATA;
+    else if (cat === 'Paeds') dataSource = PAEDS_DATA;
+    else if (cat === 'ENT') dataSource = ENT_DATA;
+    else if (cat === 'Ortho') dataSource = ORTHO_DATA;
+    else return [];
+    
+    const sysData = dataSource[sys];
+    if (!sysData || !sysData.chapters) return [];
+    const ch = sysData.chapters[chapter];
+    if (!ch || !ch.topics) return [];
+    const t = ch.topics.find(t => t.name === topic);
+    return t && t.questions ? t.questions : [];
+}
+
+function renderMcqPanel() {
+    const body = document.getElementById('mcqBody');
+    if (!body) return;
+    
+    const allQs = topicQuestions;
+    
+    if (!allQs || allQs.length === 0) {
+        body.innerHTML = `<div class="nr-empty-state">
+            <div class="nr-empty-icon">🎯</div>
+            <h3 class="nr-empty-title">No MCQs Yet</h3>
+            <p class="nr-empty-text">MCQs for this topic are coming soon.</p>
+            <p class="nr-empty-hint">Add questions to enable practice mode</p>
+        </div>`;
+        return;
+    }
+    
+    // Calculate progress
+    const prog = getProgress();
+    const answered = allQs.filter((q, i) => prog[q.id || 'tq' + i]).length;
+    const correct = allQs.filter((q, i) => {
+        const p = prog[q.id || 'tq' + i];
+        return p && p.correct;
+    }).length;
+    const pct = Math.round((correct / allQs.length) * 100);
+    
+    // Filter questions by type
+    const recallQs = allQs.filter(q => q.t === 'r');
+    const caseQs = allQs.filter(q => q.t === 'c');
+    const allCount = allQs.length;
+    const recallCount = recallQs.length;
+    const caseCount = caseQs.length;
+    
+    let html = `
+        <div class="mcq-panel-header">
+            <div class="mcq-panel-progress">
+                <div class="mcq-panel-progress-fill" style="width:${(answered / allCount) * 100}%"></div>
+            </div>
+            <div class="mcq-panel-stats">${answered}/${allCount} done • ${correct} correct (${pct}%)</div>
+        </div>
+        <div class="mcq-filter-bar">
+            <button class="mcq-filter-btn ${currentMcqType === 'all' ? 'active' : ''}" onclick="filterMcqs('all')">
+                All (${allCount})
+            </button>
+            <button class="mcq-filter-btn ${currentMcqType === 'recall' ? 'active' : ''}" onclick="filterMcqs('recall')">
+                Recall (${recallCount})
+            </button>
+            <button class="mcq-filter-btn ${currentMcqType === 'case' ? 'active' : ''}" onclick="filterMcqs('case')">
+                Case (${caseCount})
+            </button>
+        </div>
+        <div class="mcq-scroll-list">
+    `;
+    
+    // Get filtered questions
+    let filtered;
+    if (currentMcqType === 'recall') filtered = recallQs;
+    else if (currentMcqType === 'case') filtered = caseQs;
+    else filtered = allQs;
+    
+    const letters = ['A', 'B', 'C', 'D'];
+    
+    filtered.forEach((q, i) => {
+        const qId = q.id || 'tq' + allQs.indexOf(q);
+        const done = prog[qId];
+        const prevAnswer = done ? done.ans : -1;
+        const isAnswered = done !== undefined;
+        
+        html += `<div class="mcq-card ${isAnswered ? 'answered' : ''}">
+            <div class="mcq-card-num">Q${i + 1} ${q.t === 'r' ? '🧠' : q.t === 'c' ? '📋' : ''}</div>
+            <div class="mcq-card-q">${q.q}</div>
+            <div class="mcq-card-opts">`;
+        
+        q.o.forEach((opt, j) => {
+            let optClass = 'mcq-card-opt';
+            if (isAnswered) {
+                optClass += ' disabled';
+                if (j === q.a) optClass += ' correct';
+                if (j === prevAnswer && prevAnswer !== q.a) optClass += ' wrong';
+            }
+            html += `<div class="${optClass}" onclick="${isAnswered ? '' : `answerMcqInPanel(${allQs.indexOf(q)},${j})`}">
+                <span class="mcq-card-letter">${letters[j]}</span>
+                <span class="mcq-card-text">${opt}</span>
+            </div>`;
+        });
+        
+        html += `</div>`;
+        
+        if (isAnswered) {
+            const expClass = done.correct ? 'correct' : 'wrong';
+            const expText = q.e || (done.correct ? 'Well done!' : 'The correct answer is: ' + q.o[q.a]);
+            html += `<div class="mcq-card-exp ${expClass}">
+                <div class="mcq-exp-title ${expClass}">${done.correct ? '✅ Correct!' : '❌ Incorrect'}</div>
+                <div class="mcq-exp-text">${expText}</div>
+            </div>`;
+        }
+        
+        html += `</div>`;
+    });
+    
+    html += `</div>`;
+    body.innerHTML = html;
+}
+
+function answerMcqInPanel(qIdx, ans, evt) {
+    if (evt) { evt.stopPropagation(); evt.preventDefault(); }
+    
+    const scrollList = document.querySelector('.mcq-scroll-list');
+    const savedScroll = scrollList ? scrollList.scrollTop : 0;
+    
+    const q = topicQuestions[qIdx];
+    if (!q) return;
+    
+    const isCorrect = ans === q.a;
+    const qId = q.id || 'tq' + qIdx;
+    saveQuestionProgress({ id: qId }, ans, isCorrect);
+    renderMcqPanel();
+    
+    // Update analytics - pass current topic to ensure topic-specific analytics
+    if (currentTopicInfo && currentTopicInfo.topic) {
+        renderAnalytics();
+    }
+    
+    const newList = document.querySelector('.mcq-scroll-list');
+    if (newList) newList.scrollTop = savedScroll;
+}
+
+function filterMcqs(type) {
+    currentMcqType = type;
+    renderMcqPanel();
+}
+
+function openMcqInPanel(idx) {
+    const q = topicQuestions[idx];
+    if (!q) return;
+    
+    const letters = ['A', 'B', 'C', 'D'];
+    const body = document.getElementById('mcqBody');
+    
+    body.innerHTML = `
+        <div class="mcq-back-bar">
+            <button class="mcq-back-btn" onclick="renderMcqPanel()">← Back to List</button>
+        </div>
+        <div class="mcq-full-question">
+            <div class="mcq-full-text">${q.q}</div>
+            <div class="mcq-full-options">`;
+    
+    q.o.forEach((opt, i) => {
+        body.innerHTML += `<div class="mcq-full-opt" id="opt${i}" onclick="selectMcqOption(${idx}, ${i})">
+            <span class="mcq-full-letter">${letters[i]}</span>
+            <span class="mcq-full-text">${opt}</span>
+        </div>`;
+    });
+    
+    body.innerHTML += `</div></div>
+        <div class="mcq-full-exp" id="mcqExp" style="display:none">
+            <div class="mcq-exp-label"></div>
+            <div class="mcq-exp-text"></div>
+        </div>`;
+}
+
+function selectMcqOption(qIdx, ans) {
+    const q = topicQuestions[qIdx];
+    if (!q) return;
+    
+    const isCorrect = ans === q.a;
+    const qId = q.id || 'tq' + qIdx;
+    saveQuestionProgress({ id: qId }, ans, isCorrect);
+    
+    document.querySelectorAll('.mcq-full-opt').forEach((el, i) => {
+        el.classList.add('disabled');
+        if (i === q.a) el.classList.add('correct');
+        if (i === ans && !isCorrect) el.classList.add('wrong');
+    });
+    
+    const expEl = document.getElementById('mcqExp');
+    expEl.style.display = 'block';
+    expEl.querySelector('.mcq-exp-label').textContent = isCorrect ? '✅ Correct!' : '❌ Wrong!';
+    expEl.querySelector('.mcq-exp-text').textContent = q.e || 'The correct answer is: ' + q.o[q.a];
+    
+    renderAnalytics();
+}
+
+function filterMcqs(type) {
+    currentMcqType = type;
+    renderMcqPanel();
+}
+
+function startMcqFromPanel(idx) {
+    const q = topicQuestions[parseInt(idx)];
+    if (q) {
+        closeMcqPanel();
+        pendingPool = topicQuestions;
+        startQuiz([q], false);
+    }
+}
+
 // Legacy wrapper — keeps old code paths working
 function showModeScreen(catName, questions, emoji, isSubcat) {
     showContentHub(catName, questions, emoji, isSubcat, currentParentCat);
@@ -1008,17 +1665,100 @@ function renderLeaderboard() {
 }
 
 // ===== ANALYTICS SIDEBAR =====
-function renderAnalytics() {
-    const allQs = getAllQuestions();
+function renderAnalytics(customCat, customParent) {
+    const cat = customCat || currentCat || '';
+    const parent = customParent || currentParentCat || '';
+    const server = activeServer;
     const prog = getProgress();
-    const total = allQs.length;
-    const attempted = allQs.filter(q => prog[q.id]).length;
-    const correct = allQs.filter(q => prog[q.id] && prog[q.id].correct).length;
+    
+    let qs = [];
+    let title = '';
+    let showLevel = 'overall';
+    
+    // Check if we're viewing a specific topic - show topic progress
+    if (currentTopicInfo && currentTopicInfo.topic) {
+        qs = getTopicMcqs();
+        console.log('Topic analytics:', currentTopicInfo.topic, 'Questions:', qs.length);
+        title = currentTopicInfo.topic + ' Progress';
+        showLevel = 'topic';
+    }
+    // Determine what to show based on current context
+    else if (server === 'home' || !server) {
+        // Overall analytics for dashboard
+        qs = getAllQuestions();
+        title = 'Overall Progress';
+        showLevel = 'overall';
+    } else if (cat && parent) {
+        // Specific chapter/topic - get questions for that chapter
+        const systems = SUBJECT_SYSTEMS[parent];
+        if (systems && systems[cat] && systems[cat].chapters) {
+            // We're in a specific chapter
+            for (const chapter of Object.values(systems[cat].chapters)) {
+                qs.push(...chapter.topics);
+            }
+            title = cat + ' Analytics';
+            showLevel = 'chapter';
+        } else if (parent && SUBJECT_SYSTEMS[parent]) {
+            // We're in a system (e.g., Rheumatology under Medicine)
+            const subData = SUBJECT_SYSTEMS[parent];
+            if (subData[cat]) {
+                for (const sys of Object.values(subData)) {
+                    if (sys.chapters) {
+                        for (const chapter of Object.values(sys.chapters)) {
+                            qs.push(...chapter.topics);
+                        }
+                    }
+                }
+                title = cat + ' Analytics';
+                showLevel = 'system';
+            }
+        }
+    } else {
+        // Fallback to overall
+        qs = getAllQuestions();
+        title = 'Overall Progress';
+        showLevel = 'overall';
+    }
+
+    // Calculate stats for the filtered questions
+    const total = qs.length;
+    const attempted = qs.filter((q, i) => {
+        const qId = q.id || 'tq' + i;
+        return prog[qId];
+    }).length;
+    const correct = qs.filter((q, i) => {
+        const qId = q.id || 'tq' + i;
+        return prog[qId] && prog[qId].correct;
+    }).length;
     const wrong = attempted - correct;
     const accuracy = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
     const completion = total > 0 ? Math.round((attempted / total) * 100) : 0;
+    
+    // Determine what charts to show
+    let chartsHtml = '';
+    if (showLevel === 'topic') {
+        chartsHtml = `
+            <div class="a-chart"><h4>Topic Progress</h4><canvas id="topicChart" height="160"></canvas></div>
+            <div class="a-weak"><h4>📊 Performance</h4><div class="a-progress-list">${renderTopicProgressList()}</div></div>
+        `;
+    } else if (showLevel === 'overall') {
+        chartsHtml = `
+            <div class="a-chart"><h4>Subject Progress</h4><canvas id="subjectChart" height="260"></canvas></div>
+            <div class="a-chart"><h4>Score Trend</h4><canvas id="trendChart" height="140"></canvas></div>
+            <div class="a-weak"><h4>⚠️ Focus Areas</h4><div id="weakSubjects"></div></div>
+        `;
+    } else {
+        chartsHtml = `
+            <div class="a-chart"><h4>Topic Completion</h4><canvas id="topicChart" height="180"></canvas></div>
+            <div class="a-weak"><h4>🔴 Weak Topics</h4><div id="weakTopics"></div></div>
+        `;
+    }
 
     document.getElementById('analyticsBody').innerHTML = `
+        <div class="a-header">
+            <div class="a-title">${title}</div>
+            <div class="a-level">${showLevel === 'overall' ? 'All Subjects' : cat}</div>
+        </div>
         <div class="a-stats">
             <div class="a-stat"><div class="a-val a-ac">${total}</div><div class="a-lbl">Total</div></div>
             <div class="a-stat"><div class="a-val a-gr">${correct}</div><div class="a-lbl">Correct</div></div>
@@ -1026,26 +1766,121 @@ function renderAnalytics() {
             <div class="a-stat"><div class="a-val a-ac">${accuracy}%</div><div class="a-lbl">Accuracy</div></div>
         </div>
         <div class="a-chart"><h4>Completion</h4><canvas id="completionChart" height="180"></canvas></div>
-        <div class="a-chart"><h4>Subject Progress</h4><canvas id="subjectChart" height="260"></canvas></div>
-        <div class="a-chart"><h4>Score Trend</h4><canvas id="trendChart" height="140"></canvas></div>
-        <div class="a-weak"><h4>⚠️ Focus Areas</h4><div id="weakSubjects"></div></div>
+        ${chartsHtml}
     `;
+    
     setTimeout(() => {
-        renderCompletionChart(attempted, total - attempted);
-        renderSubjectChart();
-        renderTrendChart();
-        renderWeakSubjects();
+        const sectionData = getSectionCompletion();
+        const prog = getProgress();
+        const qs = topicQuestions || [];
+        
+        let mcqCorrect = 0, mcqWrong = 0;
+        const mcqTotal = qs.length;
+        qs.forEach((q, i) => {
+            const qId = q.id || 'tq' + i;
+            if (prog[qId]) {
+                if (prog[qId].correct) mcqCorrect++;
+                else mcqWrong++;
+            }
+        });
+        
+        const notesPct = sectionData.total > 0 ? (sectionData.completed / sectionData.total) * 100 : 0;
+        const notesDone = Math.round(notesPct);
+        const notesLeft = 100 - notesDone;
+        
+        destroyChart('completion');
+        const ctx = document.getElementById('completionChart');
+        if (ctx) {
+            chartInstances['completion'] = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'Wrong', 'Unattempted'],
+                    datasets: [
+                        {
+                            data: [mcqCorrect, mcqWrong, mcqTotal - mcqCorrect - mcqWrong],
+                            backgroundColor: ['#22c55e', '#ef4444', '#374151'],
+                            borderWidth: 0,
+                            weight: 1.2
+                        },
+                        {
+                            data: [notesDone, notesLeft],
+                            backgroundColor: ['#6366f1', '#1e1e2e'],
+                            borderWidth: 0,
+                            weight: 0.7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '40%',
+                    animation: { duration: 600, easing: 'easeOutQuart' },
+                    plugins: { legend: { display: false }, tooltip: { enabled: true } }
+                }
+            });
+        }
+        
+        if (showLevel === 'overall') {
+            renderSubjectChart();
+            renderTrendChart();
+            renderWeakSubjects();
+        } else if (showLevel === 'topic') {
+            renderTopicChart();
+        } else {
+            renderTopicChart();
+        }
     }, 50);
 }
 
-function renderCompletionChart(done, remain) {
+function renderCompletionChart(correct, wrong, unattempted, sectionsDone, sectionsTotal) {
     destroyChart('completion');
+    
+    const sectionPct = sectionsTotal > 0 ? Math.round((sectionsDone / sectionsTotal) * 100) : 0;
+    const notesCompleted = sectionPct > 0;
+    
     const ctx = document.getElementById('completionChart');
     if (!ctx) return;
+    
     chartInstances['completion'] = new Chart(ctx, {
         type: 'doughnut',
-        data: { labels: ['Done', 'Remaining'], datasets: [{ data: [done, remain], backgroundColor: ['#7c5cf0', '#262648'], borderWidth: 0 }] },
-        options: { responsive: true, cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: true } } }
+        data: { 
+            labels: ['Correct', 'Wrong', 'Unattempted'], 
+            datasets: [{ 
+                data: [correct, wrong, unattempted], 
+                backgroundColor: ['#34d399', '#f87171', '#6b7280'], 
+                borderWidth: 0
+            }] 
+        },
+        options: { 
+            responsive: true, 
+            cutout: '65%', 
+            animation: { duration: 600, easing: 'easeOutQuart' },
+            plugins: { legend: { display: false }, tooltip: { enabled: true } }
+        },
+        plugins: [{
+            id: 'notesRing',
+            beforeDraw: function(chart) {
+                const ctx = chart.ctx;
+                const cx = chart.chartArea.left + chart.width / 2;
+                const cy = chart.chartArea.top + chart.height / 2;
+                const radius = Math.min(chart.width, chart.height) / 2;
+                
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius * 0.32, 0, 2 * Math.PI);
+                ctx.fillStyle = notesCompleted ? 'rgba(52, 211, 153, 0.15)' : 'rgba(107, 114, 128, 0.1)';
+                ctx.fill();
+                
+                ctx.font = 'bold 16px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = notesCompleted ? '#34d399' : '#6b7280';
+                ctx.fillText(sectionPct + '%', cx, cy - 6);
+                ctx.font = '9px Inter';
+                ctx.fillStyle = '#8b8da8';
+                ctx.fillText('Notes', cx, cy + 10);
+                ctx.restore();
+            }
+        }]
     });
 }
 
@@ -1065,6 +1900,63 @@ function renderSubjectChart() {
         data: { labels: names, datasets: [{ data: pcts, backgroundColor: colors, borderRadius: 4, barThickness: 18 }] },
         options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } },
             scales: { x: { max: 100, grid: { color: '#262648' }, ticks: { color: '#8b8da8', font: { size: 10 } } }, y: { grid: { display: false }, ticks: { color: '#eef0f6', font: { size: 10 } } } }
+        }
+    });
+}
+
+function renderTopicProgressList() {
+    const qs = topicQuestions || getTopicMcqs();
+    const prog = getProgress();
+    let html = '<div class="a-progress-items">';
+    
+    qs.forEach((q, i) => {
+        const qId = q.id || 'tq' + i;
+        const p = prog[qId];
+        const done = !!p;
+        const correct = p && p.correct;
+        
+        html += `<div class="a-progress-item ${done ? (correct ? 'correct' : 'wrong') : ''}">
+            <span class="a-pi-num">Q${i+1}</span>
+            <span class="a-pi-text">${q.q.substring(0, 35)}${q.q.length > 35 ? '...' : ''}</span>
+            <span class="a-pi-status">${done ? (correct ? '✓' : '✗') : '○'}</span>
+        </div>`;
+    });
+    
+    html += '</div>';
+    return html;
+}
+
+function renderTopicChart() {
+    destroyChart('topic');
+    const ctx = document.getElementById('topicChart');
+    if (!ctx) return;
+    
+    const qs = topicQuestions || getTopicMcqs();
+    const prog = getProgress();
+    
+    const data = qs.map((q, i) => {
+        const qId = q.id || 'tq' + i;
+        const p = prog[qId];
+        return p ? (p.correct ? 100 : 0) : 0;
+    });
+    
+    chartInstances['topic'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: qs.map((_, i) => 'Q' + (i+1)),
+            datasets: [{
+                data: data,
+                backgroundColor: data.map(v => v === 100 ? '#34d399' : (v === 0 ? '#f87171' : '#6b7280')),
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false }, ticks: { color: '#8b8da8', font: { size: 9 } } },
+                y: { min: 0, max: 100, grid: { color: '#262648' }, ticks: { color: '#8b8da8', font: { size: 9 } }, display: false }
+            }
         }
     });
 }
@@ -1104,6 +1996,55 @@ function renderWeakSubjects() {
     const weak = subjects.filter(s => s.acc < 70).slice(0, 4);
     if (weak.length === 0) { el.innerHTML = '<p style="font-size:12px;color:var(--t3)">Looking good! No weak areas found.</p>'; return; }
     el.innerHTML = weak.map(s => `<div class="weak-item"><span class="w-em">${s.emoji}</span><span>${s.name}</span><span class="w-pct">${s.acc}%</span></div>`).join('');
+}
+
+// Topic-level chart renderer
+function renderTopicChart(qs, prog) {
+    destroyChart('topic');
+    const ctx = document.getElementById('topicChart');
+    if (!ctx) return;
+    
+    const names = [], done = [], remaining = [];
+    qs.forEach(t => {
+        names.push(t.name);
+        done.push(prog[t.name] ? 1 : 0);
+        remaining.push(prog[t.name] ? 0 : 1);
+    });
+    
+    chartInstances['topic'] = new Chart(ctx, {
+        type: 'bar',
+        data: { 
+            labels: names.slice(0, 10), 
+            datasets: [
+                { label: 'Done', data: done.slice(0, 10), backgroundColor: '#34d399', borderRadius: 4 },
+                { label: 'Remaining', data: remaining.slice(0, 10), backgroundColor: '#262648', borderRadius: 4 }
+            ] 
+        },
+        options: { 
+            responsive: true, 
+            plugins: { legend: { display: true, position: 'bottom' } },
+            scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, max: 1 } }
+        }
+    });
+}
+
+// Topic-level weak areas
+function renderWeakTopics(qs, prog) {
+    const el = document.getElementById('weakTopics');
+    if (!el) return;
+    
+    const weakTopics = [];
+    qs.forEach(t => {
+        if (prog[t.name] && !prog[t.name].correct) {
+            weakTopics.push({ name: t.name, priority: t.priority });
+        }
+    });
+    
+    if (weakTopics.length === 0) {
+        el.innerHTML = '<p style="font-size:12px;color:var(--t3)">Looking good! No weak topics found.</p>';
+        return;
+    }
+    el.innerHTML = weakTopics.slice(0, 6).map(t => `<div class="weak-item"><span>${t.name}</span></div>`).join('');
 }
 
 // ===== MOBILE DRAWERS =====

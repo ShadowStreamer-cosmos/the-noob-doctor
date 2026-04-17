@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rheumatology Master Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --card: #ffffff;
+    --text: #1a1a18;
+    --muted: #6b6b66;
+    --border: #e0ddd6;
+    --ra: #c0392b;
+    --ra-lt: #fdf0ee;
+    --ssc: #7b3fa0;
+    --ssc-lt: #f5eeff;
+    --spa: #1a6fa0;
+    --spa-lt: #e8f4fc;
+    --gout: #b8860b;
+    --gout-lt: #fdf8e8;
+    --gen: #1e7a5a;
+    --gen-lt: #eafaf3;
+    --gemini: #1a1a2e;
+    --gemini-lt: #f0f0ff;
+    --mnemonic: #f9f3e3;
+    --mnemonic-border: #d4a017;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  header {
+    background: #1a1a18;
+    color: #f7f6f2;
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 3px solid var(--ra);
+  }
+
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    margin-top: 0.3rem;
+    font-size: 13px;
+    color: #aaa;
+    font-weight: 300;
+  }
+
+  .exam-badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .badge.mbbs { background: #c0392b; color: #fff; }
+  .badge.inicet { background: #7b3fa0; color: #fff; }
+  .badge.neet { background: #1a6fa0; color: #fff; }
+  .badge.usmle { background: #1e7a5a; color: #fff; }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  nav a {
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0.8rem 1.2rem;
+    color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  nav a:hover { color: var(--text); border-bottom-color: var(--border); }
+  nav a.ra { border-bottom-color: var(--ra); color: var(--ra); }
+  nav a.ssc { border-bottom-color: var(--ssc); color: var(--ssc); }
+  nav a.spa { border-bottom-color: var(--spa); color: var(--spa); }
+  nav a.gout { border-bottom-color: var(--gout); color: var(--gout); }
+  nav a.gen { border-bottom-color: var(--gen); color: var(--gen); }
+
+  main { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 60px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .section-number {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 0.7rem;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-top: 0.5rem;
+  }
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 7px 8px;
+    border-bottom: 1px solid #f0ede8;
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .highlight-row td { background: #f9f7f3; }
+
+  .mnemonic-box {
+    background: var(--mnemonic);
+    border-left: 3px solid var(--mnemonic-border);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+  }
+
+  .mnemonic-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #a07820;
+    margin-bottom: 0.4rem;
+  }
+
+  .mnemonic-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #4a3800;
+  }
+
+  .big-mnemonic {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #7a5500;
+    letter-spacing: 1px;
+  }
+
+  .gemini-box {
+    background: #f8f8ff;
+    border: 1.5px dashed #9090c0;
+    border-radius: 10px;
+    padding: 1.2rem 1.3rem;
+    margin-top: 1.5rem;
+  }
+
+  .gemini-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #5050a0;
+    margin-bottom: 0.6rem;
+  }
+
+  .gemini-icon {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #4285f4, #a142f4);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .gemini-prompt {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #2a2a50;
+    font-style: italic;
+  }
+
+  .key-point {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 13.5px;
+  }
+
+  .key-point:last-child { border-bottom: none; }
+
+  .kp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin: 2px 2px 2px 0;
+  }
+
+  .pill.ra { background: var(--ra-lt); color: var(--ra); }
+  .pill.ssc { background: var(--ssc-lt); color: var(--ssc); }
+  .pill.spa { background: var(--spa-lt); color: var(--spa); }
+  .pill.gout { background: var(--gout-lt); color: var(--gout); }
+  .pill.gen { background: var(--gen-lt); color: var(--gen); }
+  .pill.warn { background: #fff0f0; color: #c0392b; border: 1px solid #f5b0a8; }
+  .pill.star { background: #fffbe8; color: #a07820; border: 1px solid #e8d090; }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+    margin: 0.5rem 0;
+  }
+
+  .flow-step {
+    background: #f2f0ec;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+    color: var(--text);
+  }
+
+  .flow-arrow {
+    color: var(--muted);
+    padding: 0 4px;
+    font-size: 13px;
+  }
+
+  .ab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  .ab-item {
+    background: #fafaf8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .ab-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1a1a18;
+  }
+
+  .ab-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .compare-card {
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 13px;
+  }
+
+  .compare-card h4 {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .compare-card li {
+    list-style: none;
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .deformity-visual {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .def-card {
+    flex: 1;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .joint-diagram {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0.5rem 0;
+    color: #444;
+  }
+
+  .crystal-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .crystal-card {
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .exam-alert {
+    background: #fff5f5;
+    border: 1px solid #f5b8b0;
+    border-left: 4px solid var(--ra);
+    border-radius: 0 8px 8px 0;
+    padding: 0.8rem 1rem;
+    font-size: 13px;
+    margin: 0.8rem 0;
+  }
+
+  .exam-alert strong { color: var(--ra); }
+
+  .drug-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 500px) { .drug-grid { grid-template-columns: 1fr 1fr; } }
+
+  .drug-card {
+    background: #fafaf8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+
+  .drug-name { font-weight: 500; color: #1a1a18; }
+  .drug-class { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+  .step-list { list-style: none; }
+  .step-list li {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f0ede8;
+    align-items: flex-start;
+  }
+  .step-list li:last-child { border-bottom: none; }
+
+  .step-num {
+    background: #1a1a18;
+    color: #f7f6f2;
+    font-size: 10px;
+    font-weight: 500;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .raynaud-colors {
+    display: flex;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0.8rem 0;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .raynaud-colors div {
+    flex: 1;
+    padding: 0.8rem 0.5rem;
+    text-align: center;
+  }
+
+  .quick-ref {
+    background: #1a1a18;
+    color: #f7f6f2;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .quick-ref h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #f7f6f2;
+  }
+
+  .quick-ref table { font-size: 13px; }
+  .quick-ref th { color: #888; border-bottom-color: #333; }
+  .quick-ref td { border-bottom-color: #2a2a28; color: #ddd; }
+
+  .ht { font-weight: 500; color: #f7c948; }
+
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Rheumatology — Master Study Guide</h1>
+  <p>Refined notes with mnemonics &amp; Gemini image prompts for visual memory</p>
+  <div class="exam-badges">
+    <span class="badge mbbs">MBBS Finals</span>
+    <span class="badge inicet">INICET</span>
+    <span class="badge neet">NEET PG</span>
+    <span class="badge usmle">USMLE Step 1/2</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#genetics" class="gen">01 · Genetics</a>
+  <a href="#ra" class="ra">02 · RA</a>
+  <a href="#ssc" class="ssc">03 · Scleroderma</a>
+  <a href="#spa" class="spa">04 · SpA</a>
+  <a href="#gout" class="gout">05 · Gout</a>
+  <a href="#drugs">06 · Drug Map</a>
+  <a href="#quickref">Quick Ref</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════
+     01. GENETICS & PATHOPHYSIOLOGY
+═══════════════════════════════════════════════ -->
+<section id="genetics">
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--gen)"></div>
+    <h2 class="section-title">Genetic Basis of Autoimmunity</h2>
+    <span class="section-number">01</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Core Concept in One Line</div>
+    <p style="font-size:15px;">Autoimmunity = Loss of self-tolerance → immune system attacks its own tissues, driven by genetics + environment.</p>
+    <div class="flow" style="margin-top:0.8rem;">
+      <div class="flow-step">Genetic hit (HLA/PTPN22)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Environmental trigger</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Self-tolerance breaks</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Autoantibodies</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Tissue damage</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">HLA Associations — High Yield</div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--ra)"></div>
+        <div><strong>HLA-DR4</strong> → Rheumatoid Arthritis <span class="pill star">RA-specific</span></div>
+      </div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--spa)"></div>
+        <div><strong>HLA-B27</strong> → Spondyloarthropathies (AS 90%) <span class="pill star">SpA</span></div>
+      </div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--muted)"></div>
+        <div><strong>HLA-DR3</strong> → SLE, Sjögren's, DM1</div>
+      </div>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">Mnemonic</div>
+        <div class="mnemonic-text">
+          <span class="big-mnemonic">"B27 = Backbone"</span><br>
+          B27 → Back (spine) problems = Spondyloarthritis<br>
+          DR4 = "Doctor of the 4 knuckles" = RA (MCP joints)
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">PTPN22 — The Master Switch</div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--gen)"></div>
+        <div>Normally: PTPN22 = brake on T-cell activation</div>
+      </div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--ra)"></div>
+        <div>SNP R620W → brake fails → T cells hyperactive</div>
+      </div>
+      <div class="key-point">
+        <div class="kp-dot" style="background:var(--muted)"></div>
+        <div>Links: RA, SLE, DM1, Graves', Vitiligo, MG, Addison's</div>
+      </div>
+      <div class="exam-alert">
+        <strong>EXAM TRAP:</strong> HLA-DR4 = RA-specific. PTPN22 = shared across many autoimmunes. Don't confuse them.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Autoantibody Master Table — Memorize This Cold</div>
+    <div class="ab-grid">
+      <div class="ab-item">
+        <div class="ab-name">ANA</div>
+        <div class="ab-desc">SLE screening (sensitive, not specific)</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-dsDNA</div>
+        <div class="ab-desc">SLE specific + tracks disease activity</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-CCP</div>
+        <div class="ab-desc">RA — 98% specific, predicts erosions</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">RF (IgM)</div>
+        <div class="ab-desc">RA — 67% sensitive, less specific</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-centromere</div>
+        <div class="ab-desc">Limited SSc (CREST)</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-Scl-70</div>
+        <div class="ab-desc">Diffuse SSc (topoisomerase I)</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-Ro/La</div>
+        <div class="ab-desc">Sjögren's, neonatal lupus</div>
+      </div>
+      <div class="ab-item">
+        <div class="ab-name">Anti-RNA pol III</div>
+        <div class="ab-desc">Diffuse SSc + renal crisis</div>
+      </div>
+    </div>
+    <div class="mnemonic-box" style="margin-top:1rem;">
+      <div class="mnemonic-label">Mnemonic — Autoantibodies</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">"CARD SRA"</span><br>
+        <strong>C</strong>entromere → CREST &nbsp;|&nbsp;
+        <strong>A</strong>NA → all lupus screening &nbsp;|&nbsp;
+        <strong>R</strong>F → RA (Rheumatoid Factor) &nbsp;|&nbsp;
+        <strong>D</strong>s-DNA → disease activity of SLE &nbsp;|&nbsp;
+        <strong>S</strong>cl-70 → Sclerosis diffuse &nbsp;|&nbsp;
+        <strong>R</strong>NA pol III → Renal crisis SSc &nbsp;|&nbsp;
+        <strong>A</strong>nti-CCP → accurate RA marker
+      </div>
+    </div>
+  </div>
+
+  <div class="gemini-box">
+    <div class="gemini-label">
+      <div class="gemini-icon"></div>
+      Gemini Image Prompt — Use this for visual memory
+    </div>
+    <div class="gemini-prompt">
+      "Create a detailed medical infographic illustration. Show a large human body silhouette in the center. Around it, draw labeled arrows pointing to different diseases. Label each arrow with the autoantibody that causes that disease. Include: ANA and anti-dsDNA pointing to a 'butterfly rash on face' symbol for SLE; Anti-CCP and RF pointing to swollen MCP finger joints for RA; Anti-centromere pointing to a hand with CREST written on the fingers for limited scleroderma; Anti-Scl-70 pointing to a thickened, leathery skin symbol for diffuse scleroderma. In the top left corner, draw a light switch labeled PTPN22 in the OFF position, with T-cells going haywire. In the top right, show HLA-B27 connected to a bent spine (ankylosing spondylitis) and HLA-DR4 connected to swollen finger joints (RA). Use clean medical illustration style, anatomically accurate. Label everything clearly. Color-code: SLE = purple/violet, RA = red/orange, Scleroderma = teal/green."
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     02. RHEUMATOID ARTHRITIS
+═══════════════════════════════════════════════ -->
+<section id="ra">
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--ra)"></div>
+    <h2 class="section-title" style="color:var(--ra)">Rheumatoid Arthritis</h2>
+    <span class="section-number">02</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Pathophysiology — Step by Step</div>
+    <ul class="step-list">
+      <li><div class="step-num">1</div><div>Genetic hit (HLA-DR4) + trigger (smoking, infection) → immune activation</div></li>
+      <li><div class="step-num">2</div><div>Confused plasma cells produce <strong>RF</strong> (attacks IgG) + <strong>Anti-CCP</strong> (attacks citrullinated proteins)</div></li>
+      <li><div class="step-num">3</div><div>CD4+ T cells infiltrate synovium → macrophages activated</div></li>
+      <li><div class="step-num">4</div><div>Cytokine storm: <strong>TNF-α, IL-1, IL-6, IL-17</strong> released</div></li>
+      <li><div class="step-num">5</div><div>Synovial hyperplasia → <strong>Pannus formation</strong> (invasive granulation tissue)</div></li>
+      <li><div class="step-num">6</div><div>Pannus erodes cartilage and bone → irreversible joint destruction</div></li>
+    </ul>
+    <div class="mnemonic-box" style="margin-top:0.8rem;">
+      <div class="mnemonic-label">Mnemonic — Cytokines in RA</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">"TNF-α Is Like 1 (IL-1) Liter (IL-17) of 6 (IL-6) trouble"</span><br>
+        TNF-α → IL-1 → IL-6 → IL-17 = the four culprits in RA synovitis
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Classic Clinical Features</div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div><strong>Morning stiffness &gt;30 min</strong> — improves with activity</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div><strong>Symmetric polyarthritis</strong> — MCP and PIP joints</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div>Spares DIP joints (key differentiator from OA)</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>Extra-articular: Nodules, ILD, vasculitis, anemia</div></div>
+      <div class="exam-alert" style="margin-top:0.8rem;">
+        <strong>DIP rule:</strong> RA spares DIP. OA loves DIP (Heberden's nodes). Psoriatic arthritis attacks DIP.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Deformities — Visual Memory</div>
+      <div style="margin-bottom:0.8rem;">
+        <div style="font-weight:500; font-size:13px; margin-bottom:4px;">Boutonnière Deformity</div>
+        <div class="joint-diagram">
+          MCP: neutral → PIP: [FLEXED ↓] → DIP: [EXTENDED ↑]
+        </div>
+        <div style="font-size:12.5px; color:var(--muted);">Central slip rupture. Like a button poking through a hole.</div>
+      </div>
+      <div style="margin-bottom:0.8rem;">
+        <div style="font-weight:500; font-size:13px; margin-bottom:4px;">Swan Neck Deformity</div>
+        <div class="joint-diagram">
+          MCP: neutral → PIP: [EXTENDED ↑] → DIP: [FLEXED ↓]
+        </div>
+        <div style="font-size:12.5px; color:var(--muted);">Mallet injury / tight intrinsics. Looks like a swan's neck curve.</div>
+      </div>
+      <div>
+        <div style="font-weight:500; font-size:13px; margin-bottom:4px;">Ulnar Deviation</div>
+        <div style="font-size:12.5px; color:var(--muted);">All fingers drift toward the pinky side. Classic RA at MCP joints.</div>
+      </div>
+      <div class="mnemonic-box" style="margin-top:0.8rem;">
+        <div class="mnemonic-label">Mnemonic</div>
+        <div class="mnemonic-text">
+          <strong>Boutonnière = Button + hole</strong> = PIP collapses IN<br>
+          <strong>Swan neck = S-curve</strong> = PIP goes UP like swan head
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Diagnosis — 2010 ACR/EULAR Criteria (Score ≥ 6 = RA)</div>
+    <table>
+      <tr><th>Domain</th><th>What to Score</th><th>Points</th></tr>
+      <tr><td>Joint involvement</td><td>1 large / 2–10 large / 1–3 small / 4–10 small / &gt;10 joints</td><td>0–5</td></tr>
+      <tr class="highlight-row"><td>Serology</td><td>Low RF or CCP / High RF or CCP</td><td>2–3</td></tr>
+      <tr><td>Acute phase reactants</td><td>Abnormal CRP or ESR</td><td>1</td></tr>
+      <tr class="highlight-row"><td>Duration</td><td>&lt;6 weeks / ≥6 weeks</td><td>0–1</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Management Pyramid — Step-Up Strategy</div>
+    <div style="margin-top:0.5rem;">
+      <div style="background:#fff5f5; border:1px solid #f5b0a8; border-radius:8px; padding:0.8rem; margin-bottom:0.5rem; font-size:13px;">
+        <strong style="color:var(--ra)">Step 1 — Symptom Control:</strong> NSAIDs + short-course steroids (bridge therapy)
+      </div>
+      <div style="background:#fff8f0; border:1px solid #f5d0a0; border-radius:8px; padding:0.8rem; margin-bottom:0.5rem; font-size:13px;">
+        <strong style="color:#b86000)">Step 2 — csDMARDs:</strong> <strong>Methotrexate</strong> (anchor drug, always first) ± Hydroxychloroquine ± Sulfasalazine ± Leflunomide
+      </div>
+      <div style="background:#f0f7ff; border:1px solid #b0d0f5; border-radius:8px; padding:0.8rem; margin-bottom:0.5rem; font-size:13px;">
+        <strong style="color:var(--spa)">Step 3 — bDMARDs:</strong> TNF-i (Etanercept, Adalimumab, Infliximab) | IL-6-i (Tocilizumab) | Abatacept | Rituximab
+      </div>
+      <div style="background:#f5f0ff; border:1px solid #c0a8f5; border-radius:8px; padding:0.8rem; font-size:13px;">
+        <strong style="color:var(--ssc)">Step 4 — tsDMARDs:</strong> JAK inhibitors (Tofacitinib, Upadacitinib)
+      </div>
+    </div>
+    <div class="exam-alert" style="margin-top:0.8rem;">
+      <strong>NEVER forget:</strong> Methotrexate = anchor. All combinations are built around MTX. Only switch if patient cannot tolerate MTX.
+    </div>
+  </div>
+
+  <div class="gemini-box">
+    <div class="gemini-label">
+      <div class="gemini-icon"></div>
+      Gemini Image Prompt — RA Visual Memory
+    </div>
+    <div class="gemini-prompt">
+      "Create a split medical illustration with two panels. LEFT PANEL: Draw a close-up of both hands showing classic Rheumatoid Arthritis features. Show: (1) Symmetrical swollen MCP and PIP joints highlighted in red/orange glow, (2) Boutonniere deformity on one finger — PIP joint bent DOWN, DIP joint bent UP, with a small button symbol nearby with label 'central slip rupture,' (3) Swan neck deformity on another finger — PIP joint extended UP, DIP joint flexed DOWN, with a swan neck silhouette drawn alongside, (4) Ulnar deviation — all fingers drifting toward the pinky side with arrows showing direction. Label each deformity clearly. RIGHT PANEL: Draw a cross-section of a synovial joint showing RA pathophysiology. Show: normal synovium on top half, inflamed synovium on bottom. In the inflamed half, draw: red pannus tissue eroding the cartilage, small plasma cells producing Y-shaped antibodies labeled 'RF' and 'Anti-CCP', and cytokine bubbles labeled TNF-α, IL-1, IL-6. Add a legend. Medical textbook illustration style, clean and educational."
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     03. SYSTEMIC SCLEROSIS
+═══════════════════════════════════════════════ -->
+<section id="ssc">
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--ssc)"></div>
+    <h2 class="section-title" style="color:var(--ssc)">Systemic Sclerosis (Scleroderma)</h2>
+    <span class="section-number">03</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Core Concept — 3-Hit Model</div>
+    <div class="flow" style="flex-wrap:nowrap; overflow-x:auto; gap:0;">
+      <div class="flow-step" style="background:#fdf0ee;">Vascular injury<br><small style="color:var(--muted)">Endothelial damage</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#f5eeff;">Immune activation<br><small style="color:var(--muted)">T-cells, cytokines</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#eafaf3;">Fibroblast activation<br><small style="color:var(--muted)">Collagen overproduction</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#f5eeff;">FIBROSIS<br><small style="color:var(--muted)">Skin + organs</small></div>
+    </div>
+    <div style="margin-top:1rem; font-size:13.5px; color:var(--muted);">Think of SSc as the body "turning into stone" — excessive collagen deposits everywhere.</div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Limited SSc = CREST</div>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">The CREST Mnemonic</div>
+        <div class="mnemonic-text">
+          <strong>C</strong>alcinosis cutis<br>
+          <strong>R</strong>aynaud's phenomenon ← 1st feature<br>
+          <strong>E</strong>sophageal dysmotility<br>
+          <strong>S</strong>clerodactyly<br>
+          <strong>T</strong>elangiectasia<br><br>
+          Ab: <strong>Anti-centromere</strong>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Diffuse SSc</div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ssc)"></div><div>Rapid progression, early organ involvement</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ssc)"></div><div>Ab: <strong>Anti-Scl-70</strong> (topoisomerase I)</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div>Ab: <strong>Anti-RNA polymerase III</strong> → renal crisis risk</div></div>
+      <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>Lungs: ILD, PAH | GI: esophageal dysmotility</div></div>
+      <div class="exam-alert">
+        <strong>Rule:</strong> Anti-centromere = C for CREST = limited. Scl-70 = Sclerosis diffuse.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Raynaud's Phenomenon — Triphasic Color Change</div>
+    <div class="raynaud-colors">
+      <div style="background:#f0f0f0; color:#333;">
+        <div style="font-size:20px;">⬜</div>
+        <div>WHITE</div>
+        <div style="font-size:11px; color:#666;">Vasospasm<br>No blood flow</div>
+      </div>
+      <div style="background:#c0d8f0; color:#0a2a50;">
+        <div style="font-size:20px;">🔵</div>
+        <div>BLUE</div>
+        <div style="font-size:11px; color:#1a4070;">Deoxygenated<br>blood pools</div>
+      </div>
+      <div style="background:#f5c0b0; color:#6a1a0a;">
+        <div style="font-size:20px;">🔴</div>
+        <div>RED</div>
+        <div style="font-size:11px; color:#8a2a10;">Reperfusion<br>reactive flush</div>
+      </div>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card" style="background:#f5f5f5;">
+        <h4>Primary Raynaud's</h4>
+        <ul>
+          <li>• Standalone, no CTD</li>
+          <li>• Mild, no tissue damage</li>
+          <li>• Young women</li>
+          <li>• Normal nailfold capillaries</li>
+        </ul>
+      </div>
+      <div class="compare-card" style="background:#f5eeff;">
+        <h4 style="color:var(--ssc)">Secondary Raynaud's (SSc)</h4>
+        <ul>
+          <li>• With connective tissue disease</li>
+          <li>• Digital ulcers, gangrene possible</li>
+          <li>• Abnormal nailfold capillaries</li>
+          <li>• Anti-centromere or Scl-70 positive</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mnemonic-box">
+      <div class="mnemonic-label">Mnemonic — Raynaud's Colors</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">"Dead Flesh Bleeds" (White → Blue → Red)</span><br>
+        <strong>D</strong>ead fingers = White (no flow) →
+        <strong>F</strong>lesh turns blue (deoxygenated) →
+        <strong>B</strong>leeds red when blood returns (reperfusion)
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Management by Organ System</div>
+    <table>
+      <tr><th>Target</th><th>Drug</th><th>Pearl</th></tr>
+      <tr><td>Raynaud's</td><td>CCB — Nifedipine</td><td>First-line always</td></tr>
+      <tr class="highlight-row"><td>Renal Crisis (SRC)</td><td><strong>ACE inhibitors (Captopril)</strong></td><td>START even if normotensive! Driven by hyperreninemia</td></tr>
+      <tr><td>ILD</td><td>Nintedanib, Tocilizumab</td><td>FDA-approved for SSc-ILD</td></tr>
+      <tr class="highlight-row"><td>PAH</td><td>Sildenafil, Bosentan</td><td>Pulmonary vasodilators</td></tr>
+      <tr><td>Esophageal</td><td>PPIs</td><td>Most common GI complication</td></tr>
+      <tr class="highlight-row"><td>Skin fibrosis</td><td>Methotrexate</td><td>For diffuse skin disease</td></tr>
+    </table>
+    <div class="exam-alert">
+      <strong>CRITICAL USMLE/INICET TRAP:</strong> Scleroderma Renal Crisis — do NOT give steroids (worsen SRC), do NOT withhold ACE-I (can prevent dialysis). ACE-I = lifesaver even in normotensive SRC.
+    </div>
+  </div>
+
+  <div class="gemini-box">
+    <div class="gemini-label">
+      <div class="gemini-icon"></div>
+      Gemini Image Prompt — Scleroderma Visual
+    </div>
+    <div class="gemini-prompt">
+      "Create a detailed medical illustration with two parts. TOP SECTION: Draw two hands side by side. Left hand = normal, soft, healthy. Right hand = scleroderma hand showing: sclerodactyly (skin tight, shiny, waxy fingers), calcinosis (small white calcium deposits visible under skin near fingertips), telangiectasias (tiny red spider veins on fingertips), and one finger showing Raynaud's triphasic color change — one finger white, one blue, one red. Label each finding with an arrow. TOP RIGHT: Small panel showing CREST written vertically on the right hand's fingers like a tattoo: C-R-E-S-T, one letter per finger + wrist. BOTTOM SECTION: Draw an organ map of the human body showing diffuse SSc complications: thickened skin on trunk, esophagus with dysmotility (wavy arrows showing poor movement), lungs with ILD pattern (honeycomb appearance), kidney showing crisis (highlighted in red with 'ACE-I' written next to it as treatment). Use purple/violet as the theme color. Medical illustration style, realistic but educational."
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     04. SPONDYLOARTHRITIS
+═══════════════════════════════════════════════ -->
+<section id="spa">
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--spa)"></div>
+    <h2 class="section-title" style="color:var(--spa)">Seronegative Spondyloarthritis</h2>
+    <span class="section-number">04</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">The SpA Group — Remember All 5</div>
+    <div class="mnemonic-box">
+      <div class="mnemonic-label">Mnemonic — PAREA</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">P-A-R-E-U</span><br>
+        <strong>P</strong>soriatic Arthritis<br>
+        <strong>A</strong>nkylosing Spondylitis (AS)<br>
+        <strong>R</strong>eactive Arthritis (formerly Reiter's)<br>
+        <strong>E</strong>nteropathic Arthritis (IBD-associated)<br>
+        <strong>U</strong>ndifferentiated SpA<br><br>
+        All are: RF-negative (seronegative) + HLA-B27 positive (varying degrees)
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Shared Features Across All SpA</div>
+    <div class="two-col">
+      <div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div><strong>Inflammatory back pain</strong> — insidious onset, &lt;40yr, improves with exercise (KEY differentiator from mechanical pain)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div><strong>Enthesitis</strong> — inflammation at tendon/ligament insertion (Achilles, plantar fascia)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div><strong>Asymmetric peripheral arthritis</strong> — lower limbs predominantly</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div><strong>Dactylitis</strong> — "sausage digit" (whole finger/toe swollen)</div></div>
+      </div>
+      <div>
+        <div style="font-weight:500; font-size:13px; margin-bottom:0.5rem;">Extra-articular (3 Es)</div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div><strong>Eyes:</strong> Acute anterior Uveitis (emergency — pain + red eye)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--gout)"></div><div><strong>Enteritis:</strong> IBD association</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--ssc)"></div><div><strong>rEactive:</strong> Psoriasis (skin)</div></div>
+        <div class="exam-alert">
+          <strong>B27 association:</strong> AS=90%, Reactive=70%, PsA=50%, IBD-SpA=25%
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Ankylosing Spondylitis — High Yield</div>
+    <div class="two-col">
+      <div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:0.5rem; color:var(--spa)">Clinical Features</div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div>Sacroiliitis → bamboo spine on X-ray</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div>Reduced chest expansion (measure with tape)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div>Alternating buttock pain (characteristic)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--spa)"></div><div>Schober's test: &lt;5cm increase = positive</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--ra)"></div><div>Uveitis (acute anterior) — urgent ophthalmology</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>Cardiac: Aortic regurgitation (late)</div></div>
+      </div>
+      <div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:0.5rem; color:var(--spa)">Management</div>
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div><strong>NSAIDs</strong> — first-line (Naproxen, Indomethacin). Also diagnostic — if pain resolves → AS!</div></li>
+          <li><div class="step-num">2</div><div><strong>Exercise</strong> — cornerstone. Never rest! Activity reduces stiffness.</div></li>
+          <li><div class="step-num">3</div><div><strong>Sulfasalazine</strong> — for peripheral arthritis only (not axial)</div></li>
+          <li><div class="step-num">4</div><div><strong>TNF inhibitors</strong> — if inadequate NSAID response</div></li>
+          <li><div class="step-num">5</div><div><strong>IL-17i (Secukinumab)</strong> — second biologic choice</div></li>
+        </ul>
+        <div class="exam-alert">
+          <strong>KEY:</strong> MTX does NOT work for axial SpA. Sulfasalazine only for peripheral joints. Biologics = definitive for refractory AS.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemonic-box">
+    <div class="mnemonic-label">Mnemonic — Reactive Arthritis (formerly Reiter's)</div>
+    <div class="mnemonic-text">
+      <span class="big-mnemonic">"Can't See, Can't Pee, Can't Climb a Tree"</span><br>
+      <strong>See:</strong> Conjunctivitis/Uveitis &nbsp;|&nbsp;
+      <strong>Pee:</strong> Urethritis &nbsp;|&nbsp;
+      <strong>Tree:</strong> Arthritis (can't walk/climb)<br>
+      Trigger: post-Chlamydia (urogenital) or post-Salmonella/Shigella (enteric)
+    </div>
+  </div>
+
+  <div class="gemini-box">
+    <div class="gemini-label">
+      <div class="gemini-icon"></div>
+      Gemini Image Prompt — SpA Visual
+    </div>
+    <div class="gemini-prompt">
+      "Create a medical educational illustration showing Ankylosing Spondylitis (AS). LEFT SIDE: Draw a side-view X-ray comparison — normal lumbar spine vs AS spine. The AS spine should show: 'bamboo spine' appearance with syndesmophytes bridging between vertebrae, squared-off vertebral bodies (Romanus lesion), and sacroiliac joint fusion at the bottom, labeled 'sacroiliitis.' Draw a small Schober test diagram showing a tape measure on the lower back with markings. RIGHT SIDE: Draw a human figure showing body posture changes in advanced AS: hunched forward (kyphosis), neck thrust forward, reduced chest expansion with arrows, and the person trying to look up but unable. Label: 'question mark posture.' Around the figure, draw small icons for extra-articular features: a red eye (uveitis) with label, skin rash (psoriasis), and gut icon (IBD). Bottom: show HLA-B27 prominently as the genetic link. Use blue as the main color theme. Clean, educational medical illustration style."
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     05. GOUT
+═══════════════════════════════════════════════ -->
+<section id="gout">
+  <div class="section-header">
+    <div class="section-dot" style="background:var(--gout)"></div>
+    <h2 class="section-title" style="color:var(--gout)">Crystal Arthropathies — Gout</h2>
+    <span class="section-number">05</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Pathophysiology — The Crystal Story</div>
+    <div class="flow" style="flex-wrap:wrap;">
+      <div class="flow-step">Hyperuricemia<br><small>Uric acid &gt;6.8 mg/dL</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">MSU crystals form<br><small>In joints/soft tissue</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">NLRP3 inflammasome<br><small>Activated by crystals</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">IL-1β released<br><small>Massive inflammation</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Acute monoarthritis<br><small>Podagra</small></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem;">
+      <div style="font-size:13px; background:#fff8e8; border-radius:8px; padding:0.8rem;">
+        <div style="font-weight:500; margin-bottom:4px; color:var(--gout)">Overproduction (10%)</div>
+        Purine-rich diet, tumor lysis syndrome, G6PD deficiency, HGPRT deficiency (Lesch-Nyhan)
+      </div>
+      <div style="font-size:13px; background:#fff8e8; border-radius:8px; padding:0.8rem;">
+        <div style="font-weight:500; margin-bottom:4px; color:var(--gout)">Underexcretion (90%)</div>
+        Renal insufficiency, diuretics (thiazide, loop), alcohol, aspirin (low-dose), cyclosporine
+      </div>
+    </div>
+    <div class="mnemonic-box" style="margin-top:0.8rem;">
+      <div class="mnemonic-label">Mnemonic — Drugs that raise Uric Acid</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">"CANT Excrete"</span><br>
+        <strong>C</strong>yclosporine &nbsp;|&nbsp;
+        <strong>A</strong>lcohol &nbsp;|&nbsp;
+        <strong>N</strong>iacin &nbsp;|&nbsp;
+        <strong>T</strong>hiazides &nbsp;|&nbsp;
+        Low-dose aspirin (Salicylates) &nbsp;|&nbsp;
+        Loop diuretics
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Gout vs Pseudogout — The Crystal Comparison (Most Tested)</div>
+    <div class="crystal-compare">
+      <div class="crystal-card" style="background:#fff8e8; border:1px solid #e8c060;">
+        <div style="font-size:15px; font-weight:600; color:var(--gout); margin-bottom:0.6rem;">GOUT — MSU Crystals</div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--gout)"></div><div>Shape: <strong>Needle-shaped</strong> (thin, sharp, pointy)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--gout)"></div><div>Birefringence: <strong>Negatively birefringent</strong></div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--gout)"></div><div>Color under polarized light: <strong>Yellow</strong> (parallel to compensator)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--gout)"></div><div>Joint: <strong>1st MTP (Big toe)</strong> — Podagra</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>Age: 30–50, male predominance</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>X-ray: punched-out erosions, overhanging edge</div></div>
+      </div>
+      <div class="crystal-card" style="background:#f0f0ff; border:1px solid #a0a0d0;">
+        <div style="font-size:15px; font-weight:600; color:#5050a0; margin-bottom:0.6rem;">PSEUDOGOUT — CPPD</div>
+        <div class="key-point"><div class="kp-dot" style="background:#5050a0"></div><div>Shape: <strong>Rhomboid</strong> (blunt, rectangular ends)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:#5050a0"></div><div>Birefringence: <strong>Weakly positive</strong></div></div>
+        <div class="key-point"><div class="kp-dot" style="background:#5050a0"></div><div>Color: <strong>Blue</strong> (parallel to compensator)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:#5050a0"></div><div>Joint: <strong>Knee</strong> (most common)</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>Age: &gt;60, elderly</div></div>
+        <div class="key-point"><div class="kp-dot" style="background:var(--muted)"></div><div>X-ray: Chondrocalcinosis (calcification of cartilage)</div></div>
+      </div>
+    </div>
+    <div class="mnemonic-box" style="margin-top:1rem;">
+      <div class="mnemonic-label">Ultimate Crystal Mnemonic</div>
+      <div class="mnemonic-text">
+        <span class="big-mnemonic">GOUT = "Needles that are Negative &amp; Yellow"</span><br>
+        PSEUDO = "Rhomboid, positive, Blue — like a psuedo-diamond"<br><br>
+        Memory hook: <strong>Real gout = real pain = sharp NEEDLES. Pseudo = fake diamond shape (rhomboid) in old knees.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Acute Gout Management</div>
+      <ul class="step-list">
+        <li><div class="step-num">1</div><div><strong>NSAIDs</strong> — Indomethacin, Naproxen. First-line if no contraindications</div></li>
+        <li><div class="step-num">2</div><div><strong>Colchicine</strong> — 1.2mg then 0.6mg 1hr later. Works best if started within 12–24hrs</div></li>
+        <li><div class="step-num">3</div><div><strong>Steroids</strong> — oral/IA. Use if NSAIDs and colchicine contraindicated (renal failure)</div></li>
+        <li><div class="step-num">4</div><div><strong>Anakinra</strong> (IL-1 blocker) — refractory gout</div></li>
+      </ul>
+      <div class="exam-alert">Do NOT start allopurinol during acute attack — it prolongs the flare.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Chronic Gout — Urate Lowering Therapy</div>
+      <ul class="step-list">
+        <li><div class="step-num">1</div><div><strong>Allopurinol</strong> — xanthine oxidase inhibitor. First-line. Target uric acid &lt;6 mg/dL</div></li>
+        <li><div class="step-num">2</div><div><strong>Febuxostat</strong> — more potent XO inhibitor. Use if allopurinol intolerant</div></li>
+        <li><div class="step-num">3</div><div><strong>Probenecid</strong> — uricosuric. Only if underexcretor + good renal function</div></li>
+        <li><div class="step-num">4</div><div><strong>Pegloticase</strong> — IV, for refractory tophaceous gout</div></li>
+      </ul>
+      <div class="exam-alert">Always start <strong>colchicine prophylaxis 0.6mg daily</strong> for 3–6 months when initiating allopurinol to prevent flare.</div>
+    </div>
+  </div>
+
+  <div class="gemini-box">
+    <div class="gemini-label">
+      <div class="gemini-icon"></div>
+      Gemini Image Prompt — Gout &amp; Crystal Arthropathy Visual
+    </div>
+    <div class="gemini-prompt">
+      "Create a detailed medical illustration with two sections. TOP SECTION: Draw a foot with the big toe (first metatarsophalangeal joint) highlighted in red, swollen, showing acute gout attack — label this 'Podagra.' Draw an inset showing a microscopy view of synovial fluid: show two types of crystals side by side. Left crystal = needle-shaped MSU crystal (long, thin, sharp), yellow color with 'Negatively birefringent' label. Right crystal = rhomboid CPPD crystal (blunt, rectangular), blue color with 'Weakly positive birefringent' label. Add a polarized light microscope icon nearby. Next to the foot, show a tophus (white chalky deposit) on the ear helix. BOTTOM SECTION: Draw a simple metabolic pathway diagram showing: 'Purines → Xanthine → Uric Acid' with 'Xanthine Oxidase' enzyme drawn as a gear between steps. Draw ALLOPURINOL as a red X blocking the xanthine oxidase step. Show URIC ACID crystals forming in a joint cavity below. Draw a kidney on the side showing 90% underexcretion. Use golden/amber color theme. Educational and clean style."
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     06. DRUG MAP
+═══════════════════════════════════════════════ -->
+<section id="drugs">
+  <div class="section-header">
+    <div class="section-dot" style="background:#444"></div>
+    <h2 class="section-title">Drug Overlap Map</h2>
+    <span class="section-number">06</span>
+  </div>
+  <div class="card">
+    <div class="card-title">Same Drugs, Multiple Diseases — High Yield Cross-Reference</div>
+    <table>
+      <tr><th>Drug</th><th>Class</th><th>Used In</th><th>Key Pearl</th></tr>
+      <tr class="highlight-row">
+        <td><strong>Methotrexate</strong></td>
+        <td>csDMARD</td>
+        <td><span class="pill ra">RA</span><span class="pill ssc">SSc</span><span class="pill spa">PsA</span></td>
+        <td>Anchor drug of rheumatology. Monitor LFTs + CBC.</td>
+      </tr>
+      <tr>
+        <td><strong>Sulfasalazine</strong></td>
+        <td>csDMARD</td>
+        <td><span class="pill ra">RA</span><span class="pill spa">SpA peripheral</span></td>
+        <td>Doesn't work for axial SpA</td>
+      </tr>
+      <tr class="highlight-row">
+        <td><strong>TNF inhibitors</strong></td>
+        <td>bDMARD</td>
+        <td><span class="pill ra">RA</span><span class="pill spa">AS</span><span class="pill spa">PsA</span></td>
+        <td>Screen TB before use. Etanercept, Adalimumab, Infliximab</td>
+      </tr>
+      <tr>
+        <td><strong>Tocilizumab</strong></td>
+        <td>IL-6 inhibitor</td>
+        <td><span class="pill ra">RA</span><span class="pill ssc">SSc-ILD</span></td>
+        <td>FDA-approved for both RA and SSc-ILD</td>
+      </tr>
+      <tr class="highlight-row">
+        <td><strong>NSAIDs</strong></td>
+        <td>Anti-inflammatory</td>
+        <td><span class="pill ra">RA</span><span class="pill spa">AS</span><span class="pill gout">Gout acute</span></td>
+        <td>First-line for acute pain in all three</td>
+      </tr>
+      <tr>
+        <td><strong>Colchicine</strong></td>
+        <td>Anti-gout</td>
+        <td><span class="pill gout">Gout</span><span class="pill ra">Pericarditis</span></td>
+        <td>Acts by inhibiting microtubule polymerization</td>
+      </tr>
+      <tr class="highlight-row">
+        <td><strong>Allopurinol</strong></td>
+        <td>XO inhibitor</td>
+        <td><span class="pill gout">Gout</span></td>
+        <td>Start only when flare-free. Lifetime therapy usually.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     QUICK REFERENCE
+═══════════════════════════════════════════════ -->
+<div class="quick-ref" id="quickref">
+  <h3>Quick Reference — Final Exam Table</h3>
+  <table>
+    <tr>
+      <th>Disease</th>
+      <th>Hallmark</th>
+      <th>Key Antibody</th>
+      <th>Gold Standard Dx</th>
+      <th>First Drug</th>
+    </tr>
+    <tr>
+      <td class="ht">RA</td>
+      <td>Morning stiffness, MCP symmetric</td>
+      <td>Anti-CCP (98% specific)</td>
+      <td>Clinical + Anti-CCP + X-ray</td>
+      <td>Methotrexate</td>
+    </tr>
+    <tr>
+      <td class="ht">SLE</td>
+      <td>Butterfly rash, multi-organ</td>
+      <td>Anti-dsDNA (activity)</td>
+      <td>ANA screen → anti-dsDNA</td>
+      <td>Hydroxychloroquine</td>
+    </tr>
+    <tr>
+      <td class="ht">Limited SSc</td>
+      <td>CREST, Raynaud's first</td>
+      <td>Anti-centromere</td>
+      <td>Clinical + Ab + nailfold capillaroscopy</td>
+      <td>Nifedipine (Raynaud's)</td>
+    </tr>
+    <tr>
+      <td class="ht">Diffuse SSc</td>
+      <td>Rapid skin + organ fibrosis</td>
+      <td>Anti-Scl-70</td>
+      <td>Clinical + Scl-70 + imaging</td>
+      <td>ACE-I (renal crisis)</td>
+    </tr>
+    <tr>
+      <td class="ht">AS</td>
+      <td>Bamboo spine, sacroiliitis, &lt;40yr</td>
+      <td>HLA-B27 (not an Ab, a gene)</td>
+      <td>Modified NY criteria + MRI sacroiliac</td>
+      <td>NSAIDs + Exercise</td>
+    </tr>
+    <tr>
+      <td class="ht">Gout</td>
+      <td>1st MTP (Podagra), acute monoarthritis</td>
+      <td>No antibody — crystal Dx</td>
+      <td>Synovial fluid: needle, -ve birefringent</td>
+      <td>NSAIDs/Colchicine acute; Allopurinol chronic</td>
+    </tr>
+    <tr>
+      <td class="ht">Pseudogout</td>
+      <td>Knee, elderly (&gt;60yr)</td>
+      <td>No antibody — crystal Dx</td>
+      <td>Synovial fluid: rhomboid, +ve birefringent</td>
+      <td>NSAIDs/Colchicine</td>
+    </tr>
+  </table>
+</div>
+
+</main>
+
+<footer>
+  Study guide designed for MBBS Finals · INICET · NEET PG · USMLE Step 1/2 · Use Gemini prompts after each section to generate visual memory aids
+</footer>
+
+</body>
+</html>

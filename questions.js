@@ -110,18 +110,23 @@ function getContentNotes(catName, parentCat) {
     // catName is either the category name (Rheumatology) or parent category (Medicine)
     // parentCat is the subject (e.g., Medicine) - same as catName when clicking category directly
     
+    console.log('getContentNotes called:', catName, parentCat);
+    
     // Check if parentCat + catName form a valid path in SUBJECT_SYSTEMS
     // e.g., Medicine has key "Rheumatology" with notesUrl
     if (parentCat && SUBJECT_SYSTEMS[parentCat]) {
         const subData = SUBJECT_SYSTEMS[parentCat];
+        console.log('Checking SUBJECT_SYSTEMS:', parentCat, 'Keys:', Object.keys(subData));
         
         // Check if catName exists as a key with notesUrl (e.g., subData["Rheumatology"].notesUrl)
         if (subData[catName] && subData[catName].notesUrl) {
+            console.log('Found notesUrl:', subData[catName].notesUrl);
             return [{ title: catName + ' Master Guide', url: subData[catName].notesUrl, type: 'local' }];
         }
         
         // Also check each system/chapter for topic-level notes
         for (const [sysName, sys] of Object.entries(subData)) {
+            console.log('Checking system:', sysName, 'has notesUrl:', sys.notesUrl);
             if (sys.chapters) {
                 for (const [chapterName, chapter] of Object.entries(sys.chapters)) {
                     const topic = chapter.topics.find(t => t.name === catName);
@@ -132,6 +137,7 @@ function getContentNotes(catName, parentCat) {
     }
     
     if (SUBJECT_CONTENT[catName]) return SUBJECT_CONTENT[catName].notes || [];
+    console.log('No notes found for:', catName, parentCat);
     return [];
 }
 

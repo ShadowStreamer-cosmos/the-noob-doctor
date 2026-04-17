@@ -38,6 +38,31 @@ const MEDICINE_DATA = {
                     { name: "Hypertensive emergency", priority: "red" },
                     { name: "ACE inhibitors", priority: "red" }
                 ]
+            },
+            "Valvular Heart Diseases": {
+                topics: [
+                    { name: "Mitral stenosis", priority: "red", notesUrl: "notes/Medicine/mitral_stenosis_masterclass.html", questions: [
+                        { q: "In mitral stenosis, which chamber is primarily enlarged?", o: ["Left ventricle", "Left atrium", "Right atrium", "Right ventricle"], a: 1, t: "r", e: "In MS, the left atrium faces pressure overload as blood struggles to empty through narrowed mitral valve. This causes LA enlargement visible on chest X-ray as straightened left heart border." },
+                        { q: "The most common cause of mitral stenosis worldwide is?", o: ["Congenital", "Rheumatic fever", "Degenerative", "Infective endocarditis"], a: 1, t: "r", e: "Rheumatic heart disease from recurrent rheumatic fever is the leading cause globally. Post-inflammatory scarring of mitral valve leaflets leads to commissural fusion and narrowing." },
+                        { q: "Which murmur is characteristic of mitral stenosis?", o: ["Pan-systolic murmur", "Early diastolic murmur", "Mid-diastolic rumble", "Continuous murmur"], a: 2, t: "r", e: "The presystolic accentuation of mid-diastolic rumble is classic. It occurs after opening snap due to blood rushing through narrowed valve during ventricular diastole." },
+                        { q: "Opening snap in mitral stenosis is due to?", o: ["Aortic valve closure", "Mitral valve opening", "Tricuspid valve opening", "Pulmonic valve closure"], a: 1, t: "r", e: "The opening snap occurs when thickened mitral leaflets suddenly open during isovolumetric relaxation. The faster the opening, the more severe the stenosis." },
+                        { q: "Which is TRUE about S2-OS interval in severe MS?", o: ["Longer (>100ms)", "Shorter (<60ms)", "Equal to normal", "Absent"], a: 1, t: "r", e: "In severe MS, high left atrial pressure pushes the mitral valve open earlier, shortening the S2-OS interval to <60ms. A shorter interval = more severe stenosis." },
+                        { q: "Presystolic accentuation is lost in which condition?", o: ["Sinus rhythm", "Atrial fibrillation", "Heart block", "Hypertension"], a: 1, t: "r", e: "Presystolic accentuation occurs due to atrial contraction pushing blood through narrowed valve. In AF, atrial kick is lost, so accentuation disappears." },
+                        { q: "Malar flush in MS is due to?", o: ["Fever", "Low cardiac output", "Anemia", "Infection"], a: 1, t: "r", e: "Low cardiac output causes peripheral vasoconstriction, while elevated cardiac outputdemand leads to facies with pink-purple blotchy rash over malar area." },
+                        { q: "Which is the most common complication of MS?", o: ["Systemic embolism", "Atrial fibrillation", "Heart failure", "Infective endocarditis"], a: 1, t: "r", e: "LA enlargement leads to atrial fibrillation in 30-40% of MS patients. Stasis of blood in dilated atrium predisposes to thrombus formation and systemic emboli." },
+                        { q: "In MS, worsening with tachycardia is due to?", o: ["More diastolic filling time", "Less diastolic filling time", "Increased SVR", "Increased contractility"], a: 1, t: "r", e: "Tachycardia shortens diastole, reducing time for blood flow across narrowed valve. Less filling leads to increased LA pressure and worsened symptoms." },
+                        { q: "Wilkins score is used for?", o: ["Diagnosis", "Balloon mitral valvuloplasty eligibility", "Surgery timing", "Prognosis"], a: 1, t: "r", e: "Wilkins score (0-16) assesses valve morphology for percutaneous balloon valvuloplasty. Score <8 suggests good outcome, >8 favors surgical replacement." }
+                    ]},
+                    { name: "Mitral regurgitation", priority: "red" },
+                    { name: "Austin Flint murmur", priority: "red" },
+                    { name: "Aortic stenosis", priority: "red" },
+                    { name: "Aortic regurgitation", priority: "red" },
+                    { name: "Tricuspid stenosis", priority: "purple" },
+                    { name: "Tricuspid regurgitation", priority: "purple" },
+                    { name: "Pulmonary stenosis", priority: "purple" },
+                    { name: "Murmur characteristics", priority: "red" },
+                    { name: "Indications for surgery", priority: "red" }
+                ]
             }
         }
     },
@@ -272,8 +297,16 @@ const MEDICINE_DATA = {
     },
     "Rheumatology": {
         emoji: "💪",
-        notesUrl: "refined/rheumatology_master_guide.html",
+        notesUrl: "notes/Medicine/rheumatology_master_guide.html",
         chapters: {
+            "Genetics & Autoimmunity": {
+                topics: [
+                    { name: "Autoimmunity genetics", priority: "purple" },
+                    { name: "HLA associations", priority: "red" },
+                    { name: "PTPN22", priority: "purple" },
+                    { name: "Autoantibodies overview", priority: "red" }
+                ]
+            },
             "RA": {
                 topics: [
                     { name: "Rheumatoid arthritis", priority: "red" },
@@ -312,6 +345,13 @@ const MEDICINE_DATA = {
                     { name: "Gout", priority: "red" },
                     { name: "Allopurinol", priority: "red" },
                     { name: "Pseudogout", priority: "purple" }
+                ]
+            },
+            "Rheumatology Drugs": {
+                topics: [
+                    { name: "DMARDs overview", priority: "red" },
+                    { name: "Biologics", priority: "purple" },
+                    { name: "NSAIDs in rheumatology", priority: "purple" }
                 ]
             }
         }
