@@ -2359,7 +2359,7 @@ const EXP = {
     Object.values(QUESTIONS).forEach(qs => applyExp(qs));
 })();
 
-// ===== INTERACTIVE TOOLS =====
+// ===== DYNAMIC TOOLS =====
 const dynamicTools = {
     'sokolow': {
         name: 'Sokolow-Lyon Criteria',
@@ -2368,6 +2368,21 @@ const dynamicTools = {
         path: 'notes/Medicine/NOTES&images/Aortic stenosis/Interactive Sokolow-Lyon Criteria Visualizer.html'
     }
 };
+
+// Get tool for current topic
+function getDynamicToolForTopic() {
+    const topic = currentTopicInfo.topic;
+    if (!topic) return null;
+    
+    // Map topics to their tools
+    const toolMap = {
+        'Aortic stenosis': 'sokolow',
+        'aortic stenosis': 'sokolow'
+    };
+    
+    const toolKey = toolMap[topic];
+    return toolKey ? dynamicTools[toolKey] : null;
+}
 
 function openDynamicPanel() {
     const panel = document.getElementById('dynamicPanel');
@@ -2414,7 +2429,6 @@ function closeDynamicPanel() {
 
 // ===== IMMERSIVE MODE =====
 let isImmersive = false;
-let immersiveToolKey = 'sokolow';
 
 function toggleImmersiveMode() {
     const topicView = document.querySelector('.topic-view');
@@ -2438,11 +2452,12 @@ function toggleImmersiveMode() {
         // Get and reconfigure notes iframe (LEFT side - 60%)
         const notesIframe = topicView.querySelector('iframe');
         if (notesIframe) {
-            // Remove all existing styles and apply new ones
             notesIframe.removeAttribute('style');
             notesIframe.style.cssText = 'position:absolute;left:0;top:60px;width:60%;height:calc(100vh - 60px);border:none;z-index:1;margin:0;';
-            notesIframe.style.setProperty('width', '60%', 'important');
         }
+        
+        // Get the dynamic tool for current topic
+        const tool = getDynamicToolForTopic();
         
         // Create dynamic tool iframe in a separate container (RIGHT side - 40%)
         let rightContainer = topicView.querySelector('.immersive-right');
@@ -2453,8 +2468,11 @@ function toggleImmersiveMode() {
             topicView.appendChild(rightContainer);
         }
         
-        const tool = dynamicTools[immersiveToolKey];
-        rightContainer.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe>`;
+        if (tool) {
+            rightContainer.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe>`;
+        } else {
+            rightContainer.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">No tools available for this topic</div>`;
+        }
         
     } else {
         // ===== EXIT IMMERSIVE MODE =====
