@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aortic Stenosis | Hemodynamic Pro (Light)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --accent: #0284c7; /* Deep sky blue for contrast */
+            --accent-glow: rgba(2, 132, 199, 0.2);
+            --danger: #e11d48; /* Deep rose */
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --grid-line: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 0%, #e2e8f0 0%, transparent 70%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            background: linear-gradient(to right, #0284c7, #7e22ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,1);
+        }
+
+        .panel-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        svg { width: 100%; height: auto; overflow: visible; }
+
+        /* Anatomy Styling */
+        .myocardium { 
+            fill: #7f1d1d; 
+            stroke: var(--danger); 
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .cavity { fill: #b91c1c; transition: all 0.8s ease; }
+        .valve-leaflet { stroke: #fff; stroke-width: 4; stroke-linecap: round; transition: 0.8s; }
+
+        /* PV Loop Styling */
+        .pv-path {
+            fill: rgba(2, 132, 199, 0.1);
+            stroke: var(--accent);
+            stroke-width: 4;
+            stroke-linejoin: round;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+        .espvr-line {
+            stroke: #9333ea;
+            stroke-width: 2;
+            stroke-dasharray: 6 6;
+            transition: all 0.8s ease;
+        }
+        .grid-line { stroke: var(--grid-line); stroke-width: 1.5; }
+        .axis-label { fill: var(--text-dim); font-size: 12px; font-weight: 600; }
+
+        /* Controls */
+        .controls-card {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 1rem 0 3rem 0;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--accent-glow);
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+        }
+
+        .info-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 1rem 0; color: var(--text-main); }
+        .info-desc { color: var(--text-dim); font-size: 1.1rem; line-height: 1.6; margin: 0; }
+        
+        .pearl-chip {
+            background: linear-gradient(145deg, rgba(225, 29, 72, 0.05), rgba(225, 29, 72, 0.01));
+            border-left: 4px solid var(--danger);
+            color: #881337;
+            padding: 1.5rem;
+            border-radius: 0 16px 16px 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .pearl-chip strong { color: var(--danger); display: block; margin-bottom: 0.5rem; letter-spacing: 1px; font-size: 0.85rem; text-transform: uppercase;}
+
+        @media (max-width: 900px) { .info-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>AS Hemodynamics Pro</h1>
+        <p style="color: var(--text-dim); font-size: 1.2rem; margin-top: 0.5rem;">Pathophysiological Mapping & Clinical Correlations</p>
+    </div>
+
+    <div class="dashboard">
+        <div class="panel">
+            <div class="panel-header"><span>Left Ventricular Remodeling</span><span id="wall-stress-indicator" style="color: var(--danger); font-weight: 800;">Stress: Normal</span></div>
+            <svg viewBox="0 0 400 350">
+                <defs>
+                    <radialGradient id="myoGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="70%" stop-color="#991b1b"/>
+                        <stop offset="100%" stop-color="#7f1d1d"/>
+                    </radialGradient>
+                </defs>
+                <path d="M 160,20 L 160,100 M 240,20 L 240,100" stroke="rgba(225, 29, 72, 0.15)" stroke-width="20" fill="none"/>
+                <ellipse id="lv-myo" class="myocardium" style="fill: url(#myoGrad);" cx="200" cy="220" rx="90" ry="110" />
+                <ellipse id="lv-cavity" class="cavity" cx="200" cy="220" rx="75" ry="95" />
+                <line id="valve-left" class="valve-leaflet" x1="160" y1="100" x2="185" y2="90" />
+                <line id="valve-right" class="valve-leaflet" x1="240" y1="100" x2="215" y2="90" />
+                <text x="200" y="225" fill="rgba(255,255,255,0.95)" font-size="1.5rem" font-weight="800" text-anchor="middle" style="letter-spacing: 3px;">LV</text>
+            </svg>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header"><span>Pressure-Volume Analysis</span><span style="color: #9333ea;">ESPVR Line</span></div>
+            <svg viewBox="-20 -20 480 420" id="pv-svg">
+                <g id="grid-lines"></g>
+                <line x1="40" y1="360" x2="40" y2="0" stroke="var(--text-dim)" stroke-width="2"/>
+                <text x="15" y="15" fill="var(--text-dim)" font-size="12" font-weight="600" transform="rotate(-90 15,15)">Pressure (mmHg)</text>
+                <line x1="40" y1="360" x2="420" y2="360" stroke="var(--text-dim)" stroke-width="2"/>
+                <text x="400" y="390" fill="var(--text-dim)" font-size="12" font-weight="600">Volume (mL)</text>
+                
+                <line id="espvr-line" class="espvr-line" x1="40" y1="360" x2="150" y2="100" />
+
+                <path id="pv-loop" class="pv-path" d="" />
+                
+                <circle id="pt-edv" fill="var(--accent)" r="6" />
+                <circle id="pt-esv" fill="var(--danger)" r="6" />
+                <circle id="pt-peak" fill="#0f172a" stroke="#fff" stroke-width="1.5" r="4" />
+            </svg>
+        </div>
+
+        <div class="controls-card">
+            <input type="range" id="stage-slider" min="0" max="4" value="0" step="1">
+            <div class="info-grid">
+                <div>
+                    <h3 class="info-title" id="info-title">Stage 0</h3>
+                    <p class="info-desc" id="info-desc"></p>
+                </div>
+                <div class="pearl-chip" id="clinical-pearl"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stages = [
+            {
+                title: "1. Normal Physiology",
+                desc: "Low-resistance ventricular outflow. Left ventricular systolic pressure perfectly matches aortic systolic pressure. Normal compliance and contractility.",
+                pearl: "<strong>Diagnostic Baseline</strong>Normal aortic valve area is 3.0-4.0 cm². Transvalvular pressure gradient is negligible (<5 mmHg).",
+                stress: "Normal",
+                anatomy: { wall: 12, rx: 75, ry: 95, gap: 30, glow: 0 },
+                hemo: { edv: 120, esv: 50, peakP: 120, esp: 100, edp: 10, fillP: 5, openP: 80 }
+            },
+            {
+                title: "2. Severe Aortic Stenosis",
+                desc: "Valve area falls <1.0 cm². The LV must generate massive supra-physiological pressure to force blood across the stenotic orifice, creating a severe pressure gradient.",
+                pearl: "<strong>High-Yield Exam Sign</strong>Pulsus parvus et tardus (weak and delayed carotid upstroke) due to prolonged, obstructed left ventricular ejection time.",
+                stress: "Extremely High",
+                anatomy: { wall: 16, rx: 72, ry: 92, gap: 10, glow: 15 },
+                hemo: { edv: 120, esv: 50, peakP: 200, esp: 120, edp: 15, fillP: 8, openP: 85 }
+            },
+            {
+                title: "3. Concentric Hypertrophy",
+                desc: "Chronic pressure overload triggers parallel sarcomere replication. Wall thickness increases significantly to normalize systolic wall stress and maintain stroke volume.",
+                pearl: "<strong>Laplace's Law</strong>Wall Stress = (Pressure × Radius) / (2 × Thickness). Increasing wall thickness is a compensatory mechanism to normalize high pressure stress.",
+                stress: "Compensated",
+                anatomy: { wall: 35, rx: 60, ry: 85, gap: 7, glow: 5 },
+                hemo: { edv: 110, esv: 45, peakP: 240, esp: 140, edp: 22, fillP: 12, openP: 90 }
+            },
+            {
+                title: "4. Diastolic Dysfunction",
+                desc: "The massively hypertrophied ventricle becomes fibrotic and stiff. Compliance plummets. Ventricular filling requires severely elevated left atrial pressures.",
+                pearl: "<strong>Auscultation Target</strong>S4 Gallop rhythm heard at the apex. This low-frequency sound represents atrial systole forcing blood into a stiff, non-compliant LV.",
+                stress: "Ischemic Risk",
+                anatomy: { wall: 42, rx: 55, ry: 80, gap: 6, glow: 20 },
+                hemo: { edv: 95, esv: 40, peakP: 250, esp: 150, edp: 35, fillP: 20, openP: 95 }
+            },
+            {
+                title: "5. Decompensated Systolic Failure",
+                desc: "Compensatory mechanisms are exhausted. Sarcomeres slip, leading to eccentric remodeling (dilation). Contractility plummets, End-Systolic Volume surges, and Cardiac Output collapses.",
+                pearl: "<strong>Prognosis Timeline</strong>Once the SAD triad hits, median survival plummets without valve replacement: Angina (5 yrs), Syncope (3 yrs), Heart Failure (2 yrs).",
+                stress: "Failing",
+                anatomy: { wall: 14, rx: 110, ry: 125, gap: 5, glow: 0 },
+                hemo: { edv: 170, esv: 130, peakP: 120, esp: 90, edp: 38, fillP: 25, openP: 70 }
+            }
+        ];
+
+        function mapV(v) { return 40 + (v * 1.8); }
+        function mapP(p) { return 360 - (p * 1.1); }
+
+        const grid = document.getElementById('grid-lines');
+        for(let i=0; i<=200; i+=50) {
+            grid.innerHTML += `<line class="grid-line" x1="${mapV(i)}" y1="0" x2="${mapV(i)}" y2="360"/>`;
+            grid.innerHTML += `<text class="axis-label" x="${mapV(i)}" y="380" text-anchor="middle">${i}</text>`;
+        }
+        for(let i=50; i<=250; i+=50) {
+            grid.innerHTML += `<line class="grid-line" x1="40" y1="${mapP(i)}" x2="420" y2="${mapP(i)}"/>`;
+            grid.innerHTML += `<text class="axis-label" x="30" y="${mapP(i)+4}" text-anchor="end">${i}</text>`;
+        }
+
+        function update(idx) {
+            const s = stages[idx];
+            
+            const myo = document.getElementById('lv-myo');
+            myo.style.strokeWidth = s.anatomy.wall;
+            myo.setAttribute('rx', s.anatomy.rx + s.anatomy.wall/2);
+            myo.setAttribute('ry', s.anatomy.ry + s.anatomy.wall/2);
+            if(s.anatomy.glow > 0) {
+                myo.style.filter = `drop-shadow(0 0 ${s.anatomy.glow}px rgba(225, 29, 72, 0.4))`;
+            } else {
+                myo.style.filter = 'none';
+            }
+            
+            document.getElementById('lv-cavity').setAttribute('rx', s.anatomy.rx);
+            document.getElementById('lv-cavity').setAttribute('ry', s.anatomy.ry);
+            document.getElementById('valve-left').setAttribute('x2', 200 - s.anatomy.gap);
+            document.getElementById('valve-right').setAttribute('x1', 200 + s.anatomy.gap);
+            document.getElementById('wall-stress-indicator').innerText = `Stress: ${s.stress}`;
+
+            const { edv, esv, peakP, esp, edp, fillP, openP } = s.hemo;
+            
+            const pA = { x: mapV(edv), y: mapP(edp) };        
+            const pB = { x: mapV(edv), y: mapP(openP) };      
+            const pPeak = { x: mapV((edv+esv)*0.45), y: mapP(peakP) }; 
+            const pC = { x: mapV(esv), y: mapP(esp) };        
+            const pD = { x: mapV(esv), y: mapP(fillP) };      
+
+            const path = `
+                M ${pA.x},${pA.y} 
+                L ${pB.x},${pB.y} 
+                Q ${pPeak.x},${pPeak.y - 10} ${pC.x},${pC.y} 
+                L ${pD.x},${pD.y} 
+                Q ${mapV((edv+esv)*0.6)},${pA.y + (s.anatomy.wall*0.3)} ${pA.x},${pA.y} Z
+            `;
+            
+            document.getElementById('pv-loop').setAttribute('d', path);
+            
+            document.getElementById('espvr-line').setAttribute('x2', pC.x + 20);
+            document.getElementById('espvr-line').setAttribute('y2', mapP( esp * ((pC.x-40 + 20)/(pC.x-40)) ));
+
+            document.getElementById('pt-edv').setAttribute('cx', pA.x);
+            document.getElementById('pt-edv').setAttribute('cy', pA.y);
+            document.getElementById('pt-esv').setAttribute('cx', pC.x);
+            document.getElementById('pt-esv').setAttribute('cy', pC.y);
+            document.getElementById('pt-peak').setAttribute('cx', pPeak.x);
+            document.getElementById('pt-peak').setAttribute('cy', pPeak.y + 10);
+
+            document.getElementById('info-title').innerText = s.title;
+            document.getElementById('info-desc').innerText = s.desc;
+            document.getElementById('clinical-pearl').innerHTML = s.pearl;
+        }
+
+        document.getElementById('stage-slider').addEventListener('input', (e) => update(e.target.value));
+        update(0);
+    </script>
+</body>
+</html>
