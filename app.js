@@ -2402,19 +2402,43 @@ const dynamicTools = {
     }
 };
 
-// Get tools for current topic
+// Get tools for current topic — pulls from topic data definition
 function getDynamicToolsForTopic() {
-    const topic = currentTopicInfo.topic;
+    const { cat, sys, chapter, topic } = currentTopicInfo;
     if (!topic) return [];
     
-    // Map topics to their tool keys - case insensitive
+    // 1. Try to get tools from the topic's data definition
+    let dataSource;
+    if (cat === 'Medicine') dataSource = MEDICINE_DATA;
+    else if (cat === 'Surgery') dataSource = SURGERY_DATA;
+    else if (cat === 'OBG') dataSource = OBG_DATA;
+    else if (cat === 'ENT') dataSource = typeof ENT_DATA !== 'undefined' ? ENT_DATA : null;
+    else if (cat === 'Ophthalmology') dataSource = typeof OPHTHALMOLOGY_DATA !== 'undefined' ? OPHTHALMOLOGY_DATA : null;
+    else if (cat === 'Dermatology') dataSource = typeof DERMATOLOGY_DATA !== 'undefined' ? DERMATOLOGY_DATA : null;
+    else if (cat === 'Paediatrics') dataSource = typeof PAEDS_DATA !== 'undefined' ? PAEDS_DATA : null;
+    else if (cat === 'Orthopaedics') dataSource = typeof ORTHO_DATA !== 'undefined' ? ORTHO_DATA : null;
+    
+    if (dataSource && sys && chapter) {
+        const system = dataSource[sys];
+        if (system && system.chapters && system.chapters[chapter]) {
+            const topicData = system.chapters[chapter].topics.find(
+                t => t.name.toLowerCase() === topic.toLowerCase()
+            );
+            if (topicData && topicData.tools && topicData.tools.length > 0) {
+                console.log('Tools from topic data:', topicData.tools);
+                return topicData.tools;
+            }
+        }
+    }
+    
+    // 2. Fallback: legacy hardcoded toolMap (for backward compat)
     const topicLower = topic.toLowerCase().trim();
     const toolMap = {
         'aortic stenosis': ['as_interactive', 'sokolow']
     };
     
     const toolKeys = toolMap[topicLower] || [];
-    console.log('Tool mapping:', topicLower, toolKeys);
+    console.log('Tool mapping (legacy):', topicLower, toolKeys);
     return toolKeys.map(key => dynamicTools[key]).filter(Boolean);
 }
 
@@ -2429,23 +2453,58 @@ function openDynamicPanel() {
     
     titleEl.textContent = '🫀 Interactive Tools';
     
+    // Get ONLY the tools for the current topic
+    const topicTools = getDynamicToolsForTopic();
+    
     let toolsHTML = '<div style="padding:15px;">';
-    Object.keys(dynamicTools).forEach(key => {
-        const tool = dynamicTools[key];
+    
+    if (topicTools.length === 0) {
+        // No tools for this topic — show informative empty state
+        const topicName = currentTopicInfo.topic || 'this topic';
         toolsHTML += `
-            <div class="tool-card" onclick="selectDynamicTool('${key}')">
-                <div style="font-size:32px;margin-bottom:10px;">${tool.icon}</div>
-                <div style="font-weight:600;font-size:16px;margin-bottom:5px;">${tool.name}</div>
-                <div style="font-size:12px;color:var(--t2);">${tool.desc}</div>
+            <div style="text-align:center;padding:40px 20px;">
+                <div style="font-size:48px;margin-bottom:16px;opacity:0.4;">🔧</div>
+                <div style="font-size:16px;font-weight:600;color:var(--t1);margin-bottom:8px;">No Interactive Tools Yet</div>
+                <div style="font-size:13px;color:var(--t3);line-height:1.6;max-width:280px;margin:0 auto;">
+                    Interactive tools for <strong style="color:var(--t2);">${topicName}</strong> are coming soon.
+                    Each topic will have its own specialized calculators, visualizers, and learning aids.
+                </div>
             </div>
         `;
-    });
+    } else {
+        topicTools.forEach((tool, idx) => {
+            // Tools from topic data have name/desc/icon/path directly
+            // Legacy tools from dynamicTools registry also have same shape
+            const toolKey = tool.key || ('topic_tool_' + idx);
+            toolsHTML += `
+                <div class="tool-card" onclick="selectDynamicToolDirect(${idx})">
+                    <div style="font-size:32px;margin-bottom:10px;">${tool.icon}</div>
+                    <div style="font-weight:600;font-size:16px;margin-bottom:5px;">${tool.name}</div>
+                    <div style="font-size:12px;color:var(--t2);">${tool.desc}</div>
+                </div>
+            `;
+        });
+    }
+    
     toolsHTML += '</div>';
     bodyEl.innerHTML = toolsHTML;
 }
 
 function selectDynamicTool(toolKey) {
     const tool = dynamicTools[toolKey];
+    const bodyEl = document.getElementById('dynamicBody');
+    const titleEl = document.getElementById('dynamicTitle');
+    
+    titleEl.textContent = tool.icon + ' ' + tool.name;
+    bodyEl.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;background:#fff;"></iframe>`;
+}
+
+// Select a tool by index from the current topic's tools array
+function selectDynamicToolDirect(index) {
+    const topicTools = getDynamicToolsForTopic();
+    const tool = topicTools[index];
+    if (!tool) return;
+    
     const bodyEl = document.getElementById('dynamicBody');
     const titleEl = document.getElementById('dynamicTitle');
     

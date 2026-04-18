@@ -84,6 +84,9 @@ const MEDICINE_DATA = {
                         "06.4. Balloon Valvuloplasty",
                         "06.5. AS in Pregnancy",
                         "07. MCQs — Let's See What You've Got"
+                        ], tools: [
+                        { name: 'Aortic Stenosis Hemodynamic', desc: 'Interactive AS Calculator', icon: '❤️', path: 'notes/Medicine/NOTES&images/Aortic stenosis/interactive aortic stenosis.html' },
+                        { name: 'Sokolow-Lyon Criteria', desc: 'LVH ECG Calculator', icon: '📊', path: 'notes/Medicine/NOTES&images/Aortic stenosis/Interactive Sokolow-Lyon Criteria Visualizer.html' }
                         ], questions: [
                         { q: "A 72-year-old man presents with exertional chest pain for 4 months and a single episode of fainting while climbing stairs. Exam reveals harsh systolic murmur at 2nd RICS radiating to carotids, slow-rising pulse, sustained apex. What is expected mean survival given his dominant symptom?", o: ["1-2 years due to heart failure", "5 years due to angina", "3 years due to syncope", "8 years, as symptoms are only mild"], a: 2, t: "r", e: "Syncope has 3-year mean survival. Angina = 5 years, Dyspnea (HF) = 1-2 years. Exertional syncope mechanism: fixed CO + peripheral vasodilation → ↓BP → cerebral hypoperfusion" },
                         { q: "65-year-old woman with severe AS (AVA 0.8 cm², gradient 45 mmHg), NO symptoms, EF 42%. Most appropriate next step?", o: ["Watchful waiting with serial echos", "Aortic valve replacement", "ACE inhibitor and diuretic", "Dobutamine stress echo"], a: 1, t: "r", e: "AVR indicated even if asymptomatic when EF <50% (Class I indication). ACEi dangerous - can cause severe hypotension. Gradient clearly elevated, so dobutamine not needed." },
