@@ -1373,6 +1373,17 @@
       }
     });
   })();
+  
+  // Horizontal scroll on hover with mouse wheel for nav bar
+  const tocInner = document.querySelector('.toc-inner');
+  if (tocInner) {
+    tocInner.addEventListener('wheel', function(e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        this.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
 </script>
 </body>
 </html>

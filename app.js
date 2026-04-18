@@ -224,7 +224,17 @@ function selectServer(name) {
         }
     }
     renderAnalytics();
-    closeAllDrawers();
+
+    // On mobile: auto-open channel sidebar when a subject is selected (to show chapters)
+    // For home/leaderboard, close drawers since content loads directly into main area
+    if (window.innerWidth <= 768 && name !== 'home' && name !== 'leaderboard') {
+        const sb = document.getElementById('channelSidebar');
+        const ov = document.getElementById('drawerOverlay');
+        sb.classList.add('open');
+        ov.classList.add('vis');
+    } else {
+        closeAllDrawers();
+    }
 }
 
 // ===== CHANNEL SIDEBAR RENDERERS =====
@@ -497,7 +507,9 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
         </div>
     `;
     
-    document.getElementById('mainBody').innerHTML = `
+    const mainBody = document.getElementById('mainBody');
+    mainBody.classList.add('topic-active');
+    mainBody.innerHTML = `
         <div class="topic-view">
             <div class="topic-header">
                 <span class="topic-priority" style="background:${priorityColor}">${priorityLabel}</span>
@@ -898,6 +910,7 @@ function getSubjectQuestions(cat) {
 
 // ===== DASHBOARD =====
 function renderDashboard() {
+    document.getElementById('mainBody').classList.remove('topic-active');
     const allQs = getAllQuestions();
     const prog = getProgress();
     const total = allQs.length;
@@ -943,6 +956,7 @@ function renderDashboard() {
 
 // ===== CONTENT HUB =====
 function showContentHub(catName, questions, emoji, isSubcat, parentCat) {
+    document.getElementById('mainBody').classList.remove('topic-active');
     currentCat = catName;
     pendingPool = questions;
     pendingEmoji = emoji;
@@ -2453,6 +2467,12 @@ let isImmersive = false;
 function toggleImmersiveMode() {
     const topicView = document.querySelector('.topic-view');
     if (!topicView) return;
+    
+    // On mobile, immersive split-view doesn't fit — use the Tools panel instead
+    if (window.innerWidth <= 768) {
+        openDynamicPanel();
+        return;
+    }
     
     const channelSidebar = document.getElementById('channelSidebar');
     const analyticsSidebar = document.getElementById('analyticsSidebar');
