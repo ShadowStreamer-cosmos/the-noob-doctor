@@ -492,8 +492,8 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
                 <p class="topic-path">${cat} > ${sysName} > ${chapterName}</p>
                 <button class="topic-sections-btn" onclick="toggleSectionChecklist()">📋 Sections</button>
                 <button class="topic-mcq-btn" onclick="openMcqPanel()">🎯 MCQs</button>
-                <button class="topic-fullscreen-btn" onclick="toggleNotesFullscreen()" title="Fullscreen (F)">⛶</button>
-                <button class="topic-hide-sidebars-btn" onclick="hideAllSidebars()" title="Hide Sidebars">👁️</button>
+                <button class="topic-mcq-btn" onclick="openDynamicPanel()">🫀 Tools</button>
+                <button class="topic-fullscreen-btn" id="immersiveBtn" onclick="toggleImmersiveMode()" title="Immersive Learning Mode">⛶ Immersive</button>
             </div>
             <div class="section-checklist" id="sectionChecklist" style="display:none">
                 <div class="section-checklist-header">
@@ -2358,6 +2358,127 @@ const EXP = {
     Object.values(OBG_SUBCATEGORIES).forEach(s => applyExp(s.questions));
     Object.values(QUESTIONS).forEach(qs => applyExp(qs));
 })();
+
+// ===== INTERACTIVE TOOLS =====
+const dynamicTools = {
+    'sokolow': {
+        name: 'Sokolow-Lyon Criteria',
+        desc: 'LVH ECG Calculator',
+        icon: '📊',
+        path: 'notes/Medicine/NOTES&images/Aortic stenosis/Interactive Sokolow-Lyon Criteria Visualizer.html'
+    }
+};
+
+function openDynamicPanel() {
+    const panel = document.getElementById('dynamicPanel');
+    const overlay = document.getElementById('dynamicOverlay');
+    const titleEl = document.getElementById('dynamicTitle');
+    const bodyEl = document.getElementById('dynamicBody');
+    
+    panel.classList.add('open');
+    overlay.classList.add('vis');
+    
+    titleEl.textContent = '🫀 Interactive Tools';
+    
+    let toolsHTML = '<div style="padding:15px;">';
+    Object.keys(dynamicTools).forEach(key => {
+        const tool = dynamicTools[key];
+        toolsHTML += `
+            <div class="tool-card" onclick="selectDynamicTool('${key}')">
+                <div style="font-size:32px;margin-bottom:10px;">${tool.icon}</div>
+                <div style="font-weight:600;font-size:16px;margin-bottom:5px;">${tool.name}</div>
+                <div style="font-size:12px;color:var(--t2);">${tool.desc}</div>
+            </div>
+        `;
+    });
+    toolsHTML += '</div>';
+    bodyEl.innerHTML = toolsHTML;
+}
+
+function selectDynamicTool(toolKey) {
+    const tool = dynamicTools[toolKey];
+    const bodyEl = document.getElementById('dynamicBody');
+    const titleEl = document.getElementById('dynamicTitle');
+    
+    titleEl.textContent = tool.icon + ' ' + tool.name;
+    bodyEl.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;background:#fff;"></iframe>`;
+}
+
+function closeDynamicPanel() {
+    const panel = document.getElementById('dynamicPanel');
+    const overlay = document.getElementById('dynamicOverlay');
+    panel.classList.remove('open');
+    panel.classList.remove('immersive');
+    overlay.classList.remove('vis');
+}
+
+// ===== IMMERSIVE MODE =====
+let isImmersive = false;
+let immersiveToolKey = 'sokolow';
+
+function toggleImmersiveMode() {
+    const topicView = document.querySelector('.topic-view');
+    if (!topicView) return;
+    
+    const channelSidebar = document.getElementById('channelSidebar');
+    const analyticsSidebar = document.getElementById('analyticsSidebar');
+    const btn = document.getElementById('immersiveBtn');
+    
+    if (!isImmersive) {
+        // ===== ENTER IMMERSIVE MODE =====
+        isImmersive = true;
+        topicView.classList.add('immersive-mode');
+        
+        if (btn) btn.innerHTML = '⛶ Exit';
+        
+        // Hide sidebars
+        if (channelSidebar) { channelSidebar.classList.add('collapsed'); channelSidebar.style.display = 'none'; }
+        if (analyticsSidebar) { analyticsSidebar.classList.add('collapsed'); analyticsSidebar.style.display = 'none'; }
+        
+        // Get and reconfigure notes iframe (LEFT side - 60%)
+        const notesIframe = topicView.querySelector('iframe');
+        if (notesIframe) {
+            // Remove all existing styles and apply new ones
+            notesIframe.removeAttribute('style');
+            notesIframe.style.cssText = 'position:absolute;left:0;top:60px;width:60%;height:calc(100vh - 60px);border:none;z-index:1;margin:0;';
+            notesIframe.style.setProperty('width', '60%', 'important');
+        }
+        
+        // Create dynamic tool iframe in a separate container (RIGHT side - 40%)
+        let rightContainer = topicView.querySelector('.immersive-right');
+        if (!rightContainer) {
+            rightContainer = document.createElement('div');
+            rightContainer.className = 'immersive-right';
+            rightContainer.style.cssText = 'position:absolute;right:0;top:60px;width:40%;height:calc(100vh - 60px);background:#fff;z-index:1;margin:0;';
+            topicView.appendChild(rightContainer);
+        }
+        
+        const tool = dynamicTools[immersiveToolKey];
+        rightContainer.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe>`;
+        
+    } else {
+        // ===== EXIT IMMERSIVE MODE =====
+        isImmersive = false;
+        topicView.classList.remove('immersive-mode');
+        
+        if (btn) btn.innerHTML = '⛶ Immersive';
+        
+        // Show sidebars
+        if (channelSidebar) { channelSidebar.classList.remove('collapsed'); channelSidebar.style.display = ''; }
+        if (analyticsSidebar) { analyticsSidebar.classList.remove('collapsed'); analyticsSidebar.style.display = ''; }
+        
+        // Reset notes iframe to original state
+        const notesIframe = topicView.querySelector('iframe');
+        if (notesIframe) {
+            notesIframe.removeAttribute('style');
+            notesIframe.style.cssText = 'width:100%;height:calc(100vh - 140px);border:none;margin-top:10px;border-radius:8px;overflow:hidden;';
+        }
+        
+        // Remove right container
+        const rightContainer = topicView.querySelector('.immersive-right');
+        if (rightContainer) rightContainer.remove();
+    }
+}
 
 // ===== ANALYTICS TRACKING =====
 function trackEvent(eventType, data = {}) {
