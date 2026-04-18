@@ -1,0 +1,27 @@
+<!-- After uploading images to Cloudinary, use the URL in your HTML like this: -->
+
+<!-- Basic image -->
+<img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/noob-doctor/ecg-normal.jpg" alt="Normal ECG" loading="lazy">
+
+<!-- With responsive styling -->
+<img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/w_800,noob-doctor/chest-xray.jpg" 
+     alt="Chest X-ray" 
+     style="width:100%; max-width:600px; border-radius:8px;">
+
+<!-- As figure with caption -->
+<figure style="margin:20px 0;">
+  <img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/w_600,noob-doctor/echo-m-mode.jpg" 
+       alt="M-mode echo" 
+       style="border-radius:8px;">
+  <figcaption style="font-size:13px; color:var(--ink-muted); margin-top:8px;">
+    M-mode echocardiography showing mitral valve motion
+  </figcaption>
+</figure>
+
+<!-- Image with lightbox (click to enlarge) -->
+<a href="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/noob-doctor/ecg-stemi.jpg" 
+   target="_blank">
+  <img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/w_400,noob-doctor/ecg-stemi.jpg" 
+       alt="ECG showing STEMI" 
+       style="cursor:zoom-in; border-radius:6px;">
+</a>
