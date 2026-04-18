@@ -862,6 +862,9 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg0);color:va
   font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s
 }
 .topic-sections-btn:hover{background:var(--bg2);border-color:var(--ac)}
+.topic-fullscreen-btn,.topic-hide-sidebars-btn{padding:8px 12px;background:var(--bg3);color:var(--t2);border:1px solid var(--bd);border-radius:var(--rS);font-size:13px;cursor:pointer;transition:all 0.2s}
+.topic-fullscreen-btn:hover,.topic-hide-sidebars-btn:hover{background:var(--acL);border-color:var(--ac)}
+.topic-view.fullscreen-mode{padding:0;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;background:var(--bg1);display:flex}.topic-view.fullscreen-mode .topic-header{position:absolute;top:0;left:0;right:0;background:var(--bg2);padding:10px 20px;border-bottom:1px solid var(--bd);z-index:10}.topic-view.fullscreen-mode iframe{position:absolute;top:60px;left:0;width:60%!important;height:calc(100vh - 60px)!important;border-radius:0!important}
 .section-checklist{position:absolute;top:60px;left:20px;width:340px;max-height:450px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rS);z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
 .section-checklist-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--bd);font-weight:700;font-size:14px;background:var(--bg3);border-radius:var(--rS) var(--rS) 0 0}
 .section-checklist-header button{background:none;border:none;color:var(--t2);cursor:pointer;font-size:18px;padding:0;line-height:1}

@@ -492,6 +492,8 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
                 <p class="topic-path">${cat} > ${sysName} > ${chapterName}</p>
                 <button class="topic-sections-btn" onclick="toggleSectionChecklist()">📋 Sections</button>
                 <button class="topic-mcq-btn" onclick="openMcqPanel()">🎯 MCQs</button>
+                <button class="topic-fullscreen-btn" onclick="toggleNotesFullscreen()" title="Fullscreen (F)">⛶</button>
+                <button class="topic-hide-sidebars-btn" onclick="hideAllSidebars()" title="Hide Sidebars">👁️</button>
             </div>
             <div class="section-checklist" id="sectionChecklist" style="display:none">
                 <div class="section-checklist-header">
@@ -1174,6 +1176,46 @@ function toggleMcqFullscreen() {
         panel.style.width = '400px';
     }
 }
+
+// Notes fullscreen mode
+let notesIsFullscreen = false;
+function toggleNotesFullscreen() {
+    const topicView = document.querySelector('.topic-view');
+    if (!topicView) return;
+    notesIsFullscreen = !notesIsFullscreen;
+    if (notesIsFullscreen) {
+        hideAllSidebars();
+        topicView.classList.add('fullscreen-mode');
+    } else {
+        showAllSidebars();
+        topicView.classList.remove('fullscreen-mode');
+    }
+}
+
+// Hide all sidebars for clean view
+function hideAllSidebars() {
+    const channelSidebar = document.getElementById('channelSidebar');
+    const analyticsSidebar = document.getElementById('analyticsSidebar');
+    if (channelSidebar) channelSidebar.classList.add('collapsed');
+    if (analyticsSidebar) analyticsSidebar.classList.add('collapsed');
+}
+
+// Show all sidebars
+function showAllSidebars() {
+    const channelSidebar = document.getElementById('channelSidebar');
+    const analyticsSidebar = document.getElementById('analyticsSidebar');
+    if (channelSidebar) channelSidebar.classList.remove('collapsed');
+    if (analyticsSidebar) analyticsSidebar.classList.remove('collapsed');
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'f' || e.key === 'F') {
+        if (document.querySelector('.topic-view')) {
+            toggleNotesFullscreen();
+        }
+    }
+});
 
 function initMcqResize() {
     const panel = document.getElementById('mcqPanel');
