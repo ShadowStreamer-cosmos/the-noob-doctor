@@ -13,6 +13,19 @@ let currentTopicInfo = { cat: '', sys: '', chapter: '', topic: '' };
 var TRACKING_URL = 'https://script.google.com/macros/s/AKfycbwxFErgPmvEul7E4v-Ba4jb5uSyBONjeSwy1c-WoMyjjE5ZMkvoDZuR995dokrmUgxv/exec';
 var _sessionStart = Date.now();
 
+// ===== CROSS-FRAME MESSAGES =====
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'switchTool') {
+    const tabIndex = e.data.index;
+    const tabs = document.querySelectorAll('.tool-tab');
+    if (tabs[tabIndex]) {
+      setTimeout(() => {
+        tabs[tabIndex].click();
+      }, 300);
+    }
+  }
+});
+
 // ===== PROGRESS =====
 function getProgress() { return JSON.parse(localStorage.getItem('nbd_progress') || '{}'); }
 function saveQuestionProgress(q, userAns, isCorrect) {
@@ -2380,13 +2393,14 @@ function getDynamicToolsForTopic() {
     const topic = currentTopicInfo.topic;
     if (!topic) return [];
     
-    // Map topics to their tool keys
+    // Map topics to their tool keys - case insensitive
+    const topicLower = topic.toLowerCase().trim();
     const toolMap = {
-        'Aortic stenosis': ['as_interactive', 'sokolow'],
         'aortic stenosis': ['as_interactive', 'sokolow']
     };
     
-    const toolKeys = toolMap[topic] || [];
+    const toolKeys = toolMap[topicLower] || [];
+    console.log('Tool mapping:', topicLower, toolKeys);
     return toolKeys.map(key => dynamicTools[key]).filter(Boolean);
 }
 
@@ -2455,7 +2469,7 @@ function toggleImmersiveMode() {
         if (channelSidebar) { channelSidebar.classList.add('collapsed'); channelSidebar.style.display = 'none'; }
         if (analyticsSidebar) { analyticsSidebar.classList.add('collapsed'); analyticsSidebar.style.display = 'none'; }
         
-        // Get and reconfigure notes iframe (LEFT side - 60%)
+        // Get and reconfigure notes iframe (LEFT side - starts at 60%)
         const notesIframe = topicView.querySelector('iframe');
         if (notesIframe) {
             notesIframe.removeAttribute('style');
@@ -2465,7 +2479,7 @@ function toggleImmersiveMode() {
         // Get the dynamic tools for current topic
         const tools = getDynamicToolsForTopic();
         
-        // Create dynamic tools container on right side - split evenly
+        // Create dynamic tools container on right side - starts at 40%
         let rightContainer = topicView.querySelector('.immersive-right');
         if (!rightContainer) {
             rightContainer = document.createElement('div');
@@ -2474,13 +2488,136 @@ function toggleImmersiveMode() {
             topicView.appendChild(rightContainer);
         }
         
+        // Create smooth resizable divider (only when not exists)
+        if (!document.querySelector('.immersive-divider')) {
+            const splitEl = document.createElement('div');
+            splitEl.className = 'immersive-divider';
+            splitEl.textContent = '⋮';
+            Object.assign(splitEl.style, {
+                position: 'absolute', left: '60%', top: '60px', width: '6px',
+                height: 'calc(100vh - 60px)', background: '#cbd5e1',
+                cursor: 'ew-resize', zIndex: 99, display: 'flex',
+                alignItems: 'center', justifyContent: 'center',
+                fontSize: '18px', letterSpacing: '-2px',
+                color: '#64748b', userSelect: 'none',
+                writingMode: 'vertical-rl', textOrientation: 'mixed'
+            });
+            
+            const leftPanel = topicView.querySelector('iframe');
+            const rightPanel = rightContainer;
+            let currentPct = 60;
+
+            function applyPanelSizes(pct) {
+                currentPct = pct;
+                leftPanel.style.width = pct + '%';
+                splitEl.style.left = pct + '%';
+                rightPanel.style.width = (100 - pct) + '%';
+            }
+
+            splitEl.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const startX = e.clientX;
+                const startPct = currentPct;
+                const viewW = topicView.offsetWidth;
+
+                // Full-screen overlay prevents iframes from stealing mouse events
+                const overlay = document.createElement('div');
+                Object.assign(overlay.style, {
+                    position: 'fixed', top: '0', left: '0',
+                    width: '100%', height: '100%',
+                    zIndex: '9999', cursor: 'ew-resize',
+                    background: 'transparent'
+                });
+                document.body.appendChild(overlay);
+
+                splitEl.style.background = '#94a3b8';
+                leftPanel.style.transition = 'none';
+                rightPanel.style.transition = 'none';
+                leftPanel.style.willChange = 'width';
+                rightPanel.style.willChange = 'width';
+
+                let rafId = null;
+
+                function onMove(ev) {
+                    if (rafId) cancelAnimationFrame(rafId);
+                    rafId = requestAnimationFrame(function() {
+                        const delta = ev.clientX - startX;
+                        let pct = startPct + (delta / viewW) * 100;
+                        pct = Math.max(30, Math.min(70, pct));
+                        applyPanelSizes(pct);
+                    });
+                }
+
+                function onUp() {
+                    if (rafId) cancelAnimationFrame(rafId);
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                    splitEl.style.background = '#cbd5e1';
+                    leftPanel.style.willChange = '';
+                    rightPanel.style.willChange = '';
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+
+                }
+
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            });
+            
+            topicView.appendChild(splitEl);
+        }
+        
         if (tools.length > 0) {
-            const toolCount = tools.length;
-            const heightPct = 100 / toolCount;
-            rightContainer.innerHTML = tools.map(tool => 
-                `<div style="height:${heightPct}%;overflow:hidden;border-bottom:1px solid #eee;"><iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe></div>`
-            ).join('');
+            // Simple tab navigation - iframes at 100% with internal scrolling
+            let tabsHtml = '';
+            let framesHtml = '';
+            
+            tools.forEach((t, i) => {
+                let isActive = i === 0;
+                tabsHtml += `<button data-idx="${i}" class="tool-tab" style="
+                    padding:6px 14px;border:none;border-radius:6px;
+                    background:${isActive ? '#0284c7' : 'transparent'};
+                    color:${isActive ? '#fff' : '#475569'};
+                    cursor:pointer;font-weight:600;font-size:12px;
+                    transition:all 0.2s;letter-spacing:0.3px;
+                ">${t.name}</button>`;
+                framesHtml += `<iframe src="${t.path}" class="tool-iframe" data-idx="${i}" style="
+                    width:100%;height:100%;border:none;background:#fff;
+                    display:${isActive ? 'block' : 'none'};
+                "></iframe>`;
+            });
+            
+            rightContainer.innerHTML = `
+                <div class="tool-tabbar" style="
+                    height:40px;min-height:40px;
+                    background:linear-gradient(180deg,#f8fafc,#f1f5f9);
+                    border-bottom:1px solid #e2e8f0;
+                    display:flex;align-items:center;gap:4px;padding:0 12px;
+                    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+                ">${tabsHtml}</div>
+                <div class="tool-content" style="
+                    flex:1;overflow:hidden;
+                    background:#f8fafc;
+                ">${framesHtml}</div>`;
+            
+            // Tab click handlers
+            setTimeout(() => {
+                document.querySelectorAll('.tool-tab').forEach(btn => {
+                    btn.onclick = function() {
+                        let idx = parseInt(this.dataset.idx);
+                        document.querySelectorAll('.tool-iframe').forEach((f, i) => {
+                            f.style.display = (i === idx ? 'block' : 'none');
+                        });
+                        document.querySelectorAll('.tool-tab').forEach((b, i) => {
+                            b.style.background = (i === idx ? '#0284c7' : 'transparent');
+                            b.style.color = (i === idx ? '#fff' : '#475569');
+                        });
+                    };
+                });
+            }, 100);
         } else {
+            console.log('No tools for topic:', currentTopicInfo.topic);
             rightContainer.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">No tools available for this topic</div>`;
         }
         
@@ -2505,6 +2642,10 @@ function toggleImmersiveMode() {
         // Remove right container
         const rightContainer = topicView.querySelector('.immersive-right');
         if (rightContainer) rightContainer.remove();
+        
+        // Remove divider
+        const divider = topicView.querySelector('.immersive-divider');
+        if (divider) divider.remove();
     }
 }
 

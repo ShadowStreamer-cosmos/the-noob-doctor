@@ -1325,6 +1325,54 @@
     btn.style.display = 'none';
     exp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+  
+  // Auto-switch right panel tabs based on scroll position - bidirectional
+  (function() {
+    let currentTab = 0; // Start with first tab
+    let cooldown = false;
+    
+    window.addEventListener('scroll', function() {
+      if (cooldown) return;
+      
+      const invSection = document.getElementById('investigations');
+      
+      if (invSection) {
+        const rect = invSection.getBoundingClientRect();
+        
+        // When Investigations section is visible near top
+        if (rect.top > 50 && rect.top < 300) {
+          if (currentTab !== 1) {
+            currentTab = 1;
+            cooldown = true;
+            if (window.parent && window.parent.postMessage) {
+              window.parent.postMessage({ type: 'switchTool', index: 1 }, '*');
+            }
+            setTimeout(() => cooldown = false, 1500);
+          }
+        } else if (rect.top > 400 || rect.top < 0) {
+          // Scrolled away from Investigations
+          if (currentTab !== 0) {
+            currentTab = 0;
+            cooldown = true;
+            if (window.parent && window.parent.postMessage) {
+              window.parent.postMessage({ type: 'switchTool', index: 0 }, '*');
+            }
+            setTimeout(() => cooldown = false, 1500);
+          }
+        }
+      } else {
+        // No investigations section found, default to first tool
+        if (currentTab !== 0) {
+          currentTab = 0;
+          cooldown = true;
+          if (window.parent && window.parent.postMessage) {
+            window.parent.postMessage({ type: 'switchTool', index: 0 }, '*');
+          }
+          setTimeout(() => cooldown = false, 1500);
+        }
+      }
+    });
+  })();
 </script>
 </body>
 </html>

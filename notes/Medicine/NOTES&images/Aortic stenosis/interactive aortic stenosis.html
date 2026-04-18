@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aortic Stenosis | Hemodynamic Pro (Light)</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        /* @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap'); */
 
         :root {
             --bg: #f8fafc;
@@ -19,37 +19,43 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: var(--bg);
             background-image: radial-gradient(circle at 50% 0%, #e2e8f0 0%, transparent 70%);
             color: var(--text-main);
             margin: 0;
-            padding: 2rem;
+            padding: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            min-height: auto;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 0.8rem;
         }
 
         .header h1 {
             background: linear-gradient(to right, #0284c7, #7e22ce);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 3rem;
+            font-size: 1.5rem;
             margin: 0;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 0.8rem !important;
+            margin-top: 0.2rem !important;
         }
 
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
             width: 100%;
             max-width: 1200px;
         }
@@ -59,17 +65,17 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,1);
+            border-radius: 12px;
+            padding: 0.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
         .panel-header {
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.15rem;
+            letter-spacing: 0.1rem;
             color: var(--accent);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             font-weight: 800;
             display: flex;
             justify-content: space-between;
@@ -109,19 +115,20 @@
             grid-column: 1 / -1;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            padding: 2.5rem;
-            border-radius: 24px;
+            padding: 1rem;
+            border-radius: 12px;
             border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
 
         input[type="range"] {
             -webkit-appearance: none;
+            appearance: none;
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: #e2e8f0;
             border-radius: 4px;
-            margin: 1rem 0 3rem 0;
+            margin: 0.5rem 0 1rem 0;
             outline: none;
         }
 
@@ -141,25 +148,39 @@
 
         .info-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 3rem;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
         }
 
-        .info-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 1rem 0; color: var(--text-main); }
-        .info-desc { color: var(--text-dim); font-size: 1.1rem; line-height: 1.6; margin: 0; }
+        .info-title { font-size: 1rem; font-weight: 800; margin: 0 0 0.4rem 0; color: var(--text-main); }
+        .info-desc { color: var(--text-dim); font-size: 0.8rem; line-height: 1.5; margin: 0; }
         
         .pearl-chip {
             background: linear-gradient(145deg, rgba(225, 29, 72, 0.05), rgba(225, 29, 72, 0.01));
-            border-left: 4px solid var(--danger);
+            border-left: 3px solid var(--danger);
             color: #881337;
-            padding: 1.5rem;
-            border-radius: 0 16px 16px 0;
-            font-size: 1rem;
-            line-height: 1.5;
+            padding: 0.6rem 0.8rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.75rem;
+            line-height: 1.4;
         }
-        .pearl-chip strong { color: var(--danger); display: block; margin-bottom: 0.5rem; letter-spacing: 1px; font-size: 0.85rem; text-transform: uppercase;}
+        .pearl-chip strong { color: var(--danger); display: block; margin-bottom: 0.3rem; letter-spacing: 0.5px; font-size: 0.7rem; text-transform: uppercase;}
 
-        @media (max-width: 900px) { .info-grid { grid-template-columns: 1fr; } }
+        /* Full-screen standalone - restore larger sizes */
+        @media (min-width: 900px) {
+            body { padding: 1rem; }
+            .header { margin-bottom: 2rem; }
+            .header h1 { font-size: 2.5rem; }
+            .dashboard { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+            .panel { padding: 1.5rem; border-radius: 20px; }
+            .panel-header { font-size: 0.85rem; margin-bottom: 1rem; }
+            .controls-card { padding: 2rem; }
+            input[type="range"] { margin: 0.8rem 0 2rem 0; }
+            .info-grid { grid-template-columns: 1.5fr 1fr; gap: 2rem; }
+            .info-title { font-size: 1.5rem; }
+            .info-desc { font-size: 1rem; }
+            .pearl-chip { padding: 1.2rem; font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
