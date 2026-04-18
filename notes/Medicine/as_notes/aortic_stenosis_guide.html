@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aortic Stenosis — The Ultimate Exam Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0392B;
+    --red-light: #E8A09A;
+    --red-pale: #FDF2F1;
+    --red-mid: #F4C6C2;
+    --ink: #1A1A2E;
+    --ink-soft: #3D3D5C;
+    --ink-muted: #7B7B9A;
+    --cream: #FEFCF9;
+    --warm-white: #FFF8F5;
+    --gold: #D4A017;
+    --gold-light: #F5E6B8;
+    --green: #1A7A4A;
+    --green-light: #D4F0E3;
+    --blue: #1A5C8A;
+    --blue-light: #D4E8F5;
+    --border: #E8E0D8;
+    --shadow: 0 4px 20px rgba(26,26,46,0.08);
+    --shadow-card: 0 2px 12px rgba(26,26,46,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 64px 40px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '♥';
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    font-size: 280px;
+    color: rgba(192,57,43,0.12);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--red-light); }
+  .hero p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    font-weight: 300;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .hero-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.8);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── NAV ── */
+  .toc-bar {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .toc-inner {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    scrollbar-width: none;
+  }
+  .toc-inner::-webkit-scrollbar { display: none; }
+  .toc-link {
+    padding: 14px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .toc-link:hover { color: var(--red); border-bottom-color: var(--red); }
+  .toc-link.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
+
+  /* ── SECTIONS ── */
+  section { padding: 56px 0 32px; }
+  section + section { border-top: 1px solid var(--border); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 24px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title .icon { font-size: 18px; }
+
+  /* ── HIGHLIGHT BOXES ── */
+  .box-red { background: var(--red-pale); border-left: 4px solid var(--red); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .box-gold { background: var(--gold-light); border-left: 4px solid var(--gold); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .box-green { background: var(--green-light); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+  .box-blue { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 16px 0; }
+
+  .box-red strong, .box-gold strong, .box-green strong, .box-blue strong {
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .box-red strong { color: var(--red); }
+  .box-gold strong { color: #A07800; }
+  .box-green strong { color: var(--green); }
+  .box-blue strong { color: var(--blue); }
+
+  /* ── MNEMONIC ── */
+  .mnemonic-box {
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFF3D0 100%);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .mnemonic-badge {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--gold);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
+  .mnemonic-word {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+  }
+  .mnemonic-list { list-style: none; }
+  .mnemonic-list li {
+    padding: 5px 0;
+    font-size: 15px;
+    display: flex;
+    gap: 10px;
+  }
+  .mnemonic-letter {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--gold);
+    width: 22px;
+    flex-shrink: 0;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .compare-table th {
+    background: #4a5568;
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .compare-table th:first-child { background: var(--red); }
+  .compare-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: var(--warm-white); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child {
+    font-weight: 600;
+    color: var(--red);
+    background: var(--red-pale) !important;
+    width: 180px;
+  }
+
+  /* ── MCQ ── */
+  .mcq-block {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+  }
+  .mcq-header {
+    background: #4a5568;
+    color: white;
+    padding: 16px 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .mcq-num {
+    background: var(--red);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .mcq-q { font-size: 14.5px; line-height: 1.6; font-weight: 400; }
+  .mcq-scenario {
+    background: rgba(192,57,43,0.12);
+    border-left: 3px solid var(--red-light);
+    padding: 10px 16px;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 10px;
+    border-radius: 0 4px 4px 0;
+  }
+  .mcq-options { padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .mcq-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    background: var(--warm-white);
+  }
+  .mcq-option:hover { border-color: var(--red); background: var(--red-pale); }
+  .mcq-option.correct { border-color: var(--green); background: var(--green-light); }
+  .mcq-option.wrong { border-color: var(--red); background: var(--red-pale); }
+  .mcq-option.revealed-correct { border-color: var(--green) !important; background: var(--green-light) !important; }
+  .option-letter {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--ink-muted);
+    width: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .mcq-option.correct .option-letter { color: var(--green); }
+  .mcq-option.wrong .option-letter { color: var(--red); }
+  .mcq-option.revealed-correct .option-letter { color: var(--green); }
+  .mcq-explain {
+    display: none;
+    margin: 0 22px 20px;
+    background: #F0F7FF;
+    border: 1.5px solid #B3D4F0;
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .mcq-explain.show { display: block; }
+  .explain-title {
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .show-btn {
+    display: block;
+    width: calc(100% - 44px);
+    margin: 0 22px 20px;
+    background: #4a5568;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .show-btn:hover { background: var(--red); }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── PILL LIST ── */
+  .pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .pill-red { background: var(--red-mid); color: #7A1510; }
+  .pill-gold { background: var(--gold-light); color: #7A5500; }
+  .pill-green { background: var(--green-light); color: #0D4A2A; }
+  .pill-blue { background: var(--blue-light); color: #0D3A5C; }
+  .pill-gray { background: #EBEBF0; color: var(--ink-soft); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--red), var(--gold));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--red);
+  }
+  .timeline-label {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .timeline-content { font-size: 14px; color: var(--ink-soft); }
+
+  /* ── ECG VISUAL ── */
+  .heart-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+  }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--red);
+    display: block;
+  }
+  .stat-label { font-size: 12px; color: var(--ink-muted); margin-top: 4px; }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: #4a5568;
+    color: white;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .callout::after {
+    content: '!';
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.05);
+  }
+  .callout-title { font-weight: 700; color: var(--red-light); margin-bottom: 8px; font-size: 15px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #4a5568;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 32px;
+    font-size: 13px;
+    margin-top: 40px;
+  }
+  footer strong { color: white; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  section { animation: fadeUp 0.5s ease both; }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+  .badge-danger { background: #FDECEA; color: #C0392B; }
+  .badge-warning { background: var(--gold-light); color: #8A5E00; }
+  .badge-info { background: var(--blue-light); color: #1A5C8A; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--red-mid); border-radius: 3px; }
+
+  hr.fancy {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--red-mid), transparent);
+    margin: 28px 0;
+  }
+
+  .murmur-visual {
+    background: #4a5568;
+    border-radius: 12px;
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    color: white;
+    font-size: 13px;
+    margin: 16px 0;
+    line-height: 2;
+  }
+  .murmur-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+  }
+  .murmur-bar {
+    height: 10px;
+    border-radius: 4px;
+    background: var(--red);
+  }
+  .murmur-label { color: rgba(255,255,255,0.6); font-size: 12px; min-width: 60px; }
+
+  .two-col-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+  }
+  @media (max-width: 520px) { .two-col-list { grid-template-columns: 1fr; } }
+  .two-col-list li {
+    font-size: 14px;
+    color: var(--ink-soft);
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .two-col-list li::before {
+    content: '→';
+    color: var(--red);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  p { margin-bottom: 12px; font-size: 15px; color: var(--ink-soft); }
+  strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">Cardiology · High Yield</div>
+    <h1>Aortic<br><span>Stenosis</span></h1>
+    <p>Everything you need to crush the exam — mnemonics, clinical scenarios, MCQs, and the kind of intuition your attending wishes you had.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">📚 Pathophysiology</span>
+      <span class="hero-tag">🩺 Clinical Features</span>
+      <span class="hero-tag">❤️ Murmur</span>
+      <span class="hero-tag">🧪 Investigations</span>
+      <span class="hero-tag">💊 Management</span>
+      <span class="hero-tag">🧠 8 MCQs</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="toc-bar">
+  <div class="container">
+    <div class="toc-inner">
+      <a href="#basics" class="toc-link">Basics</a>
+      <a href="#pathophys" class="toc-link">Pathophysiology</a>
+      <a href="#features" class="toc-link">Clinical Features</a>
+      <a href="#murmur" class="toc-link">Murmur</a>
+      <a href="#investigations" class="toc-link">Investigations</a>
+      <a href="#management" class="toc-link">Management</a>
+      <a href="#mcqs" class="toc-link">MCQs</a>
+      <a href="#bonus" class="toc-link">Pearls</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════
+     SECTION 1: THE BASICS
+══════════════════════════════════════ -->
+<section id="basics">
+  <div class="section-label">Section 01</div>
+  <h2 class="section-title"><span>01.</span> The Big Picture — What Even Is This?</h2>
+
+  <p>Aortic Stenosis (AS) is the <strong>narrowing of the aortic valve</strong>, obstructing outflow from the Left Ventricle (LV) to the aorta. It's the <strong>most common valvular heart disease in developed countries</strong> and one of the highest-yield topics in cardiology exams.</p>
+
+  <div class="box-gold">
+    <strong>🧠 The Genius Analogy</strong>
+    Imagine the LV is a bouncer trying to push a crowd through a doorway. Aortic Stenosis is like that doorway getting progressively narrower. The bouncer (LV) has to push <em>harder and harder</em> — and eventually gets exhausted. That's concentric hypertrophy → diastolic dysfunction → failure.
+  </div>
+  
+  <div style="text-align: center; margin: 20px 0;">
+    <img src="https://res.cloudinary.com/ddoysbcss/image/upload/v1776479134/noob-doctor/BouncerAnalogy.png" alt="Bouncer Analogy" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+    <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px;">The bouncer (LV) works harder as the door (aortic valve) gets narrower</p>
+  </div>
+
+  <div class="section-label" style="margin-top:28px">Causes by Age</div>
+
+  <div class="heart-stats">
+    <div class="stat-card">
+      <span class="stat-number">&lt;30</span>
+      <div class="stat-label">Congenital bicuspid aortic valve</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">30–60</span>
+      <div class="stat-label">Bicuspid valve + Rheumatic fever</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">&gt;60</span>
+      <div class="stat-label">Calcific (senile) degeneration</div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin: 20px 0;">
+    <img src="https://res.cloudinary.com/ddoysbcss/image/upload/v1776481584/noob-doctor/NormalvsBicuspidvsCalcificAorticValve.png" alt="Normal vs Bicuspid vs Calcific Aortic Valve" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+    <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px;">Types of aortic valve: Normal (left), Bicuspid (middle), Calcific (right)</p>
+  </div>
+
+  <div class="box-red">
+    <strong>⚡ Exam Fact</strong>
+    <strong>Bicuspid aortic valve</strong> is the most common congenital cardiac anomaly (1–2% of population). It's associated with <strong>coarctation of the aorta</strong> and <strong>Turner syndrome</strong>. Most patients with bicuspid AV develop AS by age 50–60.
+  </div>
+
+  <div class="mnemonic-box">
+    <div class="mnemonic-badge">Mnemonic</div>
+    <div class="mnemonic-word">C · B · C</div>
+    <ul class="mnemonic-list">
+      <li><span class="mnemonic-letter">C</span><span><strong>Congenital</strong> — bicuspid valve (young patients)</span></li>
+      <li><span class="mnemonic-letter">B</span><span><strong>Bicuspid + Rheumatic</strong> — middle-aged patients</span></li>
+      <li><span class="mnemonic-letter">C</span><span><strong>Calcific</strong> — elderly patients (most common overall)</span></li>
+    </ul>
+  </div>
+
+  <table class="compare-table" style="margin-top:20px">
+    <tr>
+      <th>Feature</th>
+      <th>Calcific AS</th>
+      <th>Rheumatic AS</th>
+      <th>Bicuspid AS</th>
+    </tr>
+    <tr><td>Age</td><td>&gt;65 yrs</td><td>Any (common 30s–50s)</td><td>30–60 yrs</td></tr>
+    <tr><td>Commissures</td><td>Not fused</td><td>Fused ✅</td><td>Not fused</td></tr>
+    <tr><td>MR/AR co-exist?</td><td>Rare</td><td>Common ✅</td><td>AR possible</td></tr>
+    <tr><td>Pathology</td><td>Lipid + calcium deposits</td><td>Immune-mediated fibrosis</td><td>Turbulent flow → calcification</td></tr>
+  </table>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 2: PATHOPHYSIOLOGY
+══════════════════════════════════════ -->
+<section id="pathophys">
+  <div class="section-label">Section 02</div>
+  <h2 class="section-title"><span>02.</span> Pathophysiology — The Domino Effect</h2>
+
+  <p>This is where it all connects. Understand the cascade, and the clinical features make perfect sense.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">Step 1</div>
+      <div class="timeline-content"><strong>Valve narrows</strong> → Increased resistance to LV outflow → Pressure overload on LV (not volume overload!)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Step 2</div>
+      <div class="timeline-content"><strong>Concentric LV hypertrophy</strong> — wall thickens to compensate (Laplace's law: ↑wall thickness reduces wall stress)</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Step 3</div>
+      <div class="timeline-content"><strong>Diastolic dysfunction</strong> — thick, stiff ventricle can't relax properly → Elevated LVEDP → Pulmonary congestion</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Step 4</div>
+      <div class="timeline-content"><strong>Fixed cardiac output</strong> — narrowed valve limits forward flow → symptoms on exertion, then at rest</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Step 5 (Late)</div>
+      <div class="timeline-content"><strong>LV dilation + systolic failure</strong> — the "exhausted bouncer" → EF drops → Cardiogenic shock territory</div>
+    </div>
+  </div>
+
+  <div class="box-blue">
+    <strong>💡 KEY DISTINCTION</strong>
+    AS = <strong>Pressure overload</strong> → Concentric hypertrophy (wall ↑, cavity same/small)<br>
+    AR/MR = <strong>Volume overload</strong> → Eccentric hypertrophy (cavity dilates)<br><br>
+    <em>On echo: In AS you'll see ↑wall thickness. In AR you'll see ↑LV cavity size.</em>
+  </div>
+
+  <div class="box-red">
+    <strong>⚡ Why Angina in AS? (Even without CAD!)</strong>
+    3 reasons:<br>
+    1. Hypertrophied muscle = more O₂ demand<br>
+    2. Compressed subendocardial vessels (↑LVEDP compresses from inside)<br>
+    3. ↓Perfusion pressure across coronary ostia (narrow valve limits diastolic runoff)<br>
+    <em>In fact ~50% of AS patients with angina have normal coronaries.</em>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 3: CLINICAL FEATURES
+══════════════════════════════════════ -->
+<section id="features">
+  <div class="section-label">Section 03</div>
+  <h2 class="section-title"><span>03.</span> Clinical Features — The Holy Trinity + Signs</h2>
+
+  <div class="mnemonic-box">
+    <div class="mnemonic-badge">The Most Important Mnemonic in AS</div>
+    <div class="mnemonic-word">S · A · D</div>
+    <ul class="mnemonic-list">
+      <li><span class="mnemonic-letter">S</span><span><strong>Syncope</strong> — mean survival <strong>3 years</strong> after onset</span></li>
+      <li><span class="mnemonic-letter">A</span><span><strong>Angina</strong> — mean survival <strong>5 years</strong> after onset</span></li>
+      <li><span class="mnemonic-letter">D</span><span><strong>Dyspnea (Heart Failure)</strong> — mean survival <strong>1–2 years</strong> after onset</span></li>
+    </ul>
+    <div style="margin-top:14px; font-size:13px; color:#7A5500; background: rgba(212,160,23,0.15); padding: 10px 14px; border-radius:6px;">
+      💡 <strong>SAD = Sad prognosis.</strong> Dyspnea = worst prognosis (shortest survival). This is extremely high-yield for MCQs asking "which symptom indicates worst prognosis?"
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🩺</span> Pulse</div>
+      <p style="font-size:14px"><strong>Slow-rising, plateau (anacrotic) pulse</strong> — also called "Pulsus parvus et tardus" (small and slow). The narrow valve slows and dampens the pressure wave.</p>
+      <div class="badge badge-danger">🎯 High Yield</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">💓</span> Apex Beat</div>
+      <p style="font-size:14px"><strong>Heaving, sustained, undisplaced apex</strong> — heaving because of hypertrophy; undisplaced because no dilation (concentric, not eccentric).</p>
+      <div class="badge badge-danger">🎯 High Yield</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🫀</span> BP</div>
+      <p style="font-size:14px"><strong>Narrow pulse pressure</strong> — because forward flow is limited (low SBP) + compensatory peripheral resistance maintained (DBP normal/elevated).</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🖐️</span> Thrill</div>
+      <p style="font-size:14px">Systolic thrill palpable in the <strong>aortic area (2nd RICS)</strong> and/or carotids. A "purring cat" sensation.</p>
+    </div>
+  </div>
+
+  <div class="box-green">
+    <strong>🔑 Signs of Severity — What Examiners Love</strong>
+    <ul class="two-col-list" style="margin-top:10px">
+      <li>Soft/absent A2 (calcified valve)</li>
+      <li>Long, late-peaking murmur</li>
+      <li>S4 gallop (stiff LV)</li>
+      <li>Narrow pulse pressure</li>
+      <li>Reverse splitting of S2</li>
+      <li>Slow-rising pulse</li>
+      <li>LV heave</li>
+      <li>Exertional syncope</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">⚠️ CRITICAL EXAM TRAP: AS vs HOCM</div>
+    Both cause <strong>exertional syncope + harsh systolic murmur + LVH</strong>. How to differentiate?<br><br>
+    AS murmur: Increases with <strong>Squatting</strong> (↑venous return → ↑gradient), decreases with standing<br>
+    HOCM murmur: Increases with <strong>Valsalva + Standing</strong> (↓venous return → worse obstruction)<br><br>
+    <em>Also: AS has slow-rising pulse, HOCM has bifid (spike-and-dome) pulse.</em>
+  </div>
+
+  <div class="mnemonic-box" style="margin-top:20px">
+    <div class="mnemonic-badge">Signs Mnemonic</div>
+    <div class="mnemonic-word">PASS</div>
+    <ul class="mnemonic-list">
+      <li><span class="mnemonic-letter">P</span><span><strong>Plateau/Parvus et Tardus</strong> pulse (slow-rising)</span></li>
+      <li><span class="mnemonic-letter">A</span><span><strong>Absent A2</strong> (in severe AS)</span></li>
+      <li><span class="mnemonic-letter">S</span><span><strong>Sustained heave</strong> at apex</span></li>
+      <li><span class="mnemonic-letter">S</span><span><strong>Systolic thrill</strong> in aortic area</span></li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 4: MURMUR
+══════════════════════════════════════ -->
+<section id="murmur">
+  <div class="section-label">Section 04</div>
+  <h2 class="section-title"><span>04.</span> The Murmur — All The Juicy Details</h2>
+
+  <div class="murmur-visual">
+    <div style="color: rgba(255,255,255,0.5); font-size:11px; margin-bottom:14px; letter-spacing:1px;">CARDIAC CYCLE TIMELINE →</div>
+    <div class="murmur-line"><span class="murmur-label">S1</span><div style="width:12px; height:18px; background:#AAA; border-radius:2px"></div><span style="color:rgba(255,255,255,0.7); margin-left:4px">Lub</span></div>
+    <div class="murmur-line"><span class="murmur-label">SYSTOLE</span><div class="murmur-bar" style="width:200px; background: linear-gradient(to right, #C0392B, #E74C3C, #C0392B); clip-path: polygon(0 50%, 10% 0%, 60% 0%, 100% 50%, 60% 100%, 10% 100%);"></div><span style="color:rgba(255,255,255,0.7); margin-left:8px">↑ Diamond/Crescendo-Decrescendo</span></div>
+    <div class="murmur-line"><span class="murmur-label">S2</span><div style="width:12px; height:18px; background:#AAA; border-radius:2px"></div><span style="color:rgba(255,255,255,0.7); margin-left:4px">Dub (soft/absent A2)</span></div>
+    <div style="color: rgba(255,255,255,0.45); font-size:12px; margin-top:14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:12px">
+      💡 "Ejection Systolic Murmur" = starts AFTER S1 (unlike MR/VSD which are pan-systolic)
+    </div>
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>Feature</th>
+      <th>Details</th>
+    </tr>
+    <tr><td>Type</td><td>Ejection Systolic (Crescendo-decrescendo / Diamond-shaped)</td></tr>
+    <tr><td>Best heard</td><td><strong>2nd Right Intercostal Space</strong> (aortic area)</td></tr>
+    <tr><td>Radiation</td><td><strong>Carotids</strong> bilaterally (classic!)</td></tr>
+    <tr><td>Character</td><td>Harsh, rough, "rasping"</td></tr>
+    <tr><td>Stethoscope piece</td><td><strong>Diaphragm</strong> (high frequency)</td></tr>
+    <tr><td>Position</td><td>↑ with patient leaning <strong>forward + in expiration</strong></td></tr>
+    <tr><td>Severity marker</td><td>Later peak = more severe (late-peaking murmur)</td></tr>
+    <tr><td>A2</td><td>Soft or absent in severe AS</td></tr>
+  </table>
+
+  <div class="box-red">
+    <strong>🔥 Gallavardin Phenomenon (Exam Favourite!)</strong>
+    In elderly calcific AS, the harsh murmur at the base may be transmitted to the apex where it <em>sounds musical</em> — mimicking MR. This is the <strong>Gallavardin phenomenon</strong>.
+    Key: the musical component at the apex is NOT due to MR — it's the same AS murmur being filtered as it radiates.
+  </div>
+
+  <div class="box-gold">
+    <strong>💡 Bedside Tricks to Increase the Murmur</strong>
+    • <strong>Squatting</strong> → ↑venous return → ↑SV → louder AS murmur<br>
+    • <strong>Handgrip</strong> → ↑afterload → may slightly ↑ murmur<br>
+    • <strong>Amyl nitrite</strong> → ↓afterload → ↑gradient → loudest AS murmur<br><br>
+    Conversely: Valsalva & standing → ↓venous return → ↓ murmur
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 5: INVESTIGATIONS
+══════════════════════════════════════ -->
+<section id="investigations">
+  <div class="section-label">Section 05</div>
+  <h2 class="section-title"><span>05.</span> Investigations — What You'll Be Asked</h2>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🫀</span> ECG Findings</div>
+      <ul class="two-col-list">
+        <li>LVH (Sokolow-Lyon criteria)</li>
+        <li>ST depression (strain pattern)</li>
+        <li>Left axis deviation</li>
+        <li>LBBB (advanced)</li>
+        <li>T-wave inversion (leads I, aVL, V5-V6)</li>
+        <li>P-mitrale (LAE)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📻</span> CXR Findings</div>
+      <ul class="two-col-list">
+        <li>Post-stenotic aortic dilation</li>
+        <li>Normal heart size (early)</li>
+        <li>Cardiomegaly (late)</li>
+        <li>Calcification of aortic valve</li>
+        <li>Pulmonary congestion (late)</li>
+        <li>Boot-shaped heart (late)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box-green">
+    <strong>🔑 Echocardiography — THE Investigation of Choice</strong>
+    Echo (Doppler) tells you everything. Know this table:
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>Parameter</th>
+      <th>Mild</th>
+      <th>Moderate</th>
+      <th>Severe</th>
+    </tr>
+    <tr><td>Valve Area (AVA)</td><td>&gt;1.5 cm²</td><td>1.0–1.5 cm²</td><td><strong>&lt;1.0 cm²</strong></td></tr>
+    <tr><td>Mean Gradient</td><td>&lt;25 mmHg</td><td>25–40 mmHg</td><td><strong>&gt;40 mmHg</strong></td></tr>
+    <tr><td>Peak Velocity</td><td>&lt;3.0 m/s</td><td>3–4 m/s</td><td><strong>&gt;4.0 m/s</strong></td></tr>
+    <tr><td>Jet Velocity</td><td>Low</td><td>Moderate</td><td>High</td></tr>
+  </table>
+
+  <div class="mnemonic-box" style="margin-top:20px">
+    <div class="mnemonic-badge">Echo Severity Mnemonic</div>
+    <div class="mnemonic-word">1-4-4</div>
+    <ul class="mnemonic-list">
+      <li><span class="mnemonic-letter">1</span><span>AVA <strong>&lt;1.0 cm²</strong> = Severe</span></li>
+      <li><span class="mnemonic-letter">4</span><span>Mean gradient <strong>&gt;40 mmHg</strong> = Severe</span></li>
+      <li><span class="mnemonic-letter">4</span><span>Peak velocity <strong>&gt;4.0 m/s</strong> = Severe</span></li>
+    </ul>
+  </div>
+
+  <div class="box-blue">
+    <strong>💡 Low-Flow Low-Gradient AS — The Tricky Scenario</strong>
+    Some patients have severe AS but <em>low gradient</em> because the LV is failing and can't generate enough pressure. How to detect true severity?<br><br>
+    → <strong>Dobutamine stress echocardiography</strong>: If gradient increases with dobutamine = true severe AS (the valve is the problem). If gradient stays low = pseudo-severe AS (the LV is the problem).<br><br>
+    Classic boards question: "Patient with AVA &lt;1.0 cm² but mean gradient of 20 mmHg, EF of 25% — what test?"
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔬</span> Cardiac Catheterization</div>
+    <p style="font-size:14px">Reserved for when echo is inconclusive OR pre-operatively to check coronary anatomy (done before valve surgery in adults &gt;40 years). The <strong>Gorlin formula</strong> calculates valve area from hemodynamic data.</p>
+    <div class="badge badge-warning">⚠️ NOT first-line. Echo is first!</div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 6: MANAGEMENT
+══════════════════════════════════════ -->
+<section id="management">
+  <div class="section-label">Section 06</div>
+  <h2 class="section-title"><span>06.</span> Management — Decisions, Decisions</h2>
+
+  <div class="box-red">
+    <strong>🚨 THE MOST IMPORTANT MANAGEMENT FACT</strong>
+    AS is a <strong>mechanical problem</strong> requiring a <strong>mechanical solution</strong>. No drug has been shown to alter the course of AS. Medical management is only for symptom control and bridge therapy.
+  </div>
+
+  <div class="mnemonic-box">
+    <div class="mnemonic-badge">Indications for AVR Mnemonic</div>
+    <div class="mnemonic-word">SAVR</div>
+    <ul class="mnemonic-list">
+      <li><span class="mnemonic-letter">S</span><span><strong>Symptomatic</strong> severe AS (ANY symptom from SAD = operate!)</span></li>
+      <li><span class="mnemonic-letter">A</span><span><strong>Asymptomatic</strong> severe AS + <strong>EF &lt;50%</strong> or undergoing other cardiac surgery</span></li>
+      <li><span class="mnemonic-letter">V</span><span><strong>Very severe</strong> (AVA &lt;0.6 cm², gradient &gt;60 mmHg) even if asymptomatic</span></li>
+      <li><span class="mnemonic-letter">R</span><span><strong>Rapid progression</strong> on serial echos + exercise testing abnormalities</span></li>
+    </ul>
+  </div>
+
+  <table class="compare-table">
+    <tr>
+      <th>Option</th>
+      <th>SAVR</th>
+      <th>TAVR</th>
+    </tr>
+    <tr><td>Full name</td><td>Surgical AVR</td><td>Transcatheter AVR</td></tr>
+    <tr><td>Ideal patient</td><td>Low/medium surgical risk, &lt;65–70 yrs</td><td>High/prohibitive surgical risk, elderly</td></tr>
+    <tr><td>Durability</td><td>Excellent (&gt;15–20 years)</td><td>Shorter (10–15 years, evolving)</td></tr>
+    <tr><td>Access</td><td>Open heart, sternotomy</td><td>Femoral artery (usually)</td></tr>
+    <tr><td>Recovery</td><td>Longer</td><td>Faster</td></tr>
+    <tr><td>Complications</td><td>AF, bleeding, stroke</td><td>Paravalvular leak, need for pacemaker, stroke</td></tr>
+  </table>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><span class="icon">💊</span> Medical Therapy — What NOT to Do (Equally Important!)</div>
+    <div class="grid-2" style="margin-top:10px">
+      <div class="box-red" style="margin:0">
+        <strong>❌ CONTRAINDICATED</strong>
+        • Vasodilators (nitrates, ACEi, ARBs) — can precipitate severe hypotension<br>
+        • Vigorous diuretics — can drop preload dangerously<br>
+        • Beta-blockers (in decompensated) — worsen CO<br>
+        • Inotropes (unless bridge to surgery)
+      </div>
+      <div class="box-green" style="margin:0">
+        <strong>✅ ACCEPTABLE / USED</strong>
+        • Diuretics (gentle) for congestion<br>
+        • Beta-blockers for AF rate control<br>
+        • Statins — observational benefit in calcific AS (unproven)<br>
+        • Anticoagulation for AF<br>
+        • Endocarditis prophylaxis (if required)
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:20px">
+    <div class="callout-title">🎯 Balloon Valvuloplasty (BAV) — When is it used?</div>
+    BAV is NOT a definitive treatment for adult AS — the stenosis recurs within 6–12 months.<br><br>
+    <strong>Uses in adults:</strong> Bridge to SAVR/TAVR in hemodynamically unstable patients, palliative in non-surgical candidates, or during pregnancy (preferred over SAVR).<br><br>
+    <strong>In children with congenital AS:</strong> BAV IS the preferred initial treatment!
+  </div>
+
+  <div class="box-gold">
+    <strong>🤰 AS in Pregnancy — High Yield Clinical Scenario</strong>
+    Pregnancy is HIGH RISK in severe AS because:<br>
+    • ↑cardiac output demand (~50% increase)<br>
+    • ↓SVR of pregnancy → fixed output can't compensate → decompensation<br><br>
+    Management: Close monitoring, avoid vigorous exercise, balloon valvuloplasty if intervention needed, avoid vasodilators/diuretics aggressively.
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SECTION 7: MCQs
+══════════════════════════════════════ -->
+<section id="mcqs">
+  <div class="section-label">Section 07</div>
+  <h2 class="section-title"><span>07.</span> MCQs — Let's See What You've Got 🧠</h2>
+  <p>Click an option to check if you're right, then reveal the full explanation.</p>
+
+  <!-- MCQ 1 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q1</span>
+      <div>
+        <div class="mcq-scenario">A 72-year-old man presents with exertional chest pain for 4 months and a single episode of fainting while climbing stairs. He has no history of CAD. Exam reveals a harsh systolic murmur at the 2nd RICS radiating to the carotids, slow-rising pulse, and a sustained apex beat.</div>
+        <div class="mcq-q">What is the expected mean survival in this patient given his current dominant symptom?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 1)"><span class="option-letter">A</span> 1–2 years due to development of heart failure</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 1)"><span class="option-letter">B</span> 5 years due to angina</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 1)"><span class="option-letter">C</span> 3 years due to syncope</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 1)"><span class="option-letter">D</span> 8 years, as symptoms are only mild</div>
+    </div>
+    <button class="show-btn" id="btn1" onclick="showExplanation(1)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp1">
+      <div class="explain-title">✅ Answer: C — 3 years (Syncope)</div>
+      The dominant symptom here is <strong>syncope</strong> (fainting while climbing stairs = exertional syncope). Using the SAD mnemonic: Syncope → 3-year mean survival; Angina → 5-year; Dyspnea (HF) → 1–2 years.<br><br>
+      Note: This patient also has angina, but the question asks about the <em>dominant symptom</em> listed — the syncope. The mechanism of exertional syncope in AS is: during exercise, fixed cardiac output + peripheral vasodilation (exercise) → sudden ↓BP → cerebral hypoperfusion. Also, baroreceptor reflex triggering vasovagal syncope may play a role.
+    </div>
+  </div>
+
+  <!-- MCQ 2 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q2</span>
+      <div>
+        <div class="mcq-scenario">A 65-year-old woman with known severe AS (AVA 0.8 cm², mean gradient 45 mmHg) is referred for evaluation. She has NO symptoms — no chest pain, no syncope, no breathlessness. Her ECG shows LVH. Echocardiography reveals EF of 42%.</div>
+        <div class="mcq-q">What is the most appropriate next step?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 2)"><span class="option-letter">A</span> Watchful waiting with serial echos every 6 months</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 2)"><span class="option-letter">B</span> Aortic valve replacement</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 2)"><span class="option-letter">C</span> Start ACE inhibitor and diuretic</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 2)"><span class="option-letter">D</span> Dobutamine stress echocardiography</div>
+    </div>
+    <button class="show-btn" id="btn2" onclick="showExplanation(2)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp2">
+      <div class="explain-title">✅ Answer: B — Aortic Valve Replacement</div>
+      Even though she has <strong>NO symptoms</strong>, AVR is indicated because of <strong>EF &lt;50%</strong> in the setting of severe AS. This is a Class I indication per guidelines.<br><br>
+      Remember the SAVR mnemonic: "A = Asymptomatic severe AS + EF &lt;50%" — this patient qualifies!<br><br>
+      Option C is dangerous — ACEi can cause severe hypotension in AS (vasodilators are generally contraindicated). Dobutamine echo (D) is used in <em>low-gradient</em> AS to distinguish true severe from pseudo-severe — not indicated here where the gradient is clearly elevated (45 mmHg &gt;40).
+    </div>
+  </div>
+
+  <!-- MCQ 3 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q3</span>
+      <div>
+        <div class="mcq-scenario">A 45-year-old man presents with exertional breathlessness. Auscultation reveals a systolic murmur at the left sternal border that INCREASES with Valsalva maneuver and standing, and DECREASES with squatting. He has a family history of sudden cardiac death.</div>
+        <div class="mcq-q">Which of the following findings most differentiates this condition from aortic stenosis?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 3)"><span class="option-letter">A</span> Presence of LVH on ECG</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 3)"><span class="option-letter">B</span> Murmur increases with Valsalva and standing</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 3)"><span class="option-letter">C</span> History of exertional symptoms</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 3)"><span class="option-letter">D</span> Sustained apex beat on examination</div>
+    </div>
+    <button class="show-btn" id="btn3" onclick="showExplanation(3)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp3">
+      <div class="explain-title">✅ Answer: B — Murmur increases with Valsalva and standing</div>
+      This is <strong>HOCM (Hypertrophic Obstructive Cardiomyopathy)</strong>. The key differentiator is dynamic obstruction in HOCM — anything that reduces LV filling (↓preload) increases obstruction and murmur loudness.<br><br>
+      <strong>Valsalva → ↓venous return → ↓LV volume → LVOT obstruction worsens → murmur louder (HOCM)</strong><br>
+      <strong>Squatting → ↑venous return → ↑LV volume → obstruction lessens → murmur softer (HOCM)</strong><br><br>
+      In AS: the opposite — squatting/↑preload = louder murmur. LVH, exertional symptoms, and heaving apex can occur in BOTH conditions.
+    </div>
+  </div>
+
+  <!-- MCQ 4 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q4</span>
+      <div>
+        <div class="mcq-scenario">An 80-year-old woman with severe symptomatic AS is deemed high surgical risk due to severe COPD, prior stroke, and frailty. Her STS score is 12%. Echo confirms AVA 0.7 cm², mean gradient 50 mmHg, EF 55%.</div>
+        <div class="mcq-q">What is the most appropriate intervention?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 4)"><span class="option-letter">A</span> Surgical AVR (SAVR)</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 4)"><span class="option-letter">B</span> Transcatheter AVR (TAVR)</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 4)"><span class="option-letter">C</span> Balloon aortic valvuloplasty as definitive therapy</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 4)"><span class="option-letter">D</span> Conservative management with diuretics and ACE inhibitor</div>
+    </div>
+    <button class="show-btn" id="btn4" onclick="showExplanation(4)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp4">
+      <div class="explain-title">✅ Answer: B — TAVR</div>
+      She is symptomatic severe AS + high surgical risk (STS &gt;8% = high risk). This is the <strong>classic TAVR indication</strong>.<br><br>
+      TAVR (Transcatheter AVR) = valve delivered percutaneously via femoral artery, avoiding open surgery. Landmark trials (PARTNER trials) showed TAVR superior to medical therapy in inoperable patients, and non-inferior to SAVR in high-risk patients.<br><br>
+      BAV (C) is NOT definitive in adults — stenosis recurs within 6–12 months. Option D with ACEi is dangerous in AS (vasodilator → hypotension). Medical therapy has NOT been shown to improve survival in AS.
+    </div>
+  </div>
+
+  <!-- MCQ 5 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q5</span>
+      <div>
+        <div class="mcq-scenario">A 58-year-old man with severe AS (AVA 0.9 cm²) has EF of 28% and a mean gradient of only 18 mmHg. Echo shows a heavily calcified valve. You want to determine if the true valve area is indeed severe or if this is pseudo-severe AS from a failing LV.</div>
+        <div class="mcq-q">Which investigation will best help you differentiate?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 5)"><span class="option-letter">A</span> CT calcium scoring of the aortic valve</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 5)"><span class="option-letter">B</span> Exercise stress echocardiography</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 5)"><span class="option-letter">C</span> Low-dose dobutamine stress echocardiography</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 5)"><span class="option-letter">D</span> Cardiac MRI with gadolinium</div>
+    </div>
+    <button class="show-btn" id="btn5" onclick="showExplanation(5)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp5">
+      <div class="explain-title">✅ Answer: C — Low-dose dobutamine stress echo</div>
+      This is the <strong>classic Low-Flow Low-Gradient (LFLG) AS scenario</strong>.<br><br>
+      When EF is severely reduced, the LV can't generate enough force to create a high gradient — so the gradient appears low DESPITE severe AS. This can be "pseudo-severe" where the valve is actually OK but looks small because the LV isn't opening it fully.<br><br>
+      <strong>Dobutamine stress echo interpretation:</strong><br>
+      • ↑ gradient + ↑ SV → <strong>True severe AS</strong> (fixed anatomic stenosis, valve is the culprit → AVR)<br>
+      • No ↑ gradient, small ↑ SV → <strong>Pseudo-severe AS</strong> (valve opens more, cardiomyopathy is the real problem)<br><br>
+      Note: Exercise stress echo is contraindicated in severe symptomatic AS.
+    </div>
+  </div>
+
+  <!-- MCQ 6 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q6</span>
+      <div>
+        <div class="mcq-scenario">During cardiac exam of a 70-year-old woman with known AS, you notice that the murmur is loud and harsh at the base but at the cardiac apex, it sounds musical, almost like a cooing dove. The apex beat is sustained and non-displaced.</div>
+        <div class="mcq-q">What is this phenomenon called, and what is the mechanism?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 6)"><span class="option-letter">A</span> Austin Flint murmur — AR jet causing functional MS</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 6)"><span class="option-letter">B</span> Carey-Coombs murmur — rheumatic inflammation of MV</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 6)"><span class="option-letter">C</span> Gallavardin phenomenon — musical component of AS murmur transmitted to apex</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 6)"><span class="option-letter">D</span> Concurrent mitral regurgitation due to annular calcification</div>
+    </div>
+    <button class="show-btn" id="btn6" onclick="showExplanation(6)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp6">
+      <div class="explain-title">✅ Answer: C — Gallavardin Phenomenon</div>
+      The <strong>Gallavardin phenomenon</strong> is a classic exam favourite! In elderly patients with calcific AS, the murmur has two components:<br><br>
+      1. <strong>Harsh component</strong> heard at the base (aortic area) — transmitted to carotids<br>
+      2. <strong>Musical/high-frequency component</strong> at the apex — sounds like MR or "cooing dove"<br><br>
+      The KEY: This is NOT concurrent MR. The musical component is just the high-frequency component of the same AS murmur being filtered as it radiates to the apex. The sustained, undisplaced apex beat confirms hypertrophy (no dilation), arguing against significant MR.
+    </div>
+  </div>
+
+  <!-- MCQ 7 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q7</span>
+      <div>
+        <div class="mcq-scenario">A 35-year-old pregnant woman (24 weeks) with known moderate AS develops progressive exertional dyspnea. Her resting echo shows mean gradient 32 mmHg, AVA 1.2 cm², EF 60%. She is on no medications.</div>
+        <div class="mcq-q">What is the most appropriate management?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 7)"><span class="option-letter">A</span> Emergency SAVR with cardiopulmonary bypass</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 7)"><span class="option-letter">B</span> Start enalapril and furosemide</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 7)"><span class="option-letter">C</span> Cautious diuretics for symptoms; balloon valvuloplasty if deterioration continues</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 7)"><span class="option-letter">D</span> Immediate TAVR</div>
+    </div>
+    <button class="show-btn" id="btn7" onclick="showExplanation(7)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp7">
+      <div class="explain-title">✅ Answer: C — Cautious diuretics; balloon valvuloplasty if needed</div>
+      Pregnancy + AS is a high-stakes scenario. The patient has <strong>moderate AS</strong> (not severe), so immediate surgery is not warranted. EF is preserved.<br><br>
+      <strong>Management ladder in pregnancy with AS:</strong><br>
+      1. Activity restriction + monitoring<br>
+      2. Gentle diuretics for symptomatic relief (avoid aggressive diuresis — reduces preload)<br>
+      3. Beta-blockers for rate control if needed<br>
+      4. If severe decompensation: <strong>balloon valvuloplasty is preferred</strong> (avoids open heart surgery risks to fetus)<br>
+      5. SAVR only if life-threatening deterioration (high fetal mortality with bypass)<br><br>
+      <strong>ACEi/ARBs (B) are TERATOGENIC</strong> — absolutely contraindicated in pregnancy!
+    </div>
+  </div>
+
+  <!-- MCQ 8 -->
+  <div class="mcq-block">
+    <div class="mcq-header">
+      <span class="mcq-num">Q8</span>
+      <div>
+        <div class="mcq-scenario">A medical student auscultates a patient and hears: a normal S1, a murmur that starts slightly after S1, crescendos to a peak in mid-systole, then decrescendos and ends before S2. S2 appears soft. There is a systolic thrill at the 2nd RICS. The murmur radiates to both carotids.</div>
+        <div class="mcq-q">A second-year student asks: "How is this different from MR murmur?" What is the BEST distinguishing feature?</div>
+      </div>
+    </div>
+    <div class="mcq-options">
+      <div class="mcq-option" onclick="selectOption(this, false, 8)"><span class="option-letter">A</span> MR murmur is louder and harsher</div>
+      <div class="mcq-option" onclick="selectOption(this, true, 8)"><span class="option-letter">B</span> MR murmur is pansystolic (S1 to S2), whereas AS murmur is ejection systolic (starts after S1, ends before S2)</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 8)"><span class="option-letter">C</span> MR murmur radiates to the carotids</div>
+      <div class="mcq-option" onclick="selectOption(this, false, 8)"><span class="option-letter">D</span> AS murmur is best heard at the apex</div>
+    </div>
+    <button class="show-btn" id="btn8" onclick="showExplanation(8)" style="display:none">📖 Show Explanation</button>
+    <div class="mcq-explain" id="exp8">
+      <div class="explain-title">✅ Answer: B — Pansystolic (MR) vs Ejection Systolic (AS)</div>
+      This is a fundamentally important auscultation concept:<br><br>
+      <strong>AS (Ejection Systolic Murmur):</strong><br>
+      • Starts AFTER S1 (there's an opening click or gap)<br>
+      • Crescendo-decrescendo (diamond shaped)<br>
+      • Ends BEFORE S2 (gap before S2)<br>
+      • Reason: Blood is EJECTED during systole through a narrow valve<br><br>
+      <strong>MR (Pansystolic / Holosystolic Murmur):</strong><br>
+      • Starts WITH S1 (replaces S1)<br>
+      • Uniform intensity throughout<br>
+      • Goes up to and may obscure S2<br>
+      • Reason: Any pressure gradient from LV to LA exists throughout ALL of systole<br><br>
+      MR radiates to the axilla, not carotids. AS murmur is best heard at the 2nd RICS, not the apex.
+    </div>
+  </div>
+
+</section>
+
+<!-- FINAL RAPID FIRE -->
+<section id="bonus">
+  <div class="section-label">Bonus</div>
+  <h2 class="section-title">Rapid Fire Pearls 🔥</h2>
+
+  <div class="grid-2">
+    <div class="box-red">
+      <strong>🚫 NEVER Give in AS</strong>
+      • Vasodilators (GTN, ACEi, ARBs, hydralazine)<br>
+      • Vigorous diuretics<br>
+      • Inotropes (except as bridge)<br>
+      • Exercise stress test in symptomatic severe AS
+    </div>
+    <div class="box-green">
+      <strong>✅ Always Remember</strong>
+      • Echo = investigation of choice<br>
+      • AVR = only definitive treatment<br>
+      • Dyspnea = worst prognosis (1–2 yr)<br>
+      • TAVR = high-risk elderly patients
+    </div>
+    <div class="box-blue">
+      <strong>💡 Associations</strong>
+      • Heyde syndrome = AS + GI angiodysplasia + bleeding (acquired vWD type 2A)<br>
+      • Bicuspid AV + Coarctation + Turner<br>
+      • AS + AR = Rheumatic fever
+    </div>
+    <div class="box-gold">
+      <strong>⚡ Calculation Pearls</strong>
+      • Gorlin formula = valve area (cath lab)<br>
+      • Continuity equation = AVA on echo<br>
+      • Bernoulli: ΔP = 4V² (peak gradient)
+    </div>
+  </div>
+
+  <div class="mnemonic-box" style="margin-top:20px">
+    <div class="mnemonic-badge">Final Revision Summary</div>
+    <div style="font-size:15px; color: var(--ink-soft); line-height:2">
+      <strong>Cause →</strong> Calcific (old) / Bicuspid (young) / Rheumatic (always with MR)<br>
+      <strong>Pathophys →</strong> Pressure overload → Concentric LVH → ↓compliance → LVEDP↑<br>
+      <strong>Symptoms →</strong> SAD (Syncope 3yr, Angina 5yr, Dyspnea 1–2yr)<br>
+      <strong>Signs →</strong> Slow-rising pulse, PASS, narrow pulse pressure, ESM → carotids<br>
+      <strong>Echo →</strong> Severe = AVA &lt;1.0, gradient &gt;40, velocity &gt;4 (the 1-4-4 rule)<br>
+      <strong>Mx →</strong> Surgery (SAVR young/low risk, TAVR elderly/high risk); NO vasodilators
+    </div>
+  </div>
+</section>
+
+</div><!-- end container -->
+
+<footer>
+  Made with ❤️ for exam prep · <strong>Aortic Stenosis — High Yield Study Guide</strong><br>
+  <span style="font-size:11px; margin-top:6px; display:block">Clinical information is for educational purposes. Always refer to current guidelines for patient care decisions.</span>
+</footer>
+
+<script>
+  // Scroll spy to highlight active section in navigation
+  (function() {
+    const links = document.querySelectorAll('.toc-link');
+    const sections = document.querySelectorAll('section[id]');
+    
+    if (links.length === 0 || sections.length === 0) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          links.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+    
+    sections.forEach(section => observer.observe(section));
+  })();
+  
+  function selectOption(el, isCorrect, qNum) {
+    const block = el.closest('.mcq-block');
+    const options = block.querySelectorAll('.mcq-option');
+    options.forEach(opt => {
+      opt.style.pointerEvents = 'none';
+    });
+    if (isCorrect) {
+      el.classList.add('correct');
+      el.querySelector('.option-letter').textContent = '✓';
+    } else {
+      el.classList.add('wrong');
+      el.querySelector('.option-letter').textContent = '✗';
+      // reveal correct
+      options.forEach(opt => {
+        if (opt.getAttribute('onclick') && opt.getAttribute('onclick').includes('true')) {
+          opt.classList.add('revealed-correct');
+        }
+      });
+    }
+    const btn = document.getElementById('btn' + qNum);
+    if (btn) btn.style.display = 'block';
+  }
+
+  function showExplanation(qNum) {
+    const exp = document.getElementById('exp' + qNum);
+    const btn = document.getElementById('btn' + qNum);
+    exp.classList.add('show');
+    btn.style.display = 'none';
+    exp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+</body>
+</html>

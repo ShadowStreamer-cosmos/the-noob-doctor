@@ -472,7 +472,8 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
     document.getElementById('mainTitle').textContent = topicName.toLowerCase();
     
     // Check if topic has notesUrl and get current theme
-    const hasNotes = topic.notesUrl ? true : false;
+    const hasNotes = topic && topic.notesUrl ? true : false;
+    console.log('Topic notesUrl:', topic ? topic.notesUrl : 'no topic');
     const currentTheme = localStorage.getItem('nbd_theme') || 'dark';
     const notesHtml = hasNotes ? `<iframe src="${topic.notesUrl}?theme=${currentTheme}" data-theme="${currentTheme}" onload="syncThemeToIframe(this)" style="width:100%;height:calc(100vh - 140px);border:none;margin-top:10px;border-radius:8px;overflow:hidden;"></iframe>` : `
         <div class="topic-content">
@@ -505,7 +506,7 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
     
     setTimeout(() => {
         renderSectionChecklist();
-    }, 100);
+    }, 300);
     
     closeAllDrawers();
     storeCurrentTopic(cat, sysName, chapterName, topicName);
@@ -513,7 +514,13 @@ function showTopicContent(cat, sysName, chapterName, topicName) {
 }
 
 function getTopicSections(topicName) {
-    // Try to extract sections from the loaded iframe notes
+    // First try to get sections from topic data in the data files
+    const sectionsFromData = getSectionsFromData(currentTopicInfo.cat, currentTopicInfo.sys, currentTopicInfo.chapter, currentTopicInfo.topic);
+    if (sectionsFromData && sectionsFromData.length > 0) {
+        return sectionsFromData;
+    }
+    
+    // Fallback: try to extract sections from the loaded iframe notes
     const iframe = document.querySelector('.topic-view iframe');
     if (iframe && iframe.contentDocument) {
         const doc = iframe.contentDocument;
@@ -560,7 +567,7 @@ function getTopicSections(topicName) {
         }
     }
     
-    // Fallback: default sections if iframe not accessible
+    // Fallback: default sections if nothing works
     return [
         { text: '01. Introduction', type: 'major' },
         { text: '02. Etiology', type: 'major' },
@@ -570,6 +577,32 @@ function getTopicSections(topicName) {
         { text: '06. Management', type: 'major' },
         { text: '07. Summary', type: 'major' }
     ];
+}
+
+// Get sections from data files
+function getSectionsFromData(cat, sys, chapter, topicName) {
+    let dataSource;
+    if (cat === 'Medicine') dataSource = MEDICINE_DATA;
+    else if (cat === 'Surgery') dataSource = SURGERY_DATA;
+    else if (cat === 'OBG') dataSource = OBG_DATA;
+    
+    if (!dataSource) return null;
+    
+    // Find the system
+    const system = dataSource[sys] || dataSource[Object.keys(dataSource).find(s => s.toLowerCase().includes(sys.toLowerCase()))];
+    if (!system || !system.chapters) return null;
+    
+    // Find the chapter
+    const chap = system.chapters[chapter] || system.chapters[Object.keys(system.chapters).find(c => c.toLowerCase().includes(chapter.toLowerCase()))];
+    if (!chap || !chap.topics) return null;
+    
+    // Find the topic
+    const topic = chap.topics.find(t => t.name.toLowerCase() === topicName.toLowerCase());
+    if (topic && topic.sections) {
+        return topic.sections.map(s => ({ text: s, type: 'sub' }));
+    }
+    
+    return null;
 }
 
 function renderSectionChecklist() {
@@ -1824,9 +1857,9 @@ function renderAnalytics(customCat, customParent) {
             renderTrendChart();
             renderWeakSubjects();
         } else if (showLevel === 'topic') {
-            renderTopicChart();
+            renderTopicChart(topicQuestions || getTopicMcqs(), getProgress());
         } else {
-            renderTopicChart();
+            renderTopicChart(topicQuestions || getTopicMcqs(), getProgress());
         }
     }, 50);
 }
@@ -2002,9 +2035,10 @@ function renderWeakSubjects() {
 function renderTopicChart(qs, prog) {
     destroyChart('topic');
     const ctx = document.getElementById('topicChart');
-    if (!ctx) return;
+    if (!ctx || !qs || qs.length === 0) return;
     
     const names = [], done = [], remaining = [];
+    if (!qs || qs.length === 0) return;
     qs.forEach(t => {
         names.push(t.name);
         done.push(prog[t.name] ? 1 : 0);
