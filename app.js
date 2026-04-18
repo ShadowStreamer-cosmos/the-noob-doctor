@@ -2475,8 +2475,10 @@ function toggleImmersiveMode() {
         }
         
         if (tools.length > 0) {
+            const toolCount = tools.length;
+            const heightPct = 100 / toolCount;
             rightContainer.innerHTML = tools.map(tool => 
-                `<div style="flex:1;overflow:hidden;border-bottom:1px solid #eee;"><iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe></div>`
+                `<div style="height:${heightPct}%;overflow:hidden;border-bottom:1px solid #eee;"><iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe></div>`
             ).join('');
         } else {
             rightContainer.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">No tools available for this topic</div>`;
