@@ -2361,6 +2361,12 @@ const EXP = {
 
 // ===== DYNAMIC TOOLS =====
 const dynamicTools = {
+    'as_interactive': {
+        name: 'Aortic Stenosis Hemodynamic',
+        desc: 'Interactive AS Calculator',
+        icon: '❤️',
+        path: 'notes/Medicine/NOTES&images/Aortic stenosis/interactive aortic stenosis.html'
+    },
     'sokolow': {
         name: 'Sokolow-Lyon Criteria',
         desc: 'LVH ECG Calculator',
@@ -2369,19 +2375,19 @@ const dynamicTools = {
     }
 };
 
-// Get tool for current topic
-function getDynamicToolForTopic() {
+// Get tools for current topic
+function getDynamicToolsForTopic() {
     const topic = currentTopicInfo.topic;
-    if (!topic) return null;
+    if (!topic) return [];
     
-    // Map topics to their tools
+    // Map topics to their tool keys
     const toolMap = {
-        'Aortic stenosis': 'sokolow',
-        'aortic stenosis': 'sokolow'
+        'Aortic stenosis': ['as_interactive', 'sokolow'],
+        'aortic stenosis': ['as_interactive', 'sokolow']
     };
     
-    const toolKey = toolMap[topic];
-    return toolKey ? dynamicTools[toolKey] : null;
+    const toolKeys = toolMap[topic] || [];
+    return toolKeys.map(key => dynamicTools[key]).filter(Boolean);
 }
 
 function openDynamicPanel() {
@@ -2456,20 +2462,22 @@ function toggleImmersiveMode() {
             notesIframe.style.cssText = 'position:absolute;left:0;top:60px;width:60%;height:calc(100vh - 60px);border:none;z-index:1;margin:0;';
         }
         
-        // Get the dynamic tool for current topic
-        const tool = getDynamicToolForTopic();
+        // Get the dynamic tools for current topic
+        const tools = getDynamicToolsForTopic();
         
-        // Create dynamic tool iframe in a separate container (RIGHT side - 40%)
+        // Create dynamic tools container on right side - split evenly
         let rightContainer = topicView.querySelector('.immersive-right');
         if (!rightContainer) {
             rightContainer = document.createElement('div');
             rightContainer.className = 'immersive-right';
-            rightContainer.style.cssText = 'position:absolute;right:0;top:60px;width:40%;height:calc(100vh - 60px);background:#fff;z-index:1;margin:0;';
+            rightContainer.style.cssText = 'position:absolute;right:0;top:60px;width:40%;height:calc(100vh - 60px);background:#fff;z-index:1;margin:0;display:flex;flex-direction:column;';
             topicView.appendChild(rightContainer);
         }
         
-        if (tool) {
-            rightContainer.innerHTML = `<iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe>`;
+        if (tools.length > 0) {
+            rightContainer.innerHTML = tools.map(tool => 
+                `<div style="flex:1;overflow:hidden;border-bottom:1px solid #eee;"><iframe src="${tool.path}" style="width:100%;height:100%;border:none;"></iframe></div>`
+            ).join('');
         } else {
             rightContainer.innerHTML = `<div style="padding:20px;text-align:center;color:#888;">No tools available for this topic</div>`;
         }
